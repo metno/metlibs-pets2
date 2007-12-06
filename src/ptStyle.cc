@@ -777,6 +777,7 @@ bool ptStyle::readStyle(const miString filename,
   ParId pid;
   miString buf, keyw, argu;
   vector<miString> parts;
+  map<miString,miString> userkeys; 
 
   if (verbose) cout << "ptStyle::readStyle. Reading stylefile: " << filename << endl;
   ifstream sfile(filename.cStr());
@@ -910,6 +911,12 @@ bool ptStyle::readStyle(const miString filename,
     argu= buf.substr(ieq+1, buf.length()-ieq-1);
     argu.trim();
 
+    // substitute user-defined variables
+    map<miString,miString>::iterator itr=userkeys.begin(); 
+    for ( ; itr!=userkeys.end(); itr++ )
+      if ( argu.contains(itr->first) )
+	argu.replace(itr->first,itr->second);
+    
     // global values
     if (keyw=="bgcolor") bgColor.fromStr(argu);
     else if (keyw=="topmargin")    topMargin_= atof(argu.cStr());
@@ -1029,6 +1036,7 @@ bool ptStyle::readStyle(const miString filename,
     else if (keyw=="datainknots") curl.datainknots= (argu.upcase()=="TRUE");
     else if (keyw=="scalewidth") curl.scalewidth= (argu.upcase()=="TRUE");
 
+    else if (keyw.contains("$")) userkeys[keyw] = argu;
     else cerr << "ptStyle::readStyle. Unknown keyword: " << keyw << endl;
   }
 
