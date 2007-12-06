@@ -118,6 +118,17 @@ void ptColor::initColorlist()
   ptColor("IVORY"        , 0.93, 0.93, 0.88, 1.00);
   ptColor("DARK_IVORY"   , 0.88, 0.89, 0.84, 1.00);
 
+  ptColor("BLUEGREY"     , 0.788,0.796,0.810,1.00);
+  ptColor("GREYBROWN"    , 0.705,0.660,0.600,1.00);
+  ptColor("OLIVE"        , 0.705,0.540,0.660,1.00);
+  ptColor("MUDDYGREEN"   , 0.545,0.557,0.407,1.00);
+  ptColor("GREYBLUE"     , 0.370,0.640,0.815,1.00);
+  ptColor("DARK_BLUEGREY", 0.560,0.619,0.705,1.00);
+  ptColor("DARKOLIVE"    , 0.540,0.396,0.490,1.00);
+
+  ptColor("RED_YELLOW"   , 1.000,0.870,0.376,1.00);
+  ptColor("YELLOW_RED"   , 0.920,0.176,0.180,1.00);
+
 }
 
 void ptColor::fromStr(const miString& s)
