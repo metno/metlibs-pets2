@@ -194,6 +194,12 @@ void staticYaxisElement::calcDims()
       if (cMin < Min) Min = cMin;
     }
   }
+
+  // crazy test ------------------------
+  if ( Min < minValue ) Min = minValue;
+  if ( Max > maxValue ) Max = maxValue;
+  // -----------------------------------
+
   Delta = Max-Min;
   
   float newDelta;
@@ -208,7 +214,8 @@ void staticYaxisElement::calcDims()
       Max+= (modres>0?delta-modres:-modres);
       dy= (Max-Min);
       sy= dy/float(ntick);
-      if (sy < delta) sy= delta;
+      if (sy < delta)
+	sy= delta;
       else {
 	modres= fmodf(sy,delta);
 	sy+= delta-modres;
