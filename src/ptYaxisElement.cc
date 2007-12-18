@@ -41,21 +41,22 @@
 yAxisElement::yAxisElement(const ptVertFieldf& field,
 			   const Layout& layout, 
 			   XAxisInfo* xtime)
-  :PlotElement(layout, field, xtime),
-   lineWidth(layout.lineWidth),style(layout.linePattern),
-   axis(layout.axis),axisLineWidth(layout.axisWidth),
-   tickWidth(layout.tickWidth),tickLen(layout.tickLen),
-   interval(layout.interval), axeStopY(field.y2),
-   minRange(layout.minRange),delta(layout.delta), 
-   minMargin(layout.minMargin), minIsSet(layout.minIsSet),
-   maxIsSet(layout.maxIsSet),minValue(layout.minValue),
-   maxValue(layout.maxValue),numChild(0),firstPlot(true),
-   id(layout.yaid),recalcDims(true),userlabels(false),
-   axisgrid(layout.axisgrid),gridstyle(layout.gridstyle),
-   gridwidth(layout.gridwidth), gridcolor(layout.gridcolor),
-   fittopage(layout.fittopage), linlen(48), horLabels(layout.horLabels),
-   horLabelOffset(layout.horLabelOffset), plotlegends(layout.label),
-   userLabels(layout.textlabels), legendlineinside(layout.legendlineinside)
+  : PlotElement(layout, field, xtime),
+    lineWidth(layout.lineWidth),style(layout.linePattern),
+    axis(layout.axis),axisLineWidth(layout.axisWidth),
+    tickWidth(layout.tickWidth),tickLen(layout.tickLen),
+    interval(layout.interval), axeStopY(field.y2),
+    minRange(layout.minRange),delta(layout.delta), 
+    minMargin(layout.minMargin), minIsSet(layout.minIsSet),
+    maxIsSet(layout.maxIsSet),minValue(layout.minValue),
+    maxValue(layout.maxValue),numChild(0),firstPlot(true),
+    id(layout.yaid),recalcDims(true),userlabels(false),
+    axisgrid(layout.axisgrid),gridstyle(layout.gridstyle),
+    gridwidth(layout.gridwidth), gridcolor(layout.gridcolor),
+    fittopage(layout.fittopage), linlen(48), horLabels(layout.horLabels),
+    horLabelOffset(layout.horLabelOffset), plotlegends(layout.label),
+    userLabels(layout.textlabels), legendlineinside(layout.legendlineinside),
+    useMinMax(layout.useMinMax)
 {
 #ifdef DEBUG
   cout << "Inside yAxisElement's constructor" << endl;
@@ -366,6 +367,12 @@ void yAxisElement::calcDims()
       if (cMin < Min) Min = cMin;
     }
   }
+
+  if ( useMinMax ){
+    if ( Min < minValue ) Min = minValue;
+    if ( Max > maxValue ) Max = maxValue;
+  }
+
   Delta = Max-Min;
   
   float newDelta;

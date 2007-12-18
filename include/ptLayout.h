@@ -155,7 +155,8 @@ struct Layout {
   float minValue;        // y-axis minimum datavalue
   float maxValue;        // y-axis maximum datavalue
   bool maxIsSet;         // maxValue is absolute
-  bool minIsSet;         // minVAlue is absolute
+  bool minIsSet;         // minValue is absolute
+  bool useMinMax;        // keep axis inside minValue and maxValue
   bool quantized;        // quantized values
   float quantum;         // quantum for the above
   bool reverse;          // reverse vector-direction etc.
@@ -207,7 +208,7 @@ struct Layout {
     minRange(0), interval(1), patternInColour(false), trueheight(0),
     delta(1), minMargin(0), lineBar(false), lineStep(false),
     minValue(-1000000), maxValue(1000000), maxIsSet(false), 
-    minIsSet(false), fromFile(true), position(0),
+    minIsSet(false), useMinMax(false), fromFile(true), position(0),
     vectorF(false), numTickMajor(5), numTickMinor(2), labelSpace(100),
     quantized(false), quantum(1.0), labelOnLine(false), lineLabelPos(50),
     doubleLine(false), axisgrid(false), gridxonly(true), gridwidth(1),

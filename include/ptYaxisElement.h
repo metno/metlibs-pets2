@@ -87,7 +87,8 @@ protected:
   float gridwidth;
   ptColor gridcolor;
   ptLineStyle gridstyle;
-  
+
+  bool useMinMax;
 
   void plotAxis();
   void plotGrid();

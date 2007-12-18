@@ -195,10 +195,10 @@ void staticYaxisElement::calcDims()
     }
   }
 
-  // crazy test ------------------------
-  if ( Min < minValue ) Min = minValue;
-  if ( Max > maxValue ) Max = maxValue;
-  // -----------------------------------
+  if ( useMinMax ){
+    if ( Min < minValue ) Min = minValue;
+    if ( Max > maxValue ) Max = maxValue;
+  }
 
   Delta = Max-Min;
   

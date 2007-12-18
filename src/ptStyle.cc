@@ -826,6 +826,7 @@ bool ptStyle::readStyle(const miString filename,
   onel.minIsSet = false;
   onel.minValue = FLT_MAX;
   onel.maxValue = -FLT_MAX;
+  onel.useMinMax = false;
   onel.yaid = 0;
   onel.reverse= false;
   onel.centerVector = false;
@@ -977,6 +978,7 @@ bool ptStyle::readStyle(const miString filename,
     else if (keyw=="minisset") curl.minIsSet= (argu.upcase()=="TRUE");
     else if (keyw=="minvalue") curl.minValue= atof(argu.cStr());
     else if (keyw=="maxvalue") curl.maxValue= atof(argu.cStr());
+    else if (keyw=="useminmax") curl.useMinMax= (argu.upcase()=="TRUE");
     else if (keyw=="yaid") curl.yaid= atoi(argu.cStr());
     else if (keyw=="reverse") curl.reverse= (argu.upcase()=="TRUE");
     else if (keyw=="centervector") curl.centerVector= (argu.upcase()=="TRUE");
