@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59)
+AC_PREREQ([2.59])
 AC_INIT([pets2], [4.0.0], [diana@met.no])
 AM_INIT_AUTOMAKE
 METNO_SET_VERSION_INFO
@@ -26,13 +26,6 @@ AC_CXX_HAVE_STL
 METNO_HAVE_GL
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$prefix/lib/pkgconfig
-
-# Check for the tsData library
-PKG_CHECK_MODULES([tsData], [tsdata])
-METNO_CHECK_LIB([tsdata], [main], , , , [$tsData_LIBS], 
-                [the tsData package])
-METNO_CHECK_HEADERS([tsData/ptDiagramData.h tsData/ptWeatherParameter.h], , , ,
-                    [$tsData_CFLAGS], [the tsData package])
 
 # Check for the puMet library.
 PKG_CHECK_MODULES([puMet], [pumet])
@@ -71,7 +64,7 @@ METNO_CHECK_HEADERS([glp/GLP.h glp/glpfile.h], , , ,
 
 # Check for the glText library.
 PKG_CHECK_MODULES([glText], [gltext])
-METNO_CHECK_LIB([gltext], [main], , , , [$glText_LIBS], 
+METNO_CHECK_LIB([glText], [main], , , , [$glText_LIBS], 
                 [the glText package])
 METNO_CHECK_HEADERS([glText/glText.h], , , ,
                     [$glText_CFLAGS], [the glText package])
@@ -82,6 +75,13 @@ METNO_CHECK_LIB([parameter], [main], , , , [$parameter_LIBS],
                 [the parameter package])
 METNO_CHECK_HEADERS([parameter/parameter.h], , , ,
                     [$parameter_CFLAGS], [the parameter package])
+
+# Check for the tsData library
+PKG_CHECK_MODULES([tsData], [tsdata])
+METNO_CHECK_LIB([tsdata], [main], , , , [$tsData_LIBS], 
+                [the tsData package])
+METNO_CHECK_HEADERS([tsData/ptDiagramData.h tsData/ptWeatherParameter.h], , , ,
+                    [$tsData_CFLAGS], [the tsData package])
 
 # Checks for header files.
 AC_PATH_X
