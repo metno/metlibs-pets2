@@ -27,11 +27,61 @@ METNO_HAVE_GL
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$prefix/lib/pkgconfig
 
-PKG_CHECK_MODULES([tsData], [tsData])
-METNO_CHECK_LIB([tsData], [main], , , , [$tsData_LIBS], 
+# Check for the tsData library
+PKG_CHECK_MODULES([tsData], [tsdata])
+METNO_CHECK_LIB([tsdata], [main], , , , [$tsData_LIBS], 
                 [the tsData package])
 METNO_CHECK_HEADERS([tsData/ptDiagramData.h tsData/ptWeatherParameter.h], , , ,
                     [$tsData_CFLAGS], [the tsData package])
+
+# Check for the puMet library.
+PKG_CHECK_MODULES([puMet], [pumet])
+METNO_CHECK_LIB([puMet], [main], , , , [$puMet_LIBS], 
+                [the puMet package])
+METNO_CHECK_HEADERS([puMet/symbolMaker.h], , , ,
+                    [$puMet_CFLAGS], [the puMet package])
+
+# Check for the puCtools library.
+PKG_CHECK_MODULES([puCtools], [puctools])
+METNO_CHECK_LIB([puctools], [main], , , , [$puCtools_LIBS], 
+                [the puCtools package])
+METNO_CHECK_HEADERS([puCtools/puMath.h], , , ,
+                    [$puCtools_CFLAGS], [the puCtools package])
+
+# Check for the puTools library.
+PKG_CHECK_MODULES([puTools], [putools])
+METNO_CHECK_LIB([putools], [main], , , , [$puTools_LIBS], 
+                [the puTools package])
+METNO_CHECK_HEADERS([puTools/miString.h], , , ,
+                    [$puTools_CFLAGS], [the puTools package])
+
+# Check for the puDatatypes library.
+PKG_CHECK_MODULES([puDatatypes], [pudatatypes])
+METNO_CHECK_LIB([pudatatypes], [main], , , , [$puDatatypes_LIBS], 
+                [the puDatatypes package])
+METNO_CHECK_HEADERS([puDatatypes/miPosition.h], , , ,
+                    [$puDatatypes_CFLAGS], [the puDatatypes package])
+
+# Check for the glp library.
+PKG_CHECK_MODULES([glp], [glp])
+METNO_CHECK_LIB([glp], [main], , , , [$glp_LIBS], 
+                [the glp package])
+METNO_CHECK_HEADERS([glp/GLP.h glp/glpfile.h], , , ,
+                    [$glp_CFLAGS], [the glp package])
+
+# Check for the glText library.
+PKG_CHECK_MODULES([glText], [gltext])
+METNO_CHECK_LIB([gltext], [main], , , , [$glText_LIBS], 
+                [the glText package])
+METNO_CHECK_HEADERS([glText/glText.h], , , ,
+                    [$glText_CFLAGS], [the glText package])
+
+# Check for the parameter library.
+PKG_CHECK_MODULES([parameter], [parameter])
+METNO_CHECK_LIB([parameter], [main], , , , [$parameter_LIBS], 
+                [the parameter package])
+METNO_CHECK_HEADERS([parameter/parameter.h], , , ,
+                    [$parameter_CFLAGS], [the parameter package])
 
 # Checks for header files.
 AC_PATH_X

@@ -42,13 +42,16 @@ ptWindVectorElement.cc \
 ptYaxisElement.cc
 
 lib@PACKAGE_NAME@_la_CPPFLAGS = \
-	${GL_CPPFLAGS} ${puTools_CFLAGS} ${miLogger_CFLAGS} \
-	${LOG4CXX_CPPFLAGS} ${tsData_CFLAGS} ${glp_CFLAGS} \
-	${glText_CFLAGS} 
+	${GL_CPPFLAGS} \
+	${tsData_CFLAGS} ${glText_CFLAGS} ${glp_CFLAGS} ${puMet_CFLAGS} \
+	${puDatatypes_CFLAGS} ${parameter_CFLAGS} ${puTools_CFLAGS} \
+	${miLogger_CFLAGS} \
+	${LOG4CXX_CPPFLAGS} ${GL_CFLAGS}
 
 lib@PACKAGE_NAME@_la_LDFLAGS = \
-	${puTools_LIBS} ${miLogger_LIBS} \
-	${tsData_LIBS} ${glp_LIBS} \
+	${tsData_LIBS} ${glText_LIBS} ${glp_LIBS} ${puMet_LIBS} \
+	${puDatatypes_LIBS} ${parameter_LIBS} ${puTools_LIBS} \
+	${miLogger_LIBS} \
 	${LOG4CXX_LDFLAGS} ${LOG4CXX_LIBS}  \
 	${GL_LDFLAGS} ${GL_LIBS} ${VERSION_INFO}
 
