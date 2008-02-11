@@ -1,4 +1,4 @@
-pkglib_LTLIBRARIES = lib@PACKAGE_NAME@.la
+lib_LTLIBRARIES = lib@PACKAGE_NAME@.la
 
 lib@PACKAGE_NAME@_la_SOURCES = \
 ptAxesElement.cc \
