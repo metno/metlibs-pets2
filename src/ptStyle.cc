@@ -1037,6 +1037,8 @@ bool ptStyle::readStyle(const miString filename,
     else if (keyw=="smoothdiv") curl.smoothdiv= atoi(argu.cStr());
     else if (keyw=="datainknots") curl.datainknots= (argu.upcase()=="TRUE");
     else if (keyw=="scalewidth") curl.scalewidth= (argu.upcase()=="TRUE");
+    else if (keyw=="wrapdegrees") curl.wrapdegrees= (argu.upcase()=="TRUE");
+    else if (keyw=="wraplimit") curl.wraplimit= atof(argu.cStr());
 
     else if (keyw.contains("$")) userkeys[keyw] = argu;
     else cerr << "ptStyle::readStyle. Unknown keyword: " << keyw << endl;

@@ -49,6 +49,7 @@ class EditLineElement : public AxisChildElement
   int activePoint; // pointer to last grabbed point (used for moving)
   ptLineEditMode editMode;
   ptLineEditMarker markerType;
+  float markerSize;
   ptColor backcolor;
   ptColor histocolor;
   bool printValue; // print value of active point
@@ -59,6 +60,8 @@ class EditLineElement : public AxisChildElement
   float actPx, actPy; // position of active point
   miString pformat; // numerical format of small value-tip
   int priority;     // priority for editing
+  bool wrapdegrees;
+  float wraplimit;
   
   ptEditStyle editstyle; // type of graphical editing
   ptFillStyle fstyle;    // fillstyle for editing elements

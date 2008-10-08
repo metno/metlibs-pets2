@@ -50,7 +50,9 @@ LineElement::LineElement(yAxisElement* ya,
     markersize(layout.size), markerfill(layout.markerFill),
     shadow(layout.shadow), lineBar(layout.lineBar), barsize(layout.delta),
     lineStep(layout.lineStep), colorbyvalue(layout.colorbyvalue),
-    colorlist(layout.colorlist), smoothing(layout.smoothing), smoothdiv(layout.smoothdiv)
+    colorlist(layout.colorlist),
+    smoothing(layout.smoothing), smoothdiv(layout.smoothdiv),
+    wrapdegrees(layout.wrapdegrees), wraplimit(layout.wraplimit)
     
 {
 #ifdef DEBUG
@@ -296,12 +298,14 @@ void LineElement::plot()
 	      previ1= i1;
 	    } else {
 	      if ( prevx > -1000 ){
-		plotx.push_back(prevx);
-		ploty.push_back(prevy);
-		ploti.push_back(0);
-		plotx.push_back(newx);
-		ploty.push_back(newy);
-		ploti.push_back(0);
+		if ( !wrapdegrees || fabsf(dval(j) - dval(j-1)) < wraplimit ){
+		  plotx.push_back(prevx);
+		  ploty.push_back(prevy);
+		  ploti.push_back(0);
+		  plotx.push_back(newx);
+		  ploty.push_back(newy);
+		  ploti.push_back(0);
+		}
 	      }
 	    }
 	  }

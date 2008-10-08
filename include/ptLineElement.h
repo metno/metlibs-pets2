@@ -57,6 +57,8 @@ class LineElement : public AxisChildElement
   vector<float> datalimits;
   bool smoothing;
   int smoothdiv;
+  bool wrapdegrees;
+  float wraplimit;
 
 public:
   LineElement(yAxisElement* ya,

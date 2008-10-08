@@ -48,7 +48,9 @@ EditLineElement::EditLineElement(yAxisElement* ya,
     editMode(LE_SINGLE), markerType(LE_RECT), pMarked(false),
     printValue(false), modified(false), activenodes(true), visible(true),
     backcolor(layout.color2), histocolor(layout.color3),
-    pformat(layout.pformat), priority(layout.priority)
+    pformat(layout.pformat), priority(layout.priority),
+    markerSize(layout.size), wrapdegrees(layout.wrapdegrees),
+    wraplimit(layout.wraplimit)
 {
 #ifdef DEBUG
   cout << "Inside EditLineElement's constructor" << endl;
@@ -103,8 +105,8 @@ void EditLineElement::plot()
     _setColor(color);
 
     // plot curve
-    float mSizeX = 4*pixWidth;
-    float mSizeY = 4*pixHeight;
+    float mSizeX = markerSize*pixWidth;
+    float mSizeY = markerSize*pixHeight;
     vector<float> dataX, dataY;
 
     bool fakestipple=false;
@@ -239,6 +241,10 @@ void EditLineElement::plot()
 	    }
 	    prevx=dataX[k]; prevy=dataY[k];
 	  } else {
+	    if ( wrapdegrees && k > 0 && fabsf(dval(k) - dval(k-1)) >= wraplimit ){
+	      glEnd();
+	      glBegin(GL_LINE_STRIP);
+	    }
 	    glVertex2f(dataX[k],dataY[k]);
 	  }
 	} // editstyle if

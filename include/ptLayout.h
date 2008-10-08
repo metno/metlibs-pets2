@@ -199,6 +199,8 @@ struct Layout {
   int smoothdiv;         // number of smoothing points between points
   bool datainknots;      // data is in knots
   bool scalewidth;       // scale symbol-widths
+  bool wrapdegrees;      // wrap degree-lines around
+  float wraplimit;       // wrap degree-lines limit
 
   Layout() : 
     visible(true), height(-1), spacing(0), intSpacing(0), font(NORMAL),
@@ -222,7 +224,8 @@ struct Layout {
     drawbackground(false), editstyle(ES_LINE), printValueLock(false),
     asNumber(false), datestyle(DS_DATE), legendlineinside(false),
     colorbyvalue(false), linestylebyvalue(false), fillbyvalue(false),
-    smoothing(false), smoothdiv(10), datainknots(true), scalewidth(true)
+    smoothing(false), smoothdiv(10), datainknots(true), scalewidth(true),
+    wrapdegrees(false), wraplimit(330)
     {}
   void print() const
     {
