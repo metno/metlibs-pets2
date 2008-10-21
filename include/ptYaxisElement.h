@@ -72,6 +72,7 @@ protected:
   bool recalcDims; // recalculate plot-interval etc.
   bool userlabels;
   vector<miString> userLabels;
+  vector<miString> userValueLabels;
 
   int sign;
   int lsign;
@@ -112,6 +113,8 @@ public:
     {userLabels= labels; userlabels= true;}
   void resetLabels()
     {userlabels= false;}
+  bool hasUserLabels() const { return userlabels; }
+  miString userValueLabel(const float value);
 };
 
 class staticYaxisElement : public yAxisElement

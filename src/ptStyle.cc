@@ -1023,6 +1023,7 @@ bool ptStyle::readStyle(const miString filename,
     else if (keyw=="drawbackground") curl.drawbackground= (argu.upcase()=="TRUE");
     else if (keyw=="editstyle") curl.editstyle= Str2EditStyle(argu);
     else if (keyw=="textlabels") curl.textlabels= Str2TextLabels(argu);
+    else if (keyw=="valuetextlabels") curl.valuetextlabels= Str2TextLabels(argu);
     else if (keyw=="printvaluelock") curl.printValueLock= (argu.upcase()=="TRUE");
     else if (keyw=="linebars") curl.lineBar= (argu.upcase()=="TRUE");
     else if (keyw=="linestep") curl.lineStep= (argu.upcase()=="TRUE");

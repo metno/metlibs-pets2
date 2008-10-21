@@ -269,7 +269,7 @@ void EditLineElement::plot()
       // Mark each point..
       float ox, oy;
       float sw, sh;
-      char svalue[20];
+      char svalue[80];
       if (printValue){
 	_prepFont();
       }
@@ -284,7 +284,13 @@ void EditLineElement::plot()
 	  glRectf(ox-mSizeX,oy-mSizeY,ox+mSizeX,oy+mSizeY);
 	  _updatePrinting();
 	  if (printValue && activePoint == i+prepoints){
-	    sprintf(svalue,pformat.cStr(),dval(prepoints+i));
+	    if ( Yaxis->hasUserLabels() ){
+	      miString label = Yaxis->userValueLabel(dval(prepoints+i));
+	      //cerr << "Got label:" << label << " from value:" << dval(prepoints+i) << endl;
+	      sprintf(svalue,"%s",label.c_str());
+	    } else {
+	      sprintf(svalue,pformat.cStr(),dval(prepoints+i));
+	    }
 	    _getStringSize(svalue, sw, sh);
 	    _setColor(backcolor);
 	    glRectf(ox-3,oy+mSizeY*3-5,ox+sw+3,oy+mSizeY*3+sh/*mSizeY*5*/);

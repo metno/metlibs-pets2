@@ -55,7 +55,8 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
     gridwidth(layout.gridwidth), gridcolor(layout.gridcolor),
     fittopage(layout.fittopage), linlen(48), horLabels(layout.horLabels),
     horLabelOffset(layout.horLabelOffset), plotlegends(layout.label),
-    userLabels(layout.textlabels), legendlineinside(layout.legendlineinside),
+    userLabels(layout.textlabels), userValueLabels(layout.valuetextlabels),
+    legendlineinside(layout.legendlineinside),
     useMinMax(layout.useMinMax)
 {
 #ifdef DEBUG
@@ -69,6 +70,8 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
   Labels[0] = layout.text;
 
   userlabels= (userLabels.size() > 0);
+  if ( userlabels && userValueLabels.size() == 0 )
+    userValueLabels = userLabels;
 }
 
 void yAxisElement::plotAxis()
@@ -444,5 +447,21 @@ void yAxisElement::calcDims()
   }
 
   recalcDims= false;
+}
+
+miString yAxisElement::userValueLabel(const float value)
+{
+  miString s;
+  
+  int n = majorticks.size();
+
+  for ( int i=0; i<n; i++){
+    if ( value <= majorphys[i] && i < userValueLabels.size() ){
+      s = userValueLabels[i];
+      break;
+    }
+  }
+
+  return s;
 }
 

@@ -185,6 +185,7 @@ struct Layout {
   bool drawbackground;   // draw background
   ptEditStyle editstyle; // type of graphical editing
   vector<miString> textlabels; // fixed textlabels for yaxis
+  vector<miString> valuetextlabels; // fixed textlabels for value-plotting (edit)
   bool printValueLock;   // edit: lock current printValue switch
   bool lineBar;          // line drawn as horisontal bars
   bool lineStep;         // line drawn stepwise

@@ -121,6 +121,7 @@ void GridlineElement::plot()
     int i1= (xtime->xcoord[startT] == xtime->x1 ? startT+1 : startT);
     int i2= (xtime->xcoord[stopT]  == xtime->x2 ? stopT-1 : stopT);
 
+    _setColor(daycolor);
     for (i=i1; i<=i2; i++) {
       // plot alternating day-backgrounds
       if (plotDayPattern){
@@ -129,31 +130,11 @@ void GridlineElement::plot()
 	  if (plotday) {
 	    d1= daychanges[d-1];
 	    if (d1<startT) d1= startT;
-	    _setColor(daycolor);
 	    glRectf(xtime->xcoord[d1],startY+2,
 		    xtime->xcoord[d2],startY+deltaY-2);
-	    _setColor(color);
 	  }
 	  plotday= !plotday;
 	  d++;
-	}
-      }
-      // plot lines on hours modulo useTimes
-      if (useTimes >= 0)
-      if ((timeLine[i].hour() % useTimes)==0 && timeLine[i].min()==0) {
-	if (fakestipple){
-	  _glBegin(GL_POINTS,1000);
-	  lineSegment(xtime->xcoord[i],startY,
-		      xtime->xcoord[i],startY+deltaY,
-		      LineStyle[style][0],
-		      LineStyle[style][1],
-		      true);
-	  _glEnd();
-	} else {
-	  _glBegin(GL_LINES,2);
-	  glVertex2f(xtime->xcoord[i],startY);
-	  glVertex2f(xtime->xcoord[i],startY+deltaY);
-	  _glEnd();
 	}
       }
     }
@@ -166,9 +147,32 @@ void GridlineElement::plot()
 	d1= daychanges[d-1];
       if (d1<startT) d1= startT;
       
-      _setColor(daycolor);
       glRectf(xtime->xcoord[d1],startY+2,
 	      xtime->xcoord[d2],startY+deltaY-2);
+    }
+
+    _updatePrinting();
+
+    _setColor(color);
+    for (i=i1; i<=i2; i++) {
+      // plot lines on hours modulo useTimes
+      if (useTimes >= 0)
+	if ((timeLine[i].hour() % useTimes)==0 && timeLine[i].min()==0) {
+	  if (fakestipple){
+	    _glBegin(GL_POINTS,1000);
+	    lineSegment(xtime->xcoord[i],startY,
+			xtime->xcoord[i],startY+deltaY,
+			LineStyle[style][0],
+			LineStyle[style][1],
+			true);
+	    _glEnd();
+	  } else {
+	    _glBegin(GL_LINES,2);
+	    glVertex2f(xtime->xcoord[i],startY);
+	    glVertex2f(xtime->xcoord[i],startY+deltaY);
+	    _glEnd();
+	  }
+	}
     }
 
     _updatePrinting();
