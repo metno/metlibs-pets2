@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -103,6 +103,7 @@ public:
 
   virtual void plot();
   virtual bool needsData() { return true; }
+  virtual void setTimeInterval(const int start, const int stop);
   // called from yaxis childelements to report their presence..
   // return legal range
   bool callinn(AxisChildElement*, float&, float&);
@@ -131,6 +132,8 @@ public:
 		     const Layout& layout,
 		     XAxisInfo* xtime);
   ~staticYaxisElement();
+
+  virtual void setTimeInterval(const int start, const int stop);
 };
 
 
@@ -153,10 +156,10 @@ protected:
   float minLegal, maxLegal;
   bool keepinaxis;
 
-  
+
   bool _informYaxis()
     {
-      if (Yaxis) 
+      if (Yaxis)
 	return Yaxis->callinn(this,minLegal,maxLegal);
       else return false;
     }

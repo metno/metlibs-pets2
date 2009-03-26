@@ -404,16 +404,17 @@ bool EditLineElement::grabPoint(int step, bool mark, bool fillInterval)
 {
   if (!activenodes)
     return false;
-  int i, j, k, l = -1;
+  int i, j, k, l;
   bool aHit = false; // return value
   pMarked = false; // reset flag
   if (quantized)
     _resetAccu(); // reset accumulated edit-values
-  l = datastart();
-  int dstart = l;
+
+  int first_point = datastart();
+  int last_point = dataend();
 
   if (activePoint < 0 || activePoint >= markedPoints.size()) {
-    activePoint = l;
+    activePoint = first_point;
   }
 
   if (step == 0) {
@@ -423,10 +424,12 @@ bool EditLineElement::grabPoint(int step, bool mark, bool fillInterval)
   }
 
   activePoint += step;
-  if (activePoint < l)
-    activePoint = datasize() - 1;
-  else if (activePoint >= datasize())
-    activePoint = l;
+  if (activePoint < first_point)
+    activePoint = last_point;
+  else if (activePoint > last_point)
+    activePoint = first_point;
+
+  l = first_point;
 
   for (i = startT; i <= stopT; i++) {
     if (valid(i)) {

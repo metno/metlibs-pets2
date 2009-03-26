@@ -71,10 +71,12 @@ void SymbolElement::plot()
     float testx, minx = 10000;
     int k = startT;
     for (i = startT + 1; i <= stopT; i++) {
-      if (valid(i) && valid(k)) {
-        testx = xtime->xcoord[i] - xtime->xcoord[k];
-        if (testx < minx)
-          minx = testx;
+      if (valid(i)){
+        if (valid(k)) {
+          testx = xtime->xcoord[i] - xtime->xcoord[k];
+          if (testx < minx)
+            minx = testx;
+        }
         k = i;
       }
     }

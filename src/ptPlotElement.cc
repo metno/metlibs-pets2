@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -43,7 +43,7 @@ bool PlotElement::useColour=true;       // colour or black/white
 PlotElement::PlotElement(const Layout& layout,
 			 const ptVertFieldf& field,
 			 XAxisInfo *pXtime,
-			 const bool& en, 
+			 const bool& en,
 			 PlotElement* pNext)
   :type(DUM_PRIMITIVE),name(layout.name),color(layout.color),
    startY(field.y1), stopY(field.y2),
@@ -51,7 +51,7 @@ PlotElement::PlotElement(const Layout& layout,
    enabled(en),next(pNext), startT(0), stopT(pXtime->xcoord.size()-1),
    pInColour(layout.patternInColour), circle_list(0),
    datalimits(layout.datalimits), colorlist(layout.colorlist),
-   visible(layout.visible)
+   visible(layout.visible), AllTimesAxisScale(true)
 {
 #ifdef DEBUG
   cout << "Inside PlotElement's constructor" << endl;
@@ -143,13 +143,13 @@ bool PlotElement::startPSoutput(const miString& fname,
 				const bool inlandscape,
 				const bool doEPS){
   if (printing) return false;
-  
+
   int print_options = GLP_FIT_TO_PAGE | GLP_DRAW_BACKGROUND | GLP_AUTO_ORIENT;
   int feedsize= 3000000;
   if (!incolour)
     print_options = print_options | GLP_GREYSCALE;
   bool makeeps= doEPS;
-  
+
   psoutput = new GLPfile(const_cast<char*>(fname.cStr()),
 			 print_options, feedsize,0,makeeps);
 
@@ -255,7 +255,7 @@ ptColor PlotElement::colorfromindex(const int i)
 }
 
 /*
-  B-spline smooth 
+  B-spline smooth
 */
 int PlotElement::smoothline(int npos, float x[], float y[], int nfirst, int nlast,
 			    int ismooth, float xsmooth[], float ysmooth[])
@@ -294,10 +294,10 @@ int PlotElement::smoothline(int npos, float x[], float y[], int nfirst, int nlas
     }
     return ns;
   }
-  
+
   ndivs = ismooth;
   rdivs = 1./float(ismooth+1);
-  
+
   n = nfirst;
   if (n > 0)
     {
@@ -381,4 +381,38 @@ int PlotElement::smoothline(int npos, float x[], float y[], int nfirst, int nlas
   return ns;
 }
 
+// ================ dataPlotElement
+
+void dataPlotElement::setTimeInterval(const int start, const int stop)
+{
+  PlotElement::setTimeInterval(start,stop);
+  if (AllTimesAxisScale) return;
+  // scale Y-axis to the data inside this time-interval
+  int i1=0;
+  for (int i=0; i<startT; i++) if (valid(i)) i1++;
+  int i2=i1;
+  for (int i=i2; i<stopT; i++) if (valid(i)) i2++;
+  i2--;
+  if (fdata){
+    fdata->setTimeInterval(i1,i2);
+  }
+}
+
+int dataPlotElement::datastart()// find number of points before startT
+{
+  int j = 0;
+  for (int i = 0; i < startT; i++)
+    if (valid(i))
+      j++;
+  return j;
+}
+
+int dataPlotElement::dataend()// find number of points before stopT
+{
+  int j = 0;
+  for (int i = 0; i < stopT; i++)
+    if (valid(i))
+      j++;
+  return j;
+}
 

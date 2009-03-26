@@ -312,3 +312,10 @@ void staticYaxisElement::calcDims()
   }
   recalcDims = false;
 }
+
+void staticYaxisElement::setTimeInterval(const int start, const int stop)
+{
+  yAxisElement::setTimeInterval(start,stop);
+
+  //cerr << "staticYaxisElement::setTimeInterval for axis:" << id << endl;
+}

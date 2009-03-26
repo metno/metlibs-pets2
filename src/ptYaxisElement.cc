@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -39,14 +39,14 @@
 
 
 yAxisElement::yAxisElement(const ptVertFieldf& field,
-			   const Layout& layout, 
+			   const Layout& layout,
 			   XAxisInfo* xtime)
   : PlotElement(layout, field, xtime),
     lineWidth(layout.lineWidth),style(layout.linePattern),
     axis(layout.axis),axisLineWidth(layout.axisWidth),
     tickWidth(layout.tickWidth),tickLen(layout.tickLen),
     interval(layout.interval), axeStopY(field.y2),
-    minRange(layout.minRange),delta(layout.delta), 
+    minRange(layout.minRange),delta(layout.delta),
     minMargin(layout.minMargin), minIsSet(layout.minIsSet),
     maxIsSet(layout.maxIsSet),minValue(layout.minValue),
     maxValue(layout.maxValue),numChild(0),firstPlot(true),
@@ -97,7 +97,7 @@ void yAxisElement::plotAxis()
   glVertex2f(zerox,startY); glVertex2f(zerox,startY+deltaY);
   _glEnd();
   _updatePrinting();
-  
+
   // plot tickmarks for each interval step, and write value for each delta
   glLineWidth(tickWidth);
   int i,n= minorticks.size();
@@ -210,7 +210,7 @@ void yAxisElement::plotGrid()
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(LineStyle[gridstyle][0],LineStyle[gridstyle][1]);
   } else fakestipple = true;
-  
+
   _setColor(gridcolor);
   glLineWidth(gridwidth);
   glPointSize(gridwidth/2.0);
@@ -286,7 +286,7 @@ void yAxisElement::calcPlotVal()
   labelY[numChild] = axeStopY - labelH[numChild];
   for (i=numChild-1; i>=0; i--) {
     labelY[i] = labelY[i+1] - labelH[i]*1.5;
-  }     
+  }
   deltaY = labelY[0]-charHeight-startY;
 
   switch(axis) {
@@ -336,11 +336,11 @@ void yAxisElement::calcPlotVal()
     }
     break;
   }
-  
+
 }
 
-bool yAxisElement::callinn(AxisChildElement* pc, 
-			   float& minlegal, 
+bool yAxisElement::callinn(AxisChildElement* pc,
+			   float& minlegal,
 			   float& maxlegal)
 {
   if (numChild < MAX_YAXIS_CHILDREN) {
@@ -355,6 +355,11 @@ bool yAxisElement::callinn(AxisChildElement* pc,
     return true;
   }
   return false;
+}
+
+void yAxisElement::setTimeInterval(const int start, const int stop)
+{
+  PlotElement::setTimeInterval(start,stop);
 }
 
 void yAxisElement::calcDims()
@@ -377,7 +382,7 @@ void yAxisElement::calcDims()
   }
 
   Delta = Max-Min;
-  
+
   float newDelta;
 
   if (!minIsSet && !maxIsSet){
@@ -424,7 +429,7 @@ void yAxisElement::calcDims()
   majorphys.erase(majorphys.begin(),majorphys.end());
   float y;
   const float eps2 = 0.01;
-  
+
   float interv= interval;
   float delt= delta;
   const int maxticks= 30;
@@ -432,7 +437,7 @@ void yAxisElement::calcDims()
     interv *= 2;
     delt   *= 2;
   }
-  float starti = (minPlotY < 0) ? minPlotY-interv-fmod(minPlotY,interv) 
+  float starti = (minPlotY < 0) ? minPlotY-interv-fmod(minPlotY,interv)
     : minPlotY+interv-fmod(minPlotY,interv);
   if (starti < 0) starti+=interv;
 
@@ -452,7 +457,7 @@ void yAxisElement::calcDims()
 miString yAxisElement::userValueLabel(const float value)
 {
   miString s;
-  
+
   int n = majorticks.size();
 
   for ( int i=0; i<n; i++){

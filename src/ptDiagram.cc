@@ -465,6 +465,12 @@ void ptDiagram::clearKeywords()
   keymap.clear();
 }
 
+void ptDiagram::setAllTimesAxisScale(bool b)
+{
+  for (PlotElement *elm = first; elm; elm = elm->next)
+    elm->setAllTimesAxisScale(b);
+}
+
 // set timeinterval to plot by timeline-indices
 void ptDiagram::setTimeInterval(int start, int stop)
 {
@@ -539,6 +545,34 @@ void ptDiagram::setProgInterval(int progstart, int progstop)
 
   setTimeInterval(start, stop);
 
+}
+
+void ptDiagram::getTimeInterval(int &start, int &stop)
+{
+  start = startidx;
+  stop = stopidx;
+}
+
+void ptDiagram::getTimeInterval(miTime& start, miTime & stop)
+{
+  if (startidx >= 0 && startidx<timeLine.size())
+    start = timeLine[startidx];
+  if (stopidx >= 0 && stopidx<timeLine.size())
+    stop = timeLine[stopidx];
+}
+
+void ptDiagram::getTotalTimeInterval(int &start, int &stop)
+{
+  start = 0;
+  stop = timeLine.size() - 1;
+}
+
+void ptDiagram::getTotalTimeInterval(miTime &start, miTime &stop)
+{
+  if (timeLine.size() > 0) {
+    start = timeLine[0];
+    stop = timeLine[timeLine.size() - 1];
+  }
 }
 
 // find first plotelement with specific name

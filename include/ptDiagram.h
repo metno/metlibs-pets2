@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -51,7 +51,6 @@ using namespace std;
 class ptDiagram
 {
 private:
-  //  XAxisInfo *xtime;         // x-coordinates for the timepoints
   XAxisInfo xtime;          // x-coordinates for the timepoints
   vector<miTime> timeLine;  // the actual time points
   vector<int> timeLineIdx;  // indices to complete timeline in DD
@@ -79,27 +78,24 @@ public:
   // make plotelements based on style and DD
   bool makeDefaultPlotElements(ptColor *bgColor);
   // set screen pixel dimensions in GL coordinates
-  void setPixSize(float,float);
+  void setPixSize(float, float);
+  // turn on scaling of Yaxis based on data from all timepoints
+  void setAllTimesAxisScale(bool b);
+
   // set time interval for plotting
   void setTimeInterval(int, int);
   void setTimeInterval(miTime, miTime);
-
-  void setProgInterval(int progstart,int progstop);
-
+  void setProgInterval(int progstart, int progstop);
 
   // return current timeinterval, start and stop
-  void getTimeInterval(int &start, int &stop)
-    { start = startidx; stop = stopidx; }
-  void getTotalTimeInterval(int &start, int &stop)
-    { start = 0; stop = timeLine.size()-1; }
+  void getTimeInterval(int &start, int &stop);
+  void getTimeInterval(miTime& start, miTime& stop);
+  void getTotalTimeInterval(int &start, int &stop);
+  void getTotalTimeInterval(miTime &start, miTime &stop);
 
-  PlotElement* findElement(const miString,// search by name
-			   PlotElement* start= 0);
-  PlotElement* findElement(ptPrimitiveType,// search by type
-			   PlotElement* start= 0);
-  PlotElement* findElement(ptPrimitiveType,// search by type and pid
-			   ParId,
-			   PlotElement* start= 0);
+  PlotElement* findElement(const miString, PlotElement* start = 0);// search by name
+  PlotElement* findElement(ptPrimitiveType, PlotElement* start = 0);// search by type
+  PlotElement* findElement(ptPrimitiveType, ParId, PlotElement* start = 0);// search by type and pid
   void addElement(PlotElement*);
   void removeElement(PlotElement*);
   void removeElement(ptPrimitiveType);
@@ -114,18 +110,19 @@ public:
   void tst_print();
 
   void toggleColour(bool use);
-  bool getColour() {return colourFlag;}
+  bool getColour()
+  {
+    return colourFlag;
+  }
   void setPrinting(bool print);
   void setFakeStipple(bool use);
-  bool startPSoutput(const string& fname,
-		     const bool incolour,
-		     const bool inlandscape,
-		     const bool doEPS = false);
+  bool startPSoutput(const string& fname, const bool incolour,
+      const bool inlandscape, const bool doEPS = false);
   bool startPSnewpage();
   bool endPSoutput();
   // keyword/value pair methods
   void addKeyword(const miString&, const miString&);
-  void setKeymap(const map<miString,miString>&);
+  void setKeymap(const map<miString, miString>&);
   void clearKeywords();
 };
 
