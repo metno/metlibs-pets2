@@ -58,6 +58,8 @@ private:
   PlotElement *first, *last;// pointers to plotelement list
   ptDiagramData *DD;        // diagramdata
   ptStyle *Style;           // current style
+  float glwidth, glheight;  // current GL width and height
+  int scwidth, scheight;    // current screen width and height (in pixels)
   float pixWidth, pixHeight;// current width and height of screenpixel
   miTime startT, stopT;     // current timeinterval
   int startidx, stopidx;    // current timeinterval xaxis-indices
@@ -77,8 +79,9 @@ public:
   bool attachData(ptDiagramData*);
   // make plotelements based on style and DD
   bool makeDefaultPlotElements(ptColor *bgColor);
-  // set screen pixel dimensions in GL coordinates
-  void setPixSize(float, float);
+  // set current viewport both in screen pixels and in GL coordinates
+  void setViewport(int sw, int sh, float gw, float gh);
+
   // turn on scaling of Yaxis based on data from all timepoints
   void setAllTimesAxisScale(bool b);
 

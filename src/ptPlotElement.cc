@@ -51,7 +51,8 @@ PlotElement::PlotElement(const Layout& layout,
    enabled(en),next(pNext), startT(0), stopT(pXtime->xcoord.size()-1),
    pInColour(layout.patternInColour), circle_list(0),
    datalimits(layout.datalimits), colorlist(layout.colorlist),
-   visible(layout.visible), AllTimesAxisScale(true)
+   visible(layout.visible), AllTimesAxisScale(true),
+   scwidth(1), scheight(1), glwidth(1.0), glheight(1.0), pixWidth(1.0), pixHeight(1.0)
 {
 #ifdef DEBUG
   cout << "Inside PlotElement's constructor" << endl;
@@ -62,6 +63,16 @@ PlotElement::~PlotElement()
 {
   if (circle_list) glDeleteLists(circle_list,1);
 }
+
+void PlotElement::setViewport(int sw, int sh, float gw, float gh){
+  scwidth = sw;
+  scheight = sh;
+  glwidth = gw;
+  glheight = gh;
+  pixWidth = glwidth / scwidth;
+  pixHeight = glheight / scheight;
+}
+
 
 void PlotElement::setTimeInterval(const int start, const int stop)
 {

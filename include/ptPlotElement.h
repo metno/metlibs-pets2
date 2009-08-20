@@ -75,6 +75,8 @@ protected:
   ptFontSize fontSize;        // Font size
   int fontidx;                // font index
   ptAlign align;              // Alignment
+  float glwidth, glheight;    // current GL width and height
+  int scwidth, scheight;      // current screen width and height (in pixels)
   float pixWidth;             // current screenpixel width
   float pixHeight;            // current screenpixel height
   int startT;                 // start of timeinterval to plot
@@ -116,7 +118,8 @@ protected:
   }
   void _prepFont()
   {
-    FM.setPixSize(pixWidth, pixHeight);
+    FM.setGlSize(glwidth, glheight);
+    FM.setVpSize(scwidth, scheight);
     FM.setFontSize(fontSize);
   }
   void _initPrinting(int size = 500)
@@ -172,11 +175,8 @@ public:
       XAxisInfo *pXtime = 0, const bool& en = true, PlotElement *pNext = 0);
   virtual ~PlotElement();
 
-  void setPixSize(const float pw, const float ph)
-  {
-    pixWidth = pw;
-    pixHeight = ph;
-  }
+  void setViewport(int sw, int sh, float gw, float gh);
+
   const miString& Name() const
   {
     return name;

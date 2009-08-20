@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -87,12 +87,14 @@ public:
   int setFontSize(const ptFontSize size);
   int setFontColor(const ptColor color);
   int setPrintMode(const ptPrintMode mode);
-  int setPixSize(const float pw, const float ph);
+  //int setPixSize(const float pw, const float ph);
+  void setGlSize(float width, float height);
+  void setVpSize(int width, int height);
 
   // printing commands
   int printChar(const int c, const float x, const float y);
   int printStr(const char* s, const float x, const float y);
-  // Metric commands 
+  // Metric commands
   int getCharSize(const int c, float& w, float& h);
   int getMaxCharSize(float& w, float& h);
   int getStringSize(const char* s, float& w, float& h);

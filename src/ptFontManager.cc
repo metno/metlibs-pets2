@@ -33,12 +33,19 @@ FontManager FM;
 
 miString FontManager::display_name_;
 
-const float HEADER1_size = 24.0;// 24.0
-const float HEADER2_size = 18.0;// 20.0
-const float HEADER3_size = 14.0;// 18.0
-const float NORMAL_size = 12.0;// 12.0
-const float SUBSCRIPT_size = 8.0;//  8.0
+/*
+const float HEADER1_size = 24.0;
+const float HEADER2_size = 18.0;
+const float HEADER3_size = 14.0;
+const float NORMAL_size = 12.0;
+const float SUBSCRIPT_size = 8.0;
+*/
 
+const float HEADER1_size = 20.0;
+const float HEADER2_size = 14.0;
+const float HEADER3_size = 12.0;
+const float NORMAL_size = 10.0;
+const float SUBSCRIPT_size = 6.0;
 
 FontManager::FontManager() :
   curFC(-1), numFC(0)
@@ -225,6 +232,7 @@ int FontManager::setPrintMode(const ptPrintMode mode)
   return 0;
 }
 
+/*
 int FontManager::setPixSize(const float pw, const float ph)
 {
   if (curFC >= 0) {
@@ -233,6 +241,21 @@ int FontManager::setPixSize(const float pw, const float ph)
   } else
     return 0;
 }
+*/
+
+void FontManager::setGlSize(float width, float height)
+{
+  if (curFC >= 0) {
+    FC[curFC].fontc->setGlSize(width, height);
+  }
+}
+
+void FontManager::setVpSize(int width, int height){
+  if (curFC >= 0) {
+    FC[curFC].fontc->setVpSize(width, height);
+  }
+}
+
 
 // printing commands
 int FontManager::printChar(const int c, const float x, const float y)

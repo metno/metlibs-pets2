@@ -63,8 +63,9 @@
 // should consider additional constructor for equally spaced time points????
 
 ptDiagram::ptDiagram(ptStyle *style) :
-  nPlotElements(0), first(0), last(0), DD(0), pixWidth(1.0), pixHeight(1.0),
-      Style(style), startidx(0), stopidx(0), colourFlag(true), localTime(false)
+  nPlotElements(0), first(0), last(0), DD(0), scwidth(1), scheight(1),
+  glwidth(1.0), glheight(1.0), pixWidth(1.0), pixHeight(1.0), Style(style),
+  startidx(0), stopidx(0), colourFlag(true), localTime(false)
 {
   if (Style)
     Style->getTimeSetting(localTime, timeZone);
@@ -178,20 +179,25 @@ void ptDiagram::makeXtime()
 }
 
 //---------------------------------------------------
-// Name         : setPixSize
-// Purpose      : sets the current pixel (screen) size in GL coordinates
+// Name         : setViewport
+// Purpose      : sets the current viewport both in screen pixels and in GL coordinates
 // Last modified:
 //---------------------------------------------------
-void ptDiagram::setPixSize(float pw, float ph)
-{
-  pixWidth = pw;
-  pixHeight = ph;
+void ptDiagram::setViewport(int sw, int sh, float gw, float gh){
+  scwidth = sw;
+  scheight = sh;
+  glwidth = gw;
+  glheight = gh;
+  pixWidth = glwidth / scwidth;
+  pixHeight = glheight / scheight;
 
   if (first) {
     for (PlotElement* elm = first; elm; elm = elm->next)
-      elm->setPixSize(pw, ph);
+      elm->setViewport(sw, sh, gw, gh);
   }
 }
+
+
 
 //---------------------------------------------------
 // Name         : toggleColour
