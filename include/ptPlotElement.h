@@ -161,7 +161,7 @@ protected:
   int dataLimitIndex(const float v);
   float dataLimit(const int i)
   {
-    if (i < 0 || i >= datalimits.size())
+    if (i < 0 || i >= (int)datalimits.size())
       return 0;
     return datalimits[i];
   }
@@ -287,7 +287,7 @@ public:
 		  PlotElement *pNext=0)
     : PlotElement(layout,field,pXtime,en,pNext),
       paramId((*cds.dData)[cds.index].Id()),
-      ds(cds),fdata(&((*cds.dData)[cds.index]))
+      fdata(&((*cds.dData)[cds.index])), ds(cds)
   {}
   virtual ~dataPlotElement(){}
   virtual void setTimeInterval(const int start, const int stop);
