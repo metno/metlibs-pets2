@@ -43,10 +43,9 @@
 
 const int MAXFONTCOLL=10;
 
-const miString XFONTSET   = "XFONTSET";
-const miString GLTTFONTSET= "GLTTFONTSET";
-// const miString GLCFONTSET = "GLCFONTSET";
-// const miString GLPRFONTSET= "GLPRFONTSET";
+const miString XFONTSET = "XFONTSET";
+const miString GLTTFONTSET = "GLTTFONTSET";
+const miString QTFONTSET = "QTFONTSET";
 
 class FontManager {
 private:
@@ -87,7 +86,6 @@ public:
   int setFontSize(const ptFontSize size);
   int setFontColor(const ptColor color);
   int setPrintMode(const ptPrintMode mode);
-  //int setPixSize(const float pw, const float ph);
   void setGlSize(float width, float height);
   void setVpSize(int width, int height);
 
