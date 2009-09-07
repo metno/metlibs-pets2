@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -56,13 +56,12 @@ class EditLineElement : public AxisChildElement
   bool printValueLock; // lock printValue flag
   bool modified;
   bool activenodes;
-  bool visible;
   float actPx, actPy; // position of active point
   miString pformat; // numerical format of small value-tip
   int priority;     // priority for editing
   bool wrapdegrees;
   float wraplimit;
-  
+
   ptEditStyle editstyle; // type of graphical editing
   ptFillStyle fstyle;    // fillstyle for editing elements
   ptAlign pointAlign;    // alignment of edit-markers
@@ -72,8 +71,8 @@ class EditLineElement : public AxisChildElement
 public:
   EditLineElement(yAxisElement* ya,
 		  const DataSpec cds,
-		  const ptVertFieldf& field, 
-		  const Layout& layout, 
+		  const ptVertFieldf& field,
+		  const Layout& layout,
 		  XAxisInfo* xtime);
   ~EditLineElement();
   void plot();
@@ -81,7 +80,7 @@ public:
 
   bool pMarked; // true if any points are marked for edit
   bool grabPoint(float x, float y,// return true if x,y near any datapoint
-		 bool mark = false, 
+		 bool mark = false,
 		 bool fillInterval = false);
   bool grabPoint(int  step,
 		 bool mark,
@@ -100,7 +99,6 @@ public:
   void lockValuePrinting(const bool flag); // lock/unlock printValue
   bool isModified(){return modified;}
   void setActive(const bool b){activenodes= b; }
-  void setVisible(const bool b){visible= b; }
   void getActivePos(float& px, float& py){ px= actPx; py= actPy;}
   int  Priority() const { return priority;}
 };

@@ -42,7 +42,7 @@ EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
       fstyle(layout.fillstyle), pointAlign(layout.align), printValueLock(
           layout.printValueLock), editMode(LE_SINGLE), markerType(LE_RECT),
       pMarked(false), printValue(false), modified(false), activenodes(true),
-      visible(true), backcolor(layout.color2), histocolor(layout.color3),
+      backcolor(layout.color2), histocolor(layout.color3),
       pformat(layout.pformat), priority(layout.priority), markerSize(
           layout.size), wrapdegrees(layout.wrapdegrees), wraplimit(
           layout.wraplimit)

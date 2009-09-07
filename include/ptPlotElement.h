@@ -244,6 +244,8 @@ public:
 
   void getRectangle(float& x1, float& y1, float& x2, float& y2);
   void getTimeRectangle(float& x1, float& y1, float& x2, float& y2);
+  void setVisible(const bool b){visible= b; }
+
 };
 
 
