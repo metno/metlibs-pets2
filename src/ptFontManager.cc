@@ -43,8 +43,8 @@ const float SUBSCRIPT_size = 8.0;
 
 const float HEADER1_size = 20.0;
 const float HEADER2_size = 14.0;
-const float HEADER3_size = 12.0;
-const float NORMAL_size = 8.0;
+const float HEADER3_size = 11.0;
+const float NORMAL_size = 9.0;
 const float SUBSCRIPT_size = 6.0;
 
 FontManager::FontManager() :
