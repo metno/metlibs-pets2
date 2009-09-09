@@ -87,6 +87,7 @@ public:
 		 bool fillInterval);
   void movePoints(float dy); // move marked points dy
   void movePointsQuant(int dy); // move marked points dy quants
+  void replaceDataValues(const WeatherParameter & source);
   void releasePoints(); // unmark all points
   void releaseButton(); // notify buttonrelease
   void zero(); // try to set marked points to zero..

@@ -506,6 +506,23 @@ void EditLineElement::undo()
   }
 }
 
+// replace data for marked points with data from source
+void EditLineElement::replaceDataValues(const WeatherParameter & source){
+  vector<float> sd = source.copyDataVector();
+  if (sd.size() != datasize())
+    return;
+  saveundo();
+  for (int i = 0; i < datasize(); i++)
+    if (markedPoints[i]) {
+      if (_legalValue(sd[i])) {
+        setdval(i, sd[i]);
+        modified = true;
+      }
+    }
+  calcDataProperties();
+}
+
+
 // try to set marked points to zero
 void EditLineElement::zero()
 {
