@@ -511,7 +511,7 @@ void EditLineElement::replaceDataValues(const WeatherParameter & source){
   vector<float> sd = source.copyDataVector();
   if (sd.size() != datasize())
     return;
-  saveundo();
+  //saveundo();
   for (int i = 0; i < datasize(); i++)
     if (markedPoints[i]) {
       if (_legalValue(sd[i])) {
@@ -526,7 +526,7 @@ void EditLineElement::replaceDataValues(const WeatherParameter & source){
 // try to set marked points to zero
 void EditLineElement::zero()
 {
-  saveundo();
+  //saveundo();
   for (int i = 0; i < datasize(); i++)
     if (markedPoints[i]) {
       if (_legalValue(0.0)) {
