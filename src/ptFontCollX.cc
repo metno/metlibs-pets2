@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -35,30 +35,32 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glx.h>
+#include <string.h>
+
 
 #ifdef linux
 // linux fonts
-const char HEADER1_FONT[] = 
+const char HEADER1_FONT[] =
 "-*-helvetica-medium-r-*-*-18-*-*-*-p-*-iso8859-1";
-const char HEADER2_FONT[] = 
+const char HEADER2_FONT[] =
 "-*-helvetica-medium-r-*-*-17-*-*-*-p-*-iso8859-1";
-const char HEADER3_FONT[] = 
+const char HEADER3_FONT[] =
 "-*-helvetica-medium-r-*-*-14-*-*-*-p-*-iso8859-1";
-const char NORMAL_FONT[] = 
+const char NORMAL_FONT[] =
 "-*-helvetica-medium-r-*-*-12-*-*-*-p-*-iso8859-1";
-const char SUBSCRIPT_FONT[] = 
+const char SUBSCRIPT_FONT[] =
 "-*-helvetica-medium-r-*-*-8-*-*-*-p-*-iso8859-1";
 #else
 // SGI fonts
-const char HEADER1_FONT[] = 
+const char HEADER1_FONT[] =
 "-adobe-palatino-medium-r-normal--24-0-100-100-p-100-iso8859-1";
-const char HEADER2_FONT[] = 
+const char HEADER2_FONT[] =
 "-adobe-helvetica-medium-r-normal--16-0-100-100-p-100-iso8859-1";
-const char HEADER3_FONT[] = 
+const char HEADER3_FONT[] =
 "-adobe-helvetica-medium-r-narrow--0-110-100-100-p-100-iso8859-1";
-const char NORMAL_FONT[] = 
+const char NORMAL_FONT[] =
 "-adobe-helvetica-medium-r-narrow--0-90-100-100-p-100-iso8859-1";
-const char SUBSCRIPT_FONT[] = 
+const char SUBSCRIPT_FONT[] =
 "-adobe-helvetica-medium-r-narrow--0-70-100-100-p-100-iso8859-1";
 #endif
 
@@ -82,7 +84,7 @@ void FontCollectionX::_makeRasterFont(const ptFontSize size)
 {
     Font id;
     unsigned int first, last;
-    XFontStruct *info; 
+    XFontStruct *info;
 
 #ifdef DEBUG
     cout << "before XLoadQueryFont" << endl;
@@ -95,10 +97,10 @@ void FontCollectionX::_makeRasterFont(const ptFontSize size)
       info = XLoadQueryFont(dpy,HEADER2_FONT);
       break;
     case HEADER3 :
-      info = XLoadQueryFont(dpy,HEADER3_FONT); 
+      info = XLoadQueryFont(dpy,HEADER3_FONT);
       break;
     case NORMAL :
-      info = XLoadQueryFont(dpy,NORMAL_FONT); 
+      info = XLoadQueryFont(dpy,NORMAL_FONT);
       break;
     case SUBSCRIPT :
       info = XLoadQueryFont(dpy,SUBSCRIPT_FONT);
@@ -186,7 +188,7 @@ int FontCollectionX::getMaxCharSize(float& w, float& h)
 int FontCollectionX::getStringSize(const char* s, float& w, float& h)
 {
   if (!s){
-    w=0; 
+    w=0;
     h=0;
     return 0;
   }
