@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -35,6 +35,7 @@
 
 #include <puTools/miString.h>
 #include <GL/gl.h>
+#include <vector>
 
 enum ptFillStyle {
   NONE,
@@ -68,14 +69,14 @@ const unsigned int LineStyle[][2] = {
 
 extern const GLubyte* fillPattern(ptFillStyle);
 
-extern ptFillStyle Str2FillStyle(miString&);
-extern ptLineStyle Str2LineStyle(miString&);
-extern vector<ptFillStyle> Str2FillStyleList(miString&);
-extern vector<ptLineStyle> Str2LineStyleList(miString&);
+extern ptFillStyle Str2FillStyle(miutil::miString&);
+extern ptLineStyle Str2LineStyle(miutil::miString&);
+extern std::vector<ptFillStyle> Str2FillStyleList(miutil::miString&);
+extern std::vector<ptLineStyle> Str2LineStyleList(miutil::miString&);
 
-extern miString FillStyle2Str(ptFillStyle);
-extern miString LineStyle2Str(ptLineStyle);
-extern miString FillStyleList2Str(vector<ptFillStyle>&);
-extern miString LineStyleList2Str(vector<ptLineStyle>&);
+extern miutil::miString FillStyle2Str(ptFillStyle);
+extern miutil::miString LineStyle2Str(ptLineStyle);
+extern miutil::miString FillStyleList2Str(std::vector<ptFillStyle>&);
+extern miutil::miString LineStyleList2Str(std::vector<ptLineStyle>&);
 
 #endif

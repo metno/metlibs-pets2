@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -32,6 +32,8 @@
 
 #include "ptFontColl.h"
 
+using namespace miutil;
+
 #ifdef WITH_GLP
 #include <glp.h>
 
@@ -41,7 +43,7 @@ if((GLPerr = glpGetError()) != GLP_NONE) {cout<<">>>>\tGLP error " << GLPerr << 
 
 
 FontCollectionGLPR::FontCollectionGLPR()
-  : FontCollection(), 
+  : FontCollection(),
     fscale(1.0)
 {
   const float defFontScales[MAXFONTSIZES] = {
@@ -141,7 +143,7 @@ int FontCollectionGLPR::getMaxCharSize(float& w, float& h)
 {
   w=fscale;
   h=fscale*1.5;
-//   if (!charSizes[FontIndex][Size][0]) { 
+//   if (!charSizes[FontIndex][Size][0]) {
 //     int ch1,cw1,ch2,cw2;
 //     getCharSize('M',cw1, ch1);
 //     getCharSize('f',cw2, ch2);

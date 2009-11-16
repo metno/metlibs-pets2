@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -44,7 +44,7 @@
 
 class FontCollection {
 protected:
-  miString FamilyName[MAXFONTS];
+  miutil::miString FamilyName[MAXFONTS];
   int numFonts; // number of defined fonts
   int FontIndex;    // current font index
   ptFontFace Face;  // current font face
@@ -54,8 +54,8 @@ protected:
   int charSizes[MAXFONTS][MAXFONTSIZES][2]; // typical char width and height
   float pixWidth, pixHeight;
 public:
-  FontCollection() 
-    : numFonts(0), FontIndex(-1), Face(F_NORMAL), 
+  FontCollection()
+    : numFonts(0), FontIndex(-1), Face(F_NORMAL),
       Size(NORMAL)
     {
       for (int i=0; i<MAXFONTS;i++)
@@ -63,8 +63,8 @@ public:
 	  charSizes[i][j][0] = charSizes[i][j][1] = 0;
     }
   ~FontCollection() {}
-  
-  virtual int makeFont(const miString family) = 0;
+
+  virtual int makeFont(const miutil::miString family) = 0;
   virtual int defineFontSize(const int index, const ptFontSize,
 			     const float size)= 0;
   // choose font, size, face and colour
@@ -91,10 +91,10 @@ public:
     {return Size;}
   ptColor getFontColor()
     {return Color;}
-  miString getFontName(const int index)
+  miutil::miString getFontName(const int index)
     {
-      return (index >=0 && index <numFonts) ? 
-	FamilyName[index] : miString("");
+      return (index >=0 && index <numFonts) ?
+	FamilyName[index] : miutil::miString("");
     }
 };
 
@@ -120,7 +120,7 @@ public:
   FontCollectionGlc();
   ~FontCollectionGlc();
 
-  int makeFont(const miString family);
+  int makeFont(const miutil::miString family);
   int defineFontSize(const int index, const ptFontSize,
 			     const float size);
   // choose font, size, face and colour
@@ -139,11 +139,11 @@ public:
   {Color = color; return(1);}
   int setPrintMode(const ptPrintMode mode);
   //int setPixSize(const float pw, const float ph);
-  
+
   // printing commands
   int printChar(const int c, const float x, const float y);
   int printStr(const char* s, const float x, const float y);
-  // Metric commands 
+  // Metric commands
   int getCharSize(const int c, float& w, float& h);
   int getMaxCharSize(float& w, float& h);
   int getStringSize(const char* s, float& w, float& h);
@@ -154,17 +154,17 @@ private:
   Display *dpy;
   int baseList[MAXFONTSIZES]; //index to display lists for fonts
   bool fontList[MAXFONTSIZES];  //list of fonts currently in use
-  XFontStruct* fontInfo[MAXFONTSIZES]; 
-  int base;                          //display list index for this object 
+  XFontStruct* fontInfo[MAXFONTSIZES];
+  int base;                          //display list index for this object
 
   void _makeRasterFont(const ptFontSize);
 
 public:
   FontCollectionX(Display* display);
   ~FontCollectionX();
-  
-  int makeFont(const miString family){return 1;}
-  int defineFontSize(const int index, 
+
+  int makeFont(const miutil::miString family){return 1;}
+  int defineFontSize(const int index,
 		     const ptFontSize,
 		     const float size){return 1;}
   // choose font, size, face and colour
@@ -204,8 +204,8 @@ public:
   FontCollectionGLPR();
   ~FontCollectionGLPR() {}
 
-  int makeFont(const miString family){return 1;}
-  int defineFontSize(const int index, 
+  int makeFont(const miutil::miString family){return 1;}
+  int defineFontSize(const int index,
 		     const ptFontSize,
 		     const float size){return 1;}
   int setFontColor(const ptColor color) { return 1;}
@@ -221,7 +221,7 @@ public:
   // printing commands
   int printChar(const int c, const float x, const float y);
   int printStr(const char* s, const float x, const float y);
-  // Metric commands 
+  // Metric commands
   int getCharSize(const int c, float& w, float& h);
   int getMaxCharSize(float& w, float& h);
   int getStringSize(const char* s, float& w, float& h);

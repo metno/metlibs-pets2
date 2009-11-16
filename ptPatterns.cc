@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -30,6 +30,10 @@
 
 #include "ptPatterns.h"
 #include <polyStipMasks.h>
+
+using namespace std;
+using namespace miutil;
+
 
 const GLubyte* fillPattern(ptFillStyle fill)
 {
@@ -68,7 +72,7 @@ vector<ptFillStyle> Str2FillStyleList(miString& fl)
   vector<miString> l= fl.split(",");
   int n= l.size();
   vector<ptFillStyle> vf;
-  
+
   for (int i=0; i<n; i++)
     vf.push_back(Str2FillStyle(l[i]));
 
@@ -91,7 +95,7 @@ vector<ptLineStyle> Str2LineStyleList(miString& fl)
   vector<miString> l= fl.split(",");
   int n= l.size();
   vector<ptLineStyle> vf;
-  
+
   for (int i=0; i<n; i++)
     vf.push_back(Str2LineStyle(l[i]));
 

@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -39,20 +39,20 @@
 using namespace std;
 
 struct ptColor {
-  miString name;
+  miutil::miString name;
   float colTable[4];
-  static map<miString,ptColor> colorlist;
+  static std::map<miutil::miString,ptColor> colorlist;
   static bool initialised;
 
   ptColor();
-  ptColor(const miString& n);
-  ptColor(const miString& n, float r, float g, float b, float a=1);
+  ptColor(const miutil::miString& n);
+  ptColor(const miutil::miString& n, float r, float g, float b, float a=1);
 
   static void initColorlist();
-  void fromStr(const miString&);
-  miString Color2Str() const;
-  static vector<ptColor> Str2Colorlist(const miString&);
-  static miString Colorlist2Str(const vector<ptColor>&);
+  void fromStr(const miutil::miString&);
+  miutil::miString Color2Str() const;
+  static std::vector<ptColor> Str2Colorlist(const miutil::miString&);
+  static miutil::miString Colorlist2Str(const std::vector<ptColor>&);
 
   bool operator==(const ptColor &rhs) const
   {
@@ -62,7 +62,7 @@ struct ptColor {
   {
     return (name != rhs.name);
   }
-  friend ostream& operator<<(ostream& out, const ptColor& rhs)
+  friend std::ostream& operator<<(std::ostream& out, const ptColor& rhs)
   {
     return out << rhs.name;
   }

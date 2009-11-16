@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -33,17 +33,19 @@
 #include <ptPlotElement.h>
 #include <ptProgElement.h>
 #include <iostream>
-#include <stdio.h>         
+#include <stdio.h>
 
-ProgElement::ProgElement(vector<int>& data, 
-			 const ptVertFieldf& field, 
-			 const Layout& layout, 
+using namespace miutil;
+
+ProgElement::ProgElement(vector<int>& data,
+			 const ptVertFieldf& field,
+			 const Layout& layout,
 			 XAxisInfo* xtime)
   : PlotElement(layout, field, xtime),
     timeData(data), minSkipX(layout.minSkipX)
 {
 #ifdef DEBUG
-  cout << "Inside ProgElement's constructor" << endl; 
+  cout << "Inside ProgElement's constructor" << endl;
 #endif
   type=PROG;
 }
@@ -61,7 +63,7 @@ void ProgElement::plot()
   float numWidth3 = numWidth*3;
   float numWidth4 = numWidth*4;
   float signWidth = numWidth*0.8;
-  
+
   float offset, accum=0, signw;
   float deltaT=(xtime->xcoord.size() ? xtime->xcoord[1]-xtime->xcoord[0] : 1);
 
@@ -73,15 +75,15 @@ void ProgElement::plot()
       strcpy(text,"+");
       signw = signWidth;
     }
-    else { 
+    else {
       text[0] = '\0';
       signw = 0;
     }
 
     _setColor(color);
     //print first prog time
-    sprintf(tmp,"%d",timeData[0]); 
-    if (strlen(tmp)==1) 
+    sprintf(tmp,"%d",timeData[0]);
+    if (strlen(tmp)==1)
       offset = signw + numWidth;
     else if (strlen(tmp)==2)
       offset = signw + numWidth2;
@@ -97,7 +99,7 @@ void ProgElement::plot()
 
     for (int i=1; i<xtime->xcoord.size() && i<timeData.size(); i++) {
       // if step is too small, don't print value
-      if (accum+deltaT < minSkipX*pixWidth) { 
+      if (accum+deltaT < minSkipX*pixWidth) {
 	accum += deltaT;
 	deltaT = xtime->xcoord[i+1]-xtime->xcoord[i];
 	continue;
@@ -110,8 +112,8 @@ void ProgElement::plot()
 	text[0] = '\0';
 	signw = 0;
       }
-      sprintf(tmp,"%d",timeData[i]); 
-      if (strlen(tmp)==1) 
+      sprintf(tmp,"%d",timeData[i]);
+      if (strlen(tmp)==1)
 	offset = signw + numWidth;
       else if (strlen(tmp)==2)
 	offset = signw + numWidth2;

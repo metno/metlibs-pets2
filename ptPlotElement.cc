@@ -34,6 +34,8 @@
 #include <iostream>
 #include <math.h>
 
+using namespace miutil;
+
 GLPfile* PlotElement::psoutput=0;       // PostScript module
 
 bool PlotElement::printing= false;      // postscript plotting

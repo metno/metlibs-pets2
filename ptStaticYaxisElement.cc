@@ -36,6 +36,8 @@
 #include <math.h>
 #include <float.h>
 
+using namespace miutil;
+
 staticYaxisElement::staticYaxisElement(const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime) :
   yAxisElement(field, layout, xtime), numTickMajor(layout.numTickMajor),

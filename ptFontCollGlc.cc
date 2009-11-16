@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -32,9 +32,11 @@
 
 #include "ptFontColl.h"
 
+using namespace miutil;
+
 FontCollectionGlc::FontCollectionGlc()
-  : FontCollection(), 
-    drawStyle(GL_BITMAP), dl(GL_FALSE), contextID(0), 
+  : FontCollection(),
+    drawStyle(GL_BITMAP), dl(GL_FALSE), contextID(0),
     fScale(1.0)
 {
   const float defFontScales[MAXFONTSIZES] = {
@@ -72,7 +74,7 @@ FontCollectionGlc::~FontCollectionGlc()
 
 int FontCollectionGlc::_Init() {
   //int i, index;
-  
+
 #if defined(linux)
 #else
   if ((contextID = glcGenContext()) == 0) {
@@ -129,7 +131,7 @@ int FontCollectionGlc::_Init() {
     cout << "Died at glcNewFontFromFamily" << endl; //Courier
     return 0;
   }
-  
+
   setPrintMode(M_BITMAP);
   //setPrintMode(M_LINE);
   setFont(0);
@@ -162,7 +164,7 @@ int FontCollectionGlc::setPrintMode(const ptPrintMode mode)
 {
 #if defined(linux)
 #else
-  Mode = mode; 
+  Mode = mode;
   if (Mode==M_BITMAP) {
     drawStyle = GLC_BITMAP;
   } else {
@@ -178,7 +180,7 @@ int FontCollectionGlc::makeFont(const miString family)
   return(1);
 }
 
-int FontCollectionGlc::defineFontSize(const int index, 
+int FontCollectionGlc::defineFontSize(const int index,
 				      const ptFontSize,
 				      const float size)
 {
@@ -273,7 +275,7 @@ int FontCollectionGlc::getMaxCharSize(float& w, float& h)
 {
 #if defined(linux)
 #else
-  if (!charSizes[FontIndex][Size][0]) { 
+  if (!charSizes[FontIndex][Size][0]) {
     float ch1,cw1,ch2,cw2;
     getCharSize('M',cw1, ch1);
     getCharSize('f',cw2, ch2);
@@ -363,7 +365,7 @@ void FontCollectionGlc::_FontMap_AdobeStandard(GLint f) {
     const GLint maxMapped = glcGetFonti(f, GLC_MAX_MAPPED_CODE);
     const GLCenum stringType = glcGeti(GLC_STRING_TYPE);
     //cout << "minMapped/maxMapped:" << minMapped << " / " << maxMapped << endl;
-    
+
     glcStringType(GLC_UCS1);
     for (i = minMapped ; i <= maxMapped ; ++i) {
       //cout << "FONTMAP[i]:" << i << endl;

@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -33,6 +33,8 @@
 #include <fstream>
 #include <ptStyle.h>
 #include <iostream>
+
+using namespace miutil;
 
 stMother Str2Mother(miString buf){
   miString mother = buf.upcase();
@@ -68,7 +70,7 @@ Primitive::Primitive(ptPrimitiveType t)
 void Primitive::print() const
 {
   cout << "\nPrinting of Primitive:\n\ttype: " << type << "\torder: " << order
-       << "\talias: " << id.alias << "\tnr: " << nr 
+       << "\talias: " << id.alias << "\tnr: " << nr
        << "\tconv: " << conv << "\tmother: " << mother << "\tplotAll: "
        << plotAll << "\tenabled: " << enabled
        << endl << "\t";
@@ -92,7 +94,7 @@ ptStyle::ptStyle(const ptStyle& rhs)
   timeZone= rhs.timeZone;
   leftOffset_= rhs.leftOffset_;
   rightOffset_= rhs.rightOffset_;
-  
+
   nprimF = rhs.nprimF;
   nprim = rhs.nprim;
   bgColor = rhs.bgColor;
@@ -109,7 +111,7 @@ ptStyle& ptStyle::operator=(const ptStyle& rhs)
 {
   if (this == &rhs)
     return *this;
-  
+
   // memberwise copy
   topMargin_ = rhs.topMargin_;
   bottomMargin_ = rhs.bottomMargin_;
@@ -145,14 +147,14 @@ int ptStyle::_findPrimF(const ParId id, const int from) const
   int i;
 
   if (from!=-1) {// search for alias among primitives of from's type
-    for (i=from; i<nprimF && pprimF[i].type==pprimF[from].type; i++) 
+    for (i=from; i<nprimF && pprimF[i].type==pprimF[from].type; i++)
       if (pprimF[i].id == id && pprimF[i].enabled)
 	return i;
-    
+
     return -1;  // alias not found
   }
   else {// search from start of pprim array
-    for (i=0; i<nprimF; i++) 
+    for (i=0; i<nprimF; i++)
       if (pprimF[i].id == id && pprimF[i].enabled)
 	return i;
     return -1; // alias not found
@@ -208,7 +210,7 @@ void ptStyle::disablePrimitive(const bool dataP, const ptPrimitiveType type)
 void ptStyle::enablePrimitive(const ParId pid, const ptPrimitiveType type)
 {
   for (int i=0; i<nprimF; i++)
-    if (pid == pprimF[i].id && 
+    if (pid == pprimF[i].id &&
 	(type == pprimF[i].type || type == DUM_PRIMITIVE))
       _enablePrimitive(true, i);
 }
@@ -307,7 +309,7 @@ ptAxis ptStyle::_findFirstFreeAxis(bool usedAxes[][MAXYAXIS],
   return NO_AXIS;    // no free axis exists
 }
 
-void ptStyle::_sortArray(Out*** array, const int& nelem, 
+void ptStyle::_sortArray(Out*** array, const int& nelem,
 			 const stMother& maxMother,
 			 const int* motherCount)
 {
@@ -316,8 +318,8 @@ void ptStyle::_sortArray(Out*** array, const int& nelem,
   int i,j;
   Out *tmp;
 
-  // first, make sure that all DIAGRAM-mothers appears first in array, 
-  for (i=0; i<motherCount[DIAGRAM]; i++) 
+  // first, make sure that all DIAGRAM-mothers appears first in array,
+  for (i=0; i<motherCount[DIAGRAM]; i++)
     if ((*array[i])->mother != DIAGRAM) {
       for (j=i+1; j<nelem; j++) // find first DIAGRAM-mother in rest of list
 	if ((*array[j])->mother == DIAGRAM)
@@ -359,9 +361,9 @@ void ptStyle::_sortArray(Out*** array, const int& nelem,
 	  *array[j] = *array[j+1];
 	  *array[j+1] = tmp;
 	}
-    
+
   }
-      
+
   // sort the DIAGRAM-mother-elements of the array by y-order (bubble sort)
   for (i=motherCount[DIAGRAM]-1; i>=0; i--) {
     for(j=0; j<i; j++) {
@@ -377,12 +379,12 @@ void ptStyle::_sortArray(Out*** array, const int& nelem,
 void ptStyle::print() const
 {
   int i;
-  cout << "****************************************************************\n" 
+  cout << "****************************************************************\n"
        << "* PRINTING OF STYLE \n"
        << "****************************************************************\n"
-       << "\ttopMargin: " << topMargin_ << "\tbottomMargin: " << bottomMargin_ 
+       << "\ttopMargin: " << topMargin_ << "\tbottomMargin: " << bottomMargin_
        << "\tleftMargin: " << leftMargin_ << "\trightMargin: " << rightMargin_
-       << "\tbgColor: " << bgColor << "\tnAxes: " << nAxes 
+       << "\tbgColor: " << bgColor << "\tnAxes: " << nAxes
        << "\n" << endl;
 //        << "\tnfont: " << nfont << endl;
 //   for (int i=0;i<nfont;i++)
@@ -404,8 +406,8 @@ void ptStyle::print() const
 // specified by primListIn and aliasListIn
 // In addition, location and layout are set for the primitives not found on
 // file.  All primitives and aliases are stored in aliasListOut/primListOut
-// Return value is list of vertical location for the primitives. 
-// NULL is returned on error  
+// Return value is list of vertical location for the primitives.
+// NULL is returned on error
 // assumes that sufficient space is allocated for the out-arrays
 bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 		       StyleOrder *inList,
@@ -458,7 +460,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 #ifdef DEBUG
 	cout << "Adding to outList (SPECIFIC)" << endl;
 #endif
-//  	if (pprimF[iprim].type == LINE || 
+//  	if (pprimF[iprim].type == LINE ||
 // 	    pprimF[iprim].type == EDITLINE) {
 // 	  usedAxes[pprimF[iprim].mother][pprimF[iprim].layout.axis] = true;
 // 	}
@@ -472,11 +474,11 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 	(*outList[nout])->prim.layout = pprimF[iprim].layout;
 	(*outList[nout])->mother = pprimF[iprim].mother;
 	motherCount[(*outList[nout])->mother]++;
-	
-	if ((*outList[nout])->mother!=DIAGRAM && 
+
+	if ((*outList[nout])->mother!=DIAGRAM &&
 	    maxMother < (*outList[nout])->mother)
 	  maxMother = (*outList[nout])->mother;
-	
+
 	(*outList[nout])->order = pprimF[iprim].order;
 	(*outList[nout])->zorder = zOrder(pprimF[iprim].type);
 	(*outList[nout])->prim.type = pprimF[iprim].type;
@@ -512,7 +514,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 	    outList[nout] = new Out*;
 	    (*outList[nout]) = new Out;
 	    //use default lout:
-	    (*outList[nout])->prim.layout = pprimF[iprimtype].layout; 
+	    (*outList[nout])->prim.layout = pprimF[iprimtype].layout;
 	    (*outList[nout])->mother = pprimF[iprimtype].mother;
 	    motherCount[(*outList[nout])->mother]++;
 	    (*outList[nout])->order = pprimF[iprimtype].order;
@@ -521,10 +523,10 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 	    (*outList[nout])->prim.dataIndex = inList[i].dataIndex;
 	    (*outList[nout])->prim.dataComp  = inList[i].dataComp;
 	    (*outList[nout++])->prim.id = inList[i].id;
-	  }	  
+	  }
 	}
       } // if type found
-      
+
     } // if nFound>0
 
   } // for all input elements
@@ -533,7 +535,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 
   // decide axes for the unspecified lineprimitives
   if (iline != -1) {
-    oneLayout = pprimF[iline].layout;  
+    oneLayout = pprimF[iline].layout;
     for (i=0;i<nunspecLines;i++) {
 #ifdef DEBUG
       cout << "Inside loop for unspecified line primitives" << endl;
@@ -562,7 +564,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
     }
 
 #ifdef DEBUG
-  cout << "Finished for unspecified line primitives. nout is " << nout 
+  cout << "Finished for unspecified line primitives. nout is " << nout
        << endl;
 #endif
   }
@@ -582,7 +584,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 // 	found = false;
 // 	for (k=0; k<nprim; k++) {
 // 	  if (pprim[k]->type == YAXIS)
-// 	    found = (pprim[k]->enabled && 
+// 	    found = (pprim[k]->enabled &&
 // 		     pprim[k]->mother == stMother(i) &&
 // 		     pprim[k]->layout.axis == ptAxis(j));
 // 	  if (found) break;
@@ -596,9 +598,9 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 // 	}
 //       }
 
-  
-  
-  
+
+
+
   // go through the list of non-file-primitives and put primitives on list
   for (i=0; i<nprim; i++) {
     if (pprim[i].enabled) {
@@ -617,7 +619,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
       (*outList[nout])->prim.dataComp  = 0;
       (*outList[nout++])->prim.id = ID_UNDEF;
       if (pprim[i].type == XAXIS) {    // get reference to axis-primitive
-	pAxes[axesIndex++] = *outList[nout-1]; 
+	pAxes[axesIndex++] = *outList[nout-1];
       }
     }
   }
@@ -628,25 +630,25 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
   cout << "outList before sorting:\n";
   for (i=0; i<nout;i++)
     cout << "type: " << (*outList[i])->prim.type << " mother: "
-	 << (*outList[i])->mother << " order: " << (*outList[i])->order 
-	 << " zorder: " << (*outList[i])->zorder 
+	 << (*outList[i])->mother << " order: " << (*outList[i])->order
+	 << " zorder: " << (*outList[i])->zorder
 	 << " height: " << (*outList[i])->prim.layout.height << "\n";
-  cout << "MotherCount: DIAGRAM: " << motherCount[DIAGRAM] 
-       << " AXES1: " << motherCount[AXES1] << " AXES2: " 
-       << motherCount[AXES2] << " AXES3: " << motherCount[AXES3] 
-       << " AXES4: " << motherCount[AXES4] << " NO_MOTHER: " 
+  cout << "MotherCount: DIAGRAM: " << motherCount[DIAGRAM]
+       << " AXES1: " << motherCount[AXES1] << " AXES2: "
+       << motherCount[AXES2] << " AXES3: " << motherCount[AXES3]
+       << " AXES4: " << motherCount[AXES4] << " NO_MOTHER: "
        << motherCount[NO_MOTHER] << endl;
   cout << "maxMother : " << maxMother << endl;
-#endif 
+#endif
   _sortArray(outList,nout,maxMother,motherCount);
 #ifdef DEBUG
   cout << "outList after sorting:\n";
   for (i=0; i<nout;i++)
     cout << "type: " << (*outList[i])->prim.type << " mother: "
-	 << (*outList[i])->mother << " order: " << (*outList[i])->order 
-	 << " zorder: " << (*outList[i])->zorder 
+	 << (*outList[i])->mother << " order: " << (*outList[i])->order
+	 << " zorder: " << (*outList[i])->zorder
 	 << " height: " << (*outList[i])->prim.layout.height << endl;
-#endif 
+#endif
 
 #ifdef DEBUG
   cout << "pAxes:\n";
@@ -661,7 +663,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
   }
 
 
-  // now, step through the sorted list of output primitives and set vertical 
+  // now, step through the sorted list of output primitives and set vertical
   // position on screen
   // We assume that maximum one height specification is missing
   float cury = globalWindow.y1 + bottomMargin_;
@@ -673,7 +675,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 #endif
     if (index > 0) {
       cury += ((*outList[index])->prim.type==(*outList[index-1])->prim.type) ?
-	(*outList[index-1])->prim.layout.intSpacing : 
+	(*outList[index-1])->prim.layout.intSpacing :
 	(*outList[index-1])->prim.layout.spacing;
     }
     if ((*outList[index])->prim.layout.height >= 0) {
@@ -681,15 +683,15 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
       cury += (*outList[index])->prim.layout.height;
       (*outList[index++])->prim.field.y2 = cury;
       if (cury > cury2) // coordinate sum exceeds global range, issue warning
-	cout << "Warning: sum of specified heights on style file exceeds " 
+	cout << "Warning: sum of specified heights on style file exceeds "
 	     << "global range. \nPlot may look funny" << endl;
     }
-    else {  // else block will be executed maximum one time 
-      // primitive[index] misses height specification. 
-      // Set all other heights first 
+    else {  // else block will be executed maximum one time
+      // primitive[index] misses height specification.
+      // Set all other heights first
       while(index2 > index) {
 	if (index2 < motherCount[DIAGRAM]-1) {
-	  cury2 -= ((*outList[index2])->prim.type == 
+	  cury2 -= ((*outList[index2])->prim.type ==
 		    (*outList[index2+1])->prim.type) ?
 	    (*outList[index2])->prim.layout.intSpacing :
 	    (*outList[index2])->prim.layout.spacing;
@@ -699,7 +701,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 	(*outList[index2--])->prim.field.y1 = cury2;
       }
       if (index2 < motherCount[DIAGRAM]-1) {
-	cury2 -= ((*outList[index2])->prim.type == 
+	cury2 -= ((*outList[index2])->prim.type ==
 		  (*outList[index2+1])->prim.type) ?
 	  (*outList[index2])->prim.layout.intSpacing :
 	  (*outList[index2])->prim.layout.spacing;
@@ -707,9 +709,9 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
       // now, set primitive[index] coordinates
       (*outList[index])->prim.field.y1 = cury;
       (*outList[index])->prim.field.y2 = cury2;
-      if (cury2 < cury) 
+      if (cury2 < cury)
 	// specified coordinate-sum exceeds global range, issue warning
-	cout << "Warning: sum of specified heights on style file exceeds " 
+	cout << "Warning: sum of specified heights on style file exceeds "
 	     << "global range. \nPlot may look funny" << endl;
       break; // break out of while loop
     }
@@ -717,7 +719,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
 #ifdef DEBUG
     cout << "Finished loop for vertical positions " << endl;
 #endif
-  
+
   // set coordinates for the inside-axes-primitives
   index = motherCount[DIAGRAM];
 #ifdef DEBUG
@@ -726,11 +728,11 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
   for (i=0; i<=maxMother; index+=motherCount[i++])
     for (j=0; j<motherCount[i]; j++) {
 #ifdef DEBUG
-    cout << "Inside loop, set coordinates for axeprims " << i 
+    cout << "Inside loop, set coordinates for axeprims " << i
 	 << " " << j << endl;
 #endif
-      (*outList[index+j])->prim.field.y1 = pAxes[i]->prim.field.y1 
-	+ pAxes[i]->prim.layout.tickLen; 
+      (*outList[index+j])->prim.field.y1 = pAxes[i]->prim.field.y1
+	+ pAxes[i]->prim.layout.tickLen;
       (*outList[index+j])->prim.field.y2 = pAxes[i]->prim.field.y2;
     }
 
@@ -738,13 +740,13 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout,
   cout << "outList with specified vertical positions:\n";
   for (i=0; i<nout;i++)
     cout << "type: " << (*outList[i])->prim.type << " mother: "
-	 << (*outList[i])->mother << " order: " << (*outList[i])->order 
-	 << " zorder: " << (*outList[i])->zorder 
-	 << " height: " << (*outList[i])->prim.layout.height 
-	 << " y1: " << (*outList[i])->prim.field.y1 << " y2: " 
-	 << (*outList[i])->prim.field.y2 << " text: " 
+	 << (*outList[i])->mother << " order: " << (*outList[i])->order
+	 << " zorder: " << (*outList[i])->zorder
+	 << " height: " << (*outList[i])->prim.layout.height
+	 << " y1: " << (*outList[i])->prim.field.y1 << " y2: "
+	 << (*outList[i])->prim.field.y2 << " text: "
 	 << (*outList[i])->prim.layout.text << endl;
-#endif 
+#endif
 
 
 
@@ -777,7 +779,7 @@ bool ptStyle::readStyle(const miString filename,
   ParId pid;
   miString buf, keyw, argu;
   vector<miString> parts;
-  map<miString,miString> userkeys; 
+  map<miString,miString> userkeys;
 
   if (verbose) cout << "ptStyle::readStyle. Reading stylefile: " << filename << endl;
   ifstream sfile(filename.cStr());
@@ -863,7 +865,7 @@ bool ptStyle::readStyle(const miString filename,
   // margins
   topMargin_ = bottomMargin_ = 50;
   leftMargin_ = rightMargin_ = 170;
-  
+
 
   while (sfile.good()){
     getline(sfile,buf);
@@ -891,7 +893,7 @@ bool ptStyle::readStyle(const miString filename,
 	cout << "Mother:" << curp.mother << endl;
 	cout << "Component:" << curp.component << endl;
 	//cout << "Layout:\n" << curp.layout << endl;
-#endif	
+#endif
       } else if (buf.contains("DEFAULT")){
 	// set new default
 	onel= curl;
@@ -913,11 +915,11 @@ bool ptStyle::readStyle(const miString filename,
     argu.trim();
 
     // substitute user-defined variables
-    map<miString,miString>::iterator itr=userkeys.begin(); 
+    map<miString,miString>::iterator itr=userkeys.begin();
     for ( ; itr!=userkeys.end(); itr++ )
       if ( argu.contains(itr->first) )
 	argu.replace(itr->first,itr->second);
-    
+
     // global values
     if (keyw=="bgcolor") bgColor.fromStr(argu);
     else if (keyw=="topmargin")    topMargin_= atof(argu.cStr());

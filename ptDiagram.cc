@@ -60,6 +60,8 @@
 #include <iostream>
 #include <puTools/miString.h>
 
+using namespace miutil;
+
 // should consider additional constructor for equally spaced time points????
 
 ptDiagram::ptDiagram(ptStyle *style) :

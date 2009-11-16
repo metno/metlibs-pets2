@@ -37,6 +37,8 @@
 #include <GL/glx.h>
 #include <string.h>
 
+using namespace miutil;
+
 
 #ifdef linux
 // linux fonts

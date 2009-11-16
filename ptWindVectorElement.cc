@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -33,12 +33,14 @@
 #include <ptPlotElement.h>
 #include <ptWindVectorElement.h>
 #include <iostream>
-#include <stdio.h>         
+#include <stdio.h>
 #include <math.h>
 
+using namespace miutil;
+
 WindVectorElement::WindVectorElement(const DataSpec cds,
-				     const ptVertFieldf& field, 
-				     const Layout& layout,  
+				     const ptVertFieldf& field,
+				     const Layout& layout,
 				     XAxisInfo* xtime)
   :dataPlotElement(cds, layout, field, xtime),
    boxColor(layout.color2), center(layout.centerVector),
@@ -46,7 +48,7 @@ WindVectorElement::WindVectorElement(const DataSpec cds,
    label(layout.label), useTimes(layout.useTimes), datainknots(layout.datainknots)
 {
 #ifdef DEBUG
-  cout << "Inside WindVectorElement's constructor" << endl; 
+  cout << "Inside WindVectorElement's constructor" << endl;
 #endif
   type=WIND_VECTOR;
   FF_DD = datapolar();
@@ -65,14 +67,14 @@ void WindVectorElement::plot()
 #endif
     _prepFont();
 
-    const float TICK05X=0.6, TICK05Y=0.6; 
+    const float TICK05X=0.6, TICK05Y=0.6;
     const float BOXDELTA = 2;
     const float YLEN=0.9*deltaY/2;
     const float DELTAY=0.15*YLEN;
-    const float FLAGY=3*DELTAY; 
+    const float FLAGY=3*DELTAY;
     const float ktms = float(1847.0/3600.0);
     const float mskt = float(3600.0/1847.0);
-    
+
     float fsc = ( datainknots ? 1.0 : mskt );
 
     float xscale = pixWidth/pixHeight;
@@ -97,7 +99,7 @@ void WindVectorElement::plot()
 	  left = xtime->xcoord[i]-BOXDELTA;
 	  right = left+2*BOXDELTA;
 	  _glBegin(GL_LINE_LOOP,4);
-	  glVertex2f(left,boxBottom); glVertex2f(right,boxBottom); 
+	  glVertex2f(left,boxBottom); glVertex2f(right,boxBottom);
 	  glVertex2f(right,boxTop); glVertex2f(left,boxTop);
 	  _glEnd();
 // 	  glRectf(left,boxBottom,right,boxTop);
@@ -123,7 +125,7 @@ void WindVectorElement::plot()
 	  ff = sqrt(uu*uu+vv*vv); // absolute value of wind
 	}
 	if (ff < 0.1)
-	  continue;     // don't plot arrow if absolute value is too small      
+	  continue;     // don't plot arrow if absolute value is too small
 	// maybe skip timepoints
 	if (useTimes && (((i-startT) % useTimes) != 0))
 	  continue;
@@ -132,11 +134,11 @@ void WindVectorElement::plot()
 	vff = vv/ff;            // scaled y-component
 	deltaU = DELTAX*uff;    // x-spacing between tick flags on arrow
 	deltaV = DELTAY*vff;    // y-spacing between tick flags on arrow
-	
+
 	// first, count number of 5, 10 and 50 knot flags
 	if (ff < 182.4) {
 	  k05 = (int)(ff/5);    // Round off to the nearest 5
-	  if ( ff-k05*5 >= 2.5) 
+	  if ( ff-k05*5 >= 2.5)
 	    k05++;
 	  k50 = k05/10;
 	  k05 -= 10*k50;

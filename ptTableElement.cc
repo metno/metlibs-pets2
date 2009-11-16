@@ -35,6 +35,8 @@
 #include <iostream>
 #include <stdio.h>
 
+using namespace miutil;
+
 TableElement::TableElement(const DataSpec cds,
 			   const ptVertFieldf& field,
 			   const Layout& layout,

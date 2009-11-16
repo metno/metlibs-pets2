@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -37,10 +37,11 @@
 #include <math.h>
 #include <float.h>
 
+using namespace miutil;
 
 DoubleLineElement::DoubleLineElement(yAxisElement* ya,
 				     const DataSpec cds,
-				     const ptVertFieldf& field, 
+				     const ptVertFieldf& field,
 				     const Layout& layout, XAxisInfo* xtime)
   :AxisChildElement(ya,cds,field,layout,xtime),
    fillColor(layout.color2)
@@ -117,7 +118,7 @@ void DoubleLineElement::plot()
     }
     _glEnd();
     _updatePrinting();
-    
+
     _setColor(color);
 
     // the first line..
@@ -127,7 +128,7 @@ void DoubleLineElement::plot()
       glBegin(GL_POINTS);
     else
       glBegin(GL_LINE_STRIP);
-    
+
     firstsegment = true;
     for (i=0; i<Xval.size();i++){
       if (fakestipple){

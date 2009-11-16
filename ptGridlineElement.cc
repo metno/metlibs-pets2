@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -34,6 +34,8 @@
 #include <ptGridlineElement.h>
 #include <iostream>
 #include <stdio.h>
+
+using namespace miutil;
 
 GridlineElement::GridlineElement(const vector<miTime> tline,
 				 const ptVertFieldf& field,
@@ -51,7 +53,7 @@ GridlineElement::GridlineElement(const vector<miTime> tline,
 #endif
   type=GRIDLINE;
   deltaY = axeStopY - startY - labelSpace;
-  
+
   if (plotDayPattern){
     // find all daychanges in timeline
     int n= timeLine.size();
@@ -85,15 +87,15 @@ void GridlineElement::plot()
     }
     glLineWidth(lineWidth);
     glPointSize(lineWidth/2.0);
-    
+
     if (!gridxonly){
       float matick = deltaY/(numTickMajor*1.0);
       float fy;
-      
+
       fy = startY;
       for (i=0; i<numTickMajor;i++){
 	fy+= matick;
-	
+
 	if (fakestipple){
 	  _glBegin(GL_POINTS,1000);
 	  lineSegment(xtime->x1,fy,
@@ -143,10 +145,10 @@ void GridlineElement::plot()
       d2= stopT;
       if (daychanges[d]<d2)
 	d1= daychanges[d];
-      else 
+      else
 	d1= daychanges[d-1];
       if (d1<startT) d1= startT;
-      
+
       glRectf(xtime->xcoord[d1],startY+2,
 	      xtime->xcoord[d2],startY+deltaY-2);
     }

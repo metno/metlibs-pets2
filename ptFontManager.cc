@@ -29,6 +29,8 @@
 
 #include "ptFontManager.h"
 
+using namespace miutil;
+
 FontManager FM;
 
 miString FontManager::display_name_;

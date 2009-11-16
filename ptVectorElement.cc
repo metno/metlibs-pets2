@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -33,12 +33,14 @@
 #include <ptPlotElement.h>
 #include <ptVectorElement.h>
 #include <iostream>
-#include <stdio.h>         
+#include <stdio.h>
 #include <math.h>
 
+using namespace miutil;
+
 VectorElement::VectorElement(const DataSpec cds,
-			     const ptVertFieldf& field, 
-			     const Layout& layout,  
+			     const ptVertFieldf& field,
+			     const Layout& layout,
 			     XAxisInfo* xtime)
   :dataPlotElement(cds,layout,field,xtime),
    boxColor(layout.color2),lineWidth(layout.lineWidth),
@@ -47,11 +49,11 @@ VectorElement::VectorElement(const DataSpec cds,
    reverse(layout.reverse)
 {
 #ifdef DEBUG
-  cout << "Inside VectorElement's constructor" << endl; 
+  cout << "Inside VectorElement's constructor" << endl;
 #endif
   type=VECTOR;
   polar = datapolar();
-  if (label){ // use layout.text if text is specified 
+  if (label){ // use layout.text if text is specified
     text = layout.text;
     vtext= text.split("|");
   }
@@ -108,7 +110,7 @@ void VectorElement::plot()
 	  // maybe skip timepoints
 	  if (useTimes && (((i-startT) % useTimes) != 0))
 	    continue;
-	  
+
 	  uff = XLEN*cos(alpha);  // translate to radians
 	  vff = YLEN*sin(alpha);
 	  x0 = xtime->xcoord[i];
@@ -144,14 +146,14 @@ void VectorElement::plot()
 	  }
 
 	  if ((ff=sqrt(uu*uu+vv*vv)) < MINVAL) // absolute value of vector
-	    continue;          // don't plot if absolute value is to small   
+	    continue;          // don't plot if absolute value is to small
 	  // maybe skip timepoints
 	  if (useTimes && (((i-startT) % useTimes) != 0))
 	    continue;
 
 	  uff = XLEN*uu/ff;         //scaled x-component in screen coordinates
 	  vff = YLEN*vv/ff;         // scaled y-component in screen coordinates
-	  
+
 	  x0 = xtime->xcoord[i];
 	  // draw main arrow
 	  _glBegin(GL_LINES,0);
@@ -171,7 +173,7 @@ void VectorElement::plot()
 	}
       }
     _updatePrinting();
-    
+
     // print label
     if (label) {
       int n= vtext.size();

@@ -36,6 +36,8 @@
 #include <iostream>
 #include <math.h>
 
+using namespace miutil;
+
 EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime) :
   AxisChildElement(ya, cds, field, layout, xtime), editstyle(layout.editstyle),

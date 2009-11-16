@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -36,6 +36,10 @@
 #include <png.h>
 #include <map>
 #include <fstream>
+
+using namespace std;
+using namespace miutil;
+
 
 ptImage::ptImage()
   : data(0), size(0), width(0), height(0)
@@ -141,10 +145,10 @@ void ptImage::ReadImage()
 
   if (data) {
 #ifdef DEBUG
-    cout << "RGBIMAGE: Success. Width:" <<  width << 
+    cout << "RGBIMAGE: Success. Width:" <<  width <<
       " Height:" << height << endl;
 #endif
-  } else { 
+  } else {
 #ifdef DEBUG
     cout << "RGBIMAGE: Oops. imagedata = NULL" << endl;
 #endif
@@ -174,16 +178,16 @@ void ptImage::ReadRawImage()
 
     sscanf(dataline, "%d %d",&width,&height);
     fgets(dataline,100,fp);
-    sscanf(dataline,"%d",&colours); 
+    sscanf(dataline,"%d",&colours);
 
     npixels = width * height;
     if (blending)
       nchannels = 4;
-    else 
+    else
       nchannels = 3;
     size = npixels*nchannels;
     data = new unsigned char[size];
-    
+
     acom=0xff;
     if (data) {
       for (i=0; i<height; i++) {
@@ -204,7 +208,7 @@ void ptImage::ReadRawImage()
     }
 
     fclose(fp);
-  }  else { 
+  }  else {
     cout << "RAWIMAGE: Open file error" << endl;
   }
 }
@@ -221,9 +225,9 @@ void ptImage::ReadPNGImage()
   }
 
   png_structp png_ptr = png_create_read_struct
-    (PNG_LIBPNG_VER_STRING, 
+    (PNG_LIBPNG_VER_STRING,
      (png_voidp)0,//user_error_ptr,
-     0,//user_error_fn, 
+     0,//user_error_fn,
      0);//user_warning_fn);
   if (!png_ptr){
     cerr << "ReadPNGImage ERROR creating png_struct" << endl;
@@ -260,14 +264,14 @@ void ptImage::ReadPNGImage()
 
   png_init_io(png_ptr, fp);
 
-  
+
   // do the read
   const int png_transforms = 0;
   png_read_png(png_ptr, info_ptr, png_transforms, NULL);
-  
+
   png_uint_32 uwidth, uheight;
   int color_type;
-  int bit_depth; 
+  int bit_depth;
   int interlace_type;//=   PNG_INTERLACE_NONE;
   int compression_type;//= PNG_COMPRESSION_TYPE_DEFAULT;
   int filter_type;//=      PNG_FILTER_TYPE_DEFAULT;
@@ -305,7 +309,7 @@ void ptImage::ReadPNGImage()
 	 << " ..exiting" << endl;
     return;
   }
-    
+
   blending= (nchannels==4);
 
   png_bytep *row_pointers;
@@ -313,7 +317,7 @@ void ptImage::ReadPNGImage()
 
   //png_read_image(png_ptr, row_pointers);
   //png_read_end(png_ptr, end_info);
-  
+
   // unpack image from row-based structure
   size= width*height*nchannels;
   data= new unsigned char [size];
@@ -363,7 +367,7 @@ int hexToInt(const miString& p){
   int l= up.length(), res=0, fact=1;
   for (int i=l-1; i>=0; i--,fact*=15)
     res += chartoint_(up[i])*fact;
-    
+
   return res;
 }
 
@@ -382,7 +386,7 @@ bool ptImage::imageFromXpmdata(const char** xd){
   ysize= atoi(vs[1].cStr());
   ncols= atoi(vs[2].cStr());
   nchar= atoi(vs[3].cStr());
-  
+
   if (xsize < 1 || ysize < 1 || ncols < 1 || nchar < 1){
     cerr << "imageFromXpmdata ERROR Illegal numbers "
 	 << " xsize:" << xsize << " ysize:" << ysize
@@ -479,7 +483,7 @@ bool ptImage::imageFromXpmdata(const char** xd){
 void ptImage::ReadXPMImage()
 {
   //cerr << "--------- read_xpm: " << filename << endl;
-  
+
   ifstream file(filename.c_str());
 
   if (!file){
@@ -487,10 +491,10 @@ void ptImage::ReadXPMImage()
 	 << filename << endl;
     return;
   }
-  
+
   miString buf;
   vector<miString> vs, vs2;
-  
+
   while(getline(file,buf)){
     buf.trim();
     if (buf.length() == 0)
@@ -509,9 +513,9 @@ void ptImage::ReadXPMImage()
   for (int i=0; i<vs.size(); i++){
     tmpdata[i]= strdup(vs[i].cStr());
   }
-  
+
   bool res=  imageFromXpmdata(const_cast<const char**>(tmpdata));
-  
+
   // OBS: free !!!!!!!!!!!!!!!!!!!!!!!!
 
   delete[] tmpdata;

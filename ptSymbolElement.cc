@@ -32,6 +32,8 @@
 #include <ptPlotElement.h>
 #include <ptSymbolElement.h>
 
+using namespace miutil;
+
 SymbolElement::SymbolElement(const DataSpec cds, const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime) :
   dataPlotElement(cds, layout, field, xtime), minidx(0), maxidx(0),

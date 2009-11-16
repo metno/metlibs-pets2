@@ -43,42 +43,42 @@
 
 const int MAXFONTCOLL=10;
 
-const miString XFONTSET = "XFONTSET";
-const miString GLTTFONTSET = "GLTTFONTSET";
-const miString QTFONTSET = "QTFONTSET";
+const miutil::miString XFONTSET = "XFONTSET";
+const miutil::miString GLTTFONTSET = "GLTTFONTSET";
+const miutil::miString QTFONTSET = "QTFONTSET";
 
 class FontManager {
 private:
   struct fontcoll {
-    miString name;
+    miutil::miString name;
     glText* fontc;
   };
 private:
   int curFC; // current fontcollection
   int numFC; // number of fontcollections
   fontcoll FC[MAXFONTCOLL]; // list of..
-  static miString display_name_;
+  static miutil::miString display_name_;
 
 public:
   FontManager();
   ~FontManager();
 
   // for use in batch - force different display
-  static void set_display_name(const miString name)
+  static void set_display_name(const miutil::miString name)
   {display_name_= name;}
-  static miString display_name() { return display_name_; }
+  static miutil::miString display_name() { return display_name_; }
 
-  bool addFontCollection(glText*, const miString);
-  void removeFontCollection(const miString);
-  bool setFontColl(const miString);
+  bool addFontCollection(glText*, const miutil::miString);
+  void removeFontCollection(const miutil::miString);
+  bool setFontColl(const miutil::miString);
 
   // return info
-  miString getCurrentFontCollection();
+  miutil::miString getCurrentFontCollection();
   int getNumFonts();
   ptFontFace getFontFace();
   ptFontSize getFontSize();
   ptColor getFontColor();
-  miString getFontName(const int index);
+  miutil::miString getFontName(const int index);
 
   // choose font, size, face and colour
   int setFont(const int index);

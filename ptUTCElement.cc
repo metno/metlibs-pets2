@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -34,10 +34,12 @@
 #include <iostream>
 #include <ptPlotElement.h>
 #include <ptUTCElement.h>
-#include <stdio.h>         
+#include <stdio.h>
+
+using namespace miutil;
 
 UTCElement::UTCElement(const vector<miTime> tline,
-		       const ptVertFieldf& field, 
+		       const ptVertFieldf& field,
 		       const Layout& layout,
 		       XAxisInfo* xtime)
 
@@ -46,7 +48,7 @@ UTCElement::UTCElement(const vector<miTime> tline,
    modhours(layout.modhours)
 {
 #ifdef DEBUG
-  cout << "Inside UTCElement's constructor" << endl; 
+  cout << "Inside UTCElement's constructor" << endl;
 #endif
   type=UTC;
   timeLine = tline;
@@ -82,14 +84,14 @@ void UTCElement::plot()
     float th,tw;
     _prepFont();
     _getCharSize('0',tw,th);
-    
+
     int interv= miTime::minDiff(timeLine[stopT],timeLine[startT]);
     bool plotmin= (interv < 3*60);
     bool plotallmin= (interv < 3*60 && (stopT-startT) < 20);
     float prev;
     float minw= pixWidth;//minSkipX*pixWidth;
     float guess= tw*(plotmin ? 2.5 : 1.0);
-    
+
     _setColor(color);
     bool *taken= new bool[stopT+2];
     for (int i=0; i<stopT+2; i++) taken[i]= false;

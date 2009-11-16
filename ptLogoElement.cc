@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -33,9 +33,11 @@
 #include <ptPlotElement.h>
 #include <ptLogoElement.h>
 #include <iostream>
-#include <stdio.h>         
+#include <stdio.h>
 
-LogoElement::LogoElement(const ptVertFieldf& field, 
+using namespace miutil;
+
+LogoElement::LogoElement(const ptVertFieldf& field,
 			 const Layout& layout,
  			 XAxisInfo* xtime)
 
@@ -43,7 +45,7 @@ LogoElement::LogoElement(const ptVertFieldf& field,
     pheight(layout.trueheight), pxposition(layout.position)
 {
 #ifdef DEBUG
-  cout << "Inside LogoElement's constructor" << endl; 
+  cout << "Inside LogoElement's constructor" << endl;
 #endif
   type=LOGO;
 }
@@ -104,7 +106,7 @@ void LogoElement::plot()
     texth= th + 2*textmargin;
     globeh= (height - texth)/2.0;
     globew= globeh*pixWidth/pixHeight;
-    
+
     if (align==BELOW){
       my1= startY-height;
       my2= startY;

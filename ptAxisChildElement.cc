@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -37,6 +37,7 @@
 #include <math.h>
 #include <float.h>
 
+using namespace miutil;
 
 AxisChildElement::AxisChildElement(yAxisElement* ya,
 				   const DataSpec cds,
@@ -105,7 +106,7 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
 //         If the denominator in eqn 1 is zero, AB & CD are parallel
 //         If the numerator in eqn 1 is also zero, AB & CD are collinear.
 
-//     If they are collinear, then the segments may be projected to the x- 
+//     If they are collinear, then the segments may be projected to the x-
 //     or y-axis, and overlap of the projected intervals checked.
 
 //     If the intersection point of the 2 lines are needed (lines in this
@@ -127,14 +128,14 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
 static bool intersection(float Ax, float Ay, float Bx, float By,
 			 float Cx, float Cy, float Dx, float Dy,
 			 float& r, float& s, float &Px, float& Py){
-  
+
   const float slimit= 0.000001;
   float r1= (Ay-Cy)*(Dx-Cx)-(Ax-Cx)*(Dy-Cy);
   float s1= (Ay-Cy)*(Bx-Ax)-(Ax-Cx)*(By-Ay);
 
   float den= (Bx-Ax)*(Dy-Cy)-(By-Ay)*(Dx-Cx);
 
-  
+
   if (fabsf(den)<slimit) {
     return false;
   }
@@ -168,7 +169,7 @@ bool AxisChildElement::crossPoint(const float x1, const float y1,
   } else {
     Cy=Dy= startY;
   }
-  
+
   res= intersection(Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,r,s,Px,Py);
   cx= static_cast<int>(Px);
   cy= static_cast<int>(Py);
@@ -196,7 +197,7 @@ bool AxisChildElement::dataCrossPoint(const float x1, const float y1,
   float Y = startY + deltaY*((d - minPlotY)/plotRange);
 
   Cy=Dy= Y;
-  
+
   res= intersection(Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,r,s,Px,Py);
   cx= Px;
   cy= Py;

@@ -51,8 +51,6 @@
 
 #include <vector>
 
-
-
 using namespace std;
 
 struct DataSpec {
@@ -65,7 +63,7 @@ class PlotElement
 {
 protected:
   ptPrimitiveType type;       // Type of plotelement
-  miString name;              // label or name of element
+  miutil::miString name;              // label or name of element
   bool enabled;               // plotElement is enabled
   bool visible;               // plotElement is visible
   float startY;               // vertical startposition
@@ -93,7 +91,7 @@ protected:
   static bool printing; // postscript plotting
   static GLPfile* psoutput; // PostScript module
 
-  void _printString(const miString& text, const float x, const float y)
+  void _printString(const miutil::miString& text, const float x, const float y)
   {
     FM.printStr(text.cStr(), x, y);
   }
@@ -112,7 +110,7 @@ protected:
   {
     FM.getMaxCharSize(w, h);
   }
-  void _getStringSize(const miString& c, float& w, float& h)
+  void _getStringSize(const miutil::miString& c, float& w, float& h)
   {
     FM.getStringSize(c.cStr(), w, h);
   }
@@ -177,7 +175,7 @@ public:
 
   void setViewport(int sw, int sh, float gw, float gh);
 
-  const miString& Name() const
+  const miutil::miString& Name() const
   {
     return name;
   }
@@ -237,7 +235,7 @@ public:
     useFakeStipple = use;
   }
 
-  static bool startPSoutput(const miString& fname, const bool incolour,
+  static bool startPSoutput(const miutil::miString& fname, const bool incolour,
       const bool inlandscape, const bool doEPS = false);
   static bool startPSnewpage();
   static bool endPSoutput();

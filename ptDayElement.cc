@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -34,11 +34,13 @@
 #include <ptDayElement.h>
 #include <iostream>
 #include <list>
-#include <stdio.h>         
+#include <stdio.h>
 
-DayElement::DayElement(const vector<miTime> tline, 
-		       const ptVertFieldf& field, 
-		       const Layout& layout, 
+using namespace miutil;
+
+DayElement::DayElement(const vector<miTime> tline,
+		       const ptVertFieldf& field,
+		       const Layout& layout,
 		       XAxisInfo* xtime)
 
   : PlotElement(layout, field, xtime),
@@ -46,7 +48,7 @@ DayElement::DayElement(const vector<miTime> tline,
     language(layout.language), asNumber(layout.asNumber)
 {
 #ifdef DEBUG
-  cout << "Inside DayElement's constructor" << endl; 
+  cout << "Inside DayElement's constructor" << endl;
 #endif
   type=DAY;
   lang= (language=="NO" ? miDate::Norwegian :  miDate::English);

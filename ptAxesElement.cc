@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -34,8 +34,10 @@
 #include <ptAxesElement.h>
 #include <iostream>
 
+using namespace miutil;
+
 AxesElement::AxesElement(const ptVertFieldf& field,
-			 const Layout& layout, 
+			 const Layout& layout,
 			 const bool& hor,
 			 XAxisInfo* xtime)
   : PlotElement(layout, field, xtime),
@@ -45,7 +47,7 @@ AxesElement::AxesElement(const ptVertFieldf& field,
     tickColor(layout.color2), rectangle(layout.axisRectangle)
 {
 #ifdef DEBUG
-  cout << "Inside AxesElement's constructor" << endl; 
+  cout << "Inside AxesElement's constructor" << endl;
 #endif
   type=XAXIS;
 }
@@ -85,7 +87,7 @@ void AxesElement::plot()
       _setColor(tickColor);
       _glBegin(GL_LINES,2*(stopT-startT+1));
       for(int i=startT; i<=stopT; i++) {            // tick marks
- 	glVertex2f(xtime->xcoord[i],startY); 
+ 	glVertex2f(xtime->xcoord[i],startY);
 	glVertex2f(xtime->xcoord[i],y1);
       }
       _glEnd();

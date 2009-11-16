@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -34,6 +34,8 @@
 #include <ptBoxElement.h>
 #include <iostream>
 #include <stdio.h>
+
+using namespace miutil;
 
 BoxElement::BoxElement(const DataSpec cds,
 		       const vector<miTime> tline,
@@ -82,14 +84,14 @@ void BoxElement::plot()
 #endif
     int i,j;
     int numPoints = datasize();
-    
+
     _prepFont();
 
     glLineWidth(linewidth);
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     glRectf(xtime->xcoord[startT],startY,
 	    xtime->xcoord[stopT],stopY);
-    
+
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glEnable(GL_POLYGON_STIPPLE);
     j = datastart();

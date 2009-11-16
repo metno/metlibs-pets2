@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -37,23 +37,24 @@
 #include <math.h>
 #include <float.h>
 
+using namespace miutil;
 
 LineElement::LineElement(yAxisElement* ya,
 			 const DataSpec cds,
-			 const ptVertFieldf& field, 
+			 const ptVertFieldf& field,
 			 const Layout& layout, XAxisInfo* xtime)
   : AxisChildElement(ya,cds,field,layout,xtime),
-    lineArrows(layout.lineArrows), reverse(layout.reverse), 
+    lineArrows(layout.lineArrows), reverse(layout.reverse),
     arrowLength(layout.arrowLength), arrowcolor(layout.color2),
     arrow(layout.vectorArrow), arrowSize(layout.arrowSize), arrowfill(layout.fillstyle),
-    marker(layout.marker), markercolor(layout.color2), 
+    marker(layout.marker), markercolor(layout.color2),
     markersize(layout.size), markerfill(layout.markerFill),
     shadow(layout.shadow), lineBar(layout.lineBar), barsize(layout.delta),
     lineStep(layout.lineStep), colorbyvalue(layout.colorbyvalue),
     colorlist(layout.colorlist),
     smoothing(layout.smoothing), smoothdiv(layout.smoothdiv),
     wrapdegrees(layout.wrapdegrees), wraplimit(layout.wraplimit)
-    
+
 {
 #ifdef DEBUG
   cout << "Inside LineElement's constructor" << endl;
@@ -91,7 +92,7 @@ void LineElement::plot()
 
     float prevx=-2000,prevy,newx,newy;
     int previ1=-2000;
-    
+
     // find x-startcoordinate for line-label
     float labelx, labely;
     if (labelOnLine)
@@ -108,13 +109,13 @@ void LineElement::plot()
       if (valid(i)) {
 	newx= xval(i);
 	newy= yval(j);
-	
+
 	bool pointbad=false;
-    
+
 	if (newy > stopY || newy < startY){ // illegal point
 	  pointbad = true;
 	}
-	
+
 	// find correct position for line-label
 	if ( labelOnLine )
 	  if (i>=labelx) {
@@ -125,8 +126,8 @@ void LineElement::plot()
 	      else if (newy < startY) labely= startY;
 	    }
 	  }
-	
-	// types of line drawing 
+
+	// types of line drawing
 	if (lineBar){  // draw horisontal bars
 	  if (!noc && !(keepinaxis && pointbad)){
 	    int i1 = dataLimitIndex(dval(j));
@@ -137,7 +138,7 @@ void LineElement::plot()
 	    ploty.push_back(newy);
 	    ploti.push_back(i1);
 	  }
-	  
+
 	} else if (lineStep) { // draw stairs
 	  // find points
 	  if (prevx < 0){
@@ -173,7 +174,7 @@ void LineElement::plot()
 		  plotx.push_back(newx);
 		  ploty.push_back(newy);
 		  ploti.push_back(i1);
-		  
+
 		} else {
 		  plotx.push_back(prevx);
 		  ploty.push_back(prevy);
@@ -195,14 +196,14 @@ void LineElement::plot()
 		    // find crossing
 		    if (dataCrossPoint(d2,yc1,d2,yc2,d,cx,cy)){
 		      // make line
-		      
+
 		      plotx.push_back(d2);
 		      ploty.push_back(yc1);
 		      ploti.push_back(ind1);
 		      plotx.push_back(d2);
 		      ploty.push_back(cy);
 		      ploti.push_back(ind2);
-		    
+
 		      xc1= d2; xc2= d2;
 		      yc1= cy; yc2= newy;
 		    }
@@ -213,7 +214,7 @@ void LineElement::plot()
 		  plotx.push_back(d2);
 		  ploty.push_back(newy);
 		  ploti.push_back(i1);
-		  
+
 		  plotx.push_back(d2);
 		  ploty.push_back(newy);
 		  ploti.push_back(i1);
@@ -231,14 +232,14 @@ void LineElement::plot()
 		plotx.push_back(d2);
 		ploty.push_back(prevy);
 		ploti.push_back(0);
-		
+
 		plotx.push_back(d2);
 		ploty.push_back(prevy);
 		ploti.push_back(0);
 		plotx.push_back(d2);
 		ploty.push_back(newy);
 		ploti.push_back(0);
-		
+
 		plotx.push_back(d2);
 		ploty.push_back(newy);
 		ploti.push_back(0);
@@ -248,7 +249,7 @@ void LineElement::plot()
 	      }
 	    }
 	  }
-	  
+
 	} else { // normal line
 	  if ( !noc ){
 	    if ( colorbyvalue ) {
@@ -261,7 +262,7 @@ void LineElement::plot()
 		  plotx.push_back(newx);
 		  ploty.push_back(newy);
 		  ploti.push_back(i1);
-		  
+
 		} else {
 		  // find crossing points to data limits
 		  float cx,cy;
@@ -310,7 +311,7 @@ void LineElement::plot()
 	    }
 	  }
 	}
-	
+
 	// keep vertex point
 	if ( !(keepinaxis && pointbad) ){
 	  vertexx.push_back(newx);
@@ -320,7 +321,7 @@ void LineElement::plot()
 	// previous point
 	prevx= newx;
 	prevy= newy;
-	
+
 	// increase data pointer
 	j++;
       } // valid time
@@ -335,7 +336,7 @@ void LineElement::plot()
       int   * z = new int[npos];
       float * x_s = new float[(npos-1)*smoothdiv+npos];
       float * y_s = new float[(npos-1)*smoothdiv+npos];
-      
+
       j=0;
       for ( int i=0; i<npos; i++ ){
 	if ( j==0 || (plotx[i]!=x[j-1] || ploty[i]!=y[j-1]) ){
@@ -375,7 +376,7 @@ void LineElement::plot()
       delete[] x_s;
       delete[] y_s;
     }
-    
+
     // plot line segments
     glBegin(GL_LINES);
     for ( int i=0; i<npos; i+=2 ){
@@ -398,7 +399,7 @@ void LineElement::plot()
 	      glVertex2f(cx,cy);
 	    }
 	  }
-	  
+
 	} else { // all inside
 	  glVertex2f(plotx[i],ploty[i]);
 	  glVertex2f(plotx[i+1],ploty[i+1]);
@@ -409,7 +410,7 @@ void LineElement::plot()
       }
     }
     glEnd(); // GL_LINES
-  
+
     _updatePrinting();
     glDisable(GL_LINE_STIPPLE);
 
@@ -417,7 +418,7 @@ void LineElement::plot()
     if ( marker != NO_MARKER ){
       int n=vertexx.size();
       _setColor(markercolor);
-    
+
       if (markerfill != NONE) {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if (markerfill != SOLID){
@@ -426,9 +427,9 @@ void LineElement::plot()
 	}
       } else
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-      
+
       switch (marker) {
-      case NO_MARKER : 
+      case NO_MARKER :
 	break;
       case M_RECTANGLE :
 	for (i=0; i<n; i++){
@@ -465,13 +466,13 @@ void LineElement::plot()
 	for (i=0; i<n; i++){
 	  glVertex2f(vertexx[i]-mSizeX,vertexy[i]);
 	  glVertex2f(vertexx[i]+mSizeX,vertexy[i]);
-	  
+
 	  glVertex2f(vertexx[i],vertexy[i]-mSizeY);
 	  glVertex2f(vertexx[i],vertexy[i]+mSizeY);
-	
+
 	  glVertex2f(vertexx[i]-mSizeX*0.75,vertexy[i]-mSizeY*0.75);
 	  glVertex2f(vertexx[i]+mSizeX*0.75,vertexy[i]+mSizeY*0.75);
-	  
+
 	  glVertex2f(vertexx[i]-mSizeX*0.75,vertexy[i]+mSizeY*0.75);
 	  glVertex2f(vertexx[i]+mSizeX*0.75,vertexy[i]-mSizeY*0.75);
 	}
@@ -501,7 +502,7 @@ void LineElement::plot()
 
       int n=vertexi.size();
       _setColor(arrowcolor);
-      
+
       bool closed=false;
 
       if (arrowfill != NONE) {

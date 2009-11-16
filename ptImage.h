@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -35,7 +35,7 @@
 
 class ptImage {
 private:
-  miString filename;     // bitmap-filename
+  miutil::miString filename;     // bitmap-filename
   int width, height;     // geometry in pixels
   bool blending;         // blending on/off
   unsigned char *data;   // the actual bitmap-data
@@ -50,19 +50,19 @@ private:
 public:
   ptImage(); // default constructor
   // constructor takes the bitmap filename and blending
-  ptImage(const miString& fname, const bool blend);
+  ptImage(const miutil::miString& fname, const bool blend);
   ptImage(const ptImage&); // copy constructor
   ptImage& operator=(const ptImage&); //equal operator
 
   ~ptImage();
-  
-  void setImage(const miString& fname, const bool blend);
+
+  void setImage(const miutil::miString& fname, const bool blend);
 
   const unsigned char* Data() const {return data; }
   unsigned long Size() const {return size; }
   int Width() const {return width;  }
   int Height()const {return height; }
-  const miString& Filename() const {return filename; }
+  const miutil::miString& Filename() const {return filename; }
   bool Alpha() const {return blending; }
 };
 

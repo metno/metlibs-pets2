@@ -75,7 +75,7 @@ enum ptDateStyle {
 };
 
 struct Layout {
-  miString name; // name of primitive
+  miutil::miString name; // name of primitive
   bool visible; // is visible in diagram
   float height; // height of element
   float trueheight;
@@ -96,8 +96,8 @@ struct Layout {
   ptFillStyle fillstyle; // single polygon pattern
   vector<ptFillStyle> patternlist; // list of polygon patterns
   ptAlign align; // alignment flag
-  miString text; // text to output
-  miString text2; // additional text
+  miutil::miString text; // text to output
+  miutil::miString text2; // additional text
   ptAxis axis; // which axis
   ptHorSides horsides; // for frames etc
   ptVerSides versides; // for frames etc
@@ -140,7 +140,7 @@ struct Layout {
   float arrowLength; // for line elements with arrows (length of arrows)
   float arrowSize; // for line elements with arrows (size of arrowhead)
   bool fromFile; // for text lines only
-  miString pformat; // print format Eks: %2.1f
+  miutil::miString pformat; // print format Eks: %2.1f
   bool vectorF; // Vector Table element: write angle AND size
   bool keepinaxis; // keep axischildelements within axis
   bool labelOnLine; // label on line-elements
@@ -155,11 +155,11 @@ struct Layout {
   bool fittopage; // try to fit object within diagramborders
   float cutoff; // cutoff-value used by some elements
   int priority; // priority for editing etc
-  miString language; // language ("NO" or "EN")
+  miutil::miString language; // language ("NO" or "EN")
   bool drawbackground; // draw background
   ptEditStyle editstyle; // type of graphical editing
-  vector<miString> textlabels; // fixed textlabels for yaxis
-  vector<miString> valuetextlabels; // fixed textlabels for value-plotting (edit)
+  vector<miutil::miString> textlabels; // fixed textlabels for yaxis
+  vector<miutil::miString> valuetextlabels; // fixed textlabels for value-plotting (edit)
   bool printValueLock; // edit: lock current printValue switch
   bool lineBar; // line drawn as horisontal bars
   bool lineStep; // line drawn stepwise
@@ -217,26 +217,26 @@ struct Layout {
   }
 };
 
-extern ptAxis Str2Axis(miString);
-extern ptAlign Str2Align(miString);
-extern ptSize Str2Size(miString);
-extern ptHorSides Str2HorSides(miString);
-extern ptVerSides Str2VerSides(miString);
-extern ptEditStyle Str2EditStyle(miString);
-extern vector<miString> Str2TextLabels(miString);
-extern vector<float> Str2FloatList(miString);
-extern vector<int> Str2IntList(miString);
-extern ptDateStyle Str2DateStyle(miString);
+extern ptAxis Str2Axis(miutil::miString);
+extern ptAlign Str2Align(miutil::miString);
+extern ptSize Str2Size(miutil::miString);
+extern ptHorSides Str2HorSides(miutil::miString);
+extern ptVerSides Str2VerSides(miutil::miString);
+extern ptEditStyle Str2EditStyle(miutil::miString);
+extern vector<miutil::miString> Str2TextLabels(miutil::miString);
+extern vector<float> Str2FloatList(miutil::miString);
+extern vector<int> Str2IntList(miutil::miString);
+extern ptDateStyle Str2DateStyle(miutil::miString);
 
-extern miString Axis2Str(ptAxis);
-extern miString Align2Str(ptAlign);
-extern miString Size2Str(ptSize);
-extern miString HorSides2Str(ptHorSides);
-extern miString VerSides2Str(ptVerSides);
-extern miString EditStyle2Str(ptEditStyle);
-extern miString TextLabels2Str(const vector<miString>&);
-extern miString FloatList2Str(const vector<float>&);
-extern miString IntList2Str(const vector<int>&);
-extern miString DateStyle2Str(ptDateStyle);
+extern miutil::miString Axis2Str(ptAxis);
+extern miutil::miString Align2Str(ptAlign);
+extern miutil::miString Size2Str(ptSize);
+extern miutil::miString HorSides2Str(ptHorSides);
+extern miutil::miString VerSides2Str(ptVerSides);
+extern miutil::miString EditStyle2Str(ptEditStyle);
+extern miutil::miString TextLabels2Str(const vector<miutil::miString>&);
+extern miutil::miString FloatList2Str(const vector<float>&);
+extern miutil::miString IntList2Str(const vector<int>&);
+extern miutil::miString DateStyle2Str(ptDateStyle);
 
 #endif

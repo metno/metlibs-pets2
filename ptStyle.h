@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -42,7 +42,7 @@
 const int MAXAXES = 5;     // max allowed axes in one diagram
 const int MAXYAXIS = 4;    // max allowed y-axes in one axes
 const int MAXLINES_IN_ONE = 4; // max allowed lines in one y-axis
-const int MAXUNSPECIFIED_LINES = 10; // max allowed unspecified lines 
+const int MAXUNSPECIFIED_LINES = 10; // max allowed unspecified lines
 const int MAXFONT = 5;    //max number of allowed user defined fonts
 
 enum stConversion {
@@ -75,7 +75,7 @@ struct Primitive {
   int order;
   bool enabled;
   ParId id;
-  int nr; 
+  int nr;
   Layout layout;
   stConversion conv;
   stMother mother;
@@ -98,12 +98,12 @@ class ptStyle {
   int timeZone;
 
   int _findPrimF(const ptPrimitiveType) const;
-  int _findPrimF(const ParId, const int from=-1) const; 
+  int _findPrimF(const ParId, const int from=-1) const;
   void _enablePrimitive(const bool, const int);
   void _disablePrimitive(const bool, const int);
   ptAxis _findFirstFreeAxis(bool usedAxes[][MAXLINES_IN_ONE],
 			    const stMother mother);
-  void _sortArray(Out***, const int&, const stMother&, const int*); 
+  void _sortArray(Out***, const int&, const stMother&, const int*);
 public:
   ptStyle();
   ptStyle(const ptStyle&);
@@ -128,7 +128,7 @@ public:
 
   bool organize(StyleOrder*, int*, StyleOrder*,	int);
   void enablePrimitive(const bool, const ptPrimitiveType);
-  void enablePrimitive(const ParId, 
+  void enablePrimitive(const ParId,
 		       const ptPrimitiveType type = DUM_PRIMITIVE);
   void enablePrimitive(const bool, const int);
   void enableAllPrimitives(const bool);
@@ -138,7 +138,7 @@ public:
   void disablePrimitive(const bool, const int);
   void disableAllPrimitives(const bool);
   void print() const;
-  bool readStyle(const miString filename, bool verbose= false);
+  bool readStyle(const miutil::miString filename, bool verbose= false);
 
   bool addPrimitive(const Primitive& p);
 
@@ -148,7 +148,7 @@ public:
   { lc= localTime; tz= timeZone; }
 };
 
-extern stMother Str2Mother(miString);
-extern miString Mother2Str(stMother);
+extern stMother Str2Mother(miutil::miString);
+extern miutil::miString Mother2Str(stMother);
 
 #endif

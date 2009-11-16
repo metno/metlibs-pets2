@@ -1,6 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
-  
+
   $Id$
 
   Copyright (C) 2006 met.no
@@ -11,7 +11,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -29,6 +29,9 @@
 
 
 #include <ptColor.h>
+
+using namespace miutil;
+using namespace std;
 
 map<miString,ptColor> ptColor::colorlist;
 bool ptColor::initialised= false;
@@ -50,7 +53,7 @@ ptColor::ptColor(const miString& n)
     initColorlist();
   fromStr(n);
 }
- 
+
 ptColor::ptColor(const miString& n, float r, float g, float b, float a)
   : name(n.upcase())
 {
@@ -61,7 +64,7 @@ ptColor::ptColor(const miString& n, float r, float g, float b, float a)
 
   colorlist[name] = *this;
 }
- 
+
 void ptColor::initColorlist()
 {
   initialised = true;
@@ -135,7 +138,7 @@ void ptColor::fromStr(const miString& s)
 {
   miString col = s.upcase(), alpha;
   vector<miString> vs= col.split(":");
-  
+
   if (vs.size() == 5){         // full registration
     float r= atof(vs[1].cStr());
     float g= atof(vs[2].cStr());
@@ -173,7 +176,7 @@ void ptColor::fromStr(const miString& s)
   } else if (vs.size() == 1){  // only name
     col=   vs[0];
   }
-  
+
   if (col.exists() && colorlist.count(col) > 0){
     *this = colorlist[col];
   } else {
@@ -196,7 +199,7 @@ vector<ptColor> ptColor::Str2Colorlist(const miString& s)
 {
   vector<ptColor> list;
   vector<miString> slist= s.split(",");
-  
+
   int n= slist.size();
   for (int i=0; i<n; i++){
     ptColor c;

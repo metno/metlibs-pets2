@@ -37,6 +37,7 @@
 #include <math.h>
 #include <float.h>
 
+using namespace miutil;
 
 yAxisElement::yAxisElement(const ptVertFieldf& field,
 			   const Layout& layout,
