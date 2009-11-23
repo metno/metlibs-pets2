@@ -70,7 +70,6 @@ void AxisHistogramElement::plot()
     _getCharSize('0',tw,th);
     float y;
     char text[6];
-
     _setColor(color);
     glLineWidth(lineWidth);
     if (fstyle != SOLID){
@@ -88,12 +87,11 @@ void AxisHistogramElement::plot()
 	if (dval(j) >= 0.05) { // don't draw if is ignorable
 	  y = yval(j);
 	  float del= (newx-oldx)/10.0;
-// 	  float x1 = oldx+hstart*del+1;
-// 	  float x2 = oldx+hstop*del-1;
 	  float x1 = oldx+hstart*del;
 	  float x2 = oldx+hstop*del;
 	  // enclosing box
 	  _initPrinting(10);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	  glBegin(GL_LINE_STRIP);
 	  glVertex2f(x1,startY); glVertex2f(x1,y);
 	  glVertex2f(x2,y); glVertex2f(x2,startY);

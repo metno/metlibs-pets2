@@ -94,6 +94,7 @@ void CloudElement::plot()
 	glVertex2f(left,stopY); glVertex2f(right,stopY);
 	glEnd();
 	// draw each cloud box
+  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	glRectf(left,startY,left+(2.0*deltaX*dval(j)/100.0),stopY);
 	j++;
 	if (left < mostleft) mostleft= left;

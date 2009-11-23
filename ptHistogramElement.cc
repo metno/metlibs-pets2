@@ -134,6 +134,7 @@ void HistogramElement::plot()
 	  float x1 = oldx + hstart*del;
 	  float x2 = newx - (10-hstop)*del;
 	  // enclosing box
+	  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	  glBegin(GL_LINE_STRIP);
 	  glVertex2f(x1,startY); glVertex2f(x1,y);
 	  glVertex2f(x2,y); glVertex2f(x2,startY);
