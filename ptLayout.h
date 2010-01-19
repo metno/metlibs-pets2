@@ -34,7 +34,7 @@
 
 #include "ptGlobals.h"
 #include <tsData/ptParameterDefinition.h>
-#include "ptFontColl.h"
+#include "ptFontDefs.h"
 #include "ptColor.h"
 #include "ptMarker.h"
 #include "ptPatterns.h"

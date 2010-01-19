@@ -18,9 +18,6 @@ libpets2_la_SOURCES = \
 	ptDiagram.cc \
 	ptDoubleLineElement.cc \
 	ptEditLineElement.cc \
-	ptFontCollGlc.cc \
-	ptFontCollGLPR.cc \
-	ptFontCollX.cc \
 	ptFontDefs.cc \
 	ptFontManager.cc \
 	ptGridlineElement.cc \
@@ -99,7 +96,6 @@ pkg_include_HEADERS = \
 	ptDoubleLineElement.h \
 	ptEditLineElement.h \
 	ptEditModes.h \
-	ptFontColl.h \
 	ptFontDefs.h \
 	ptFontManager.h \
 	ptGlobals.h \
