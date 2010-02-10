@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: pets2
 Description: The pets2 Library
 Version: @VERSION@
-Requires: tsData >= 3.1.0
+Requires: @pets2_pc_requires@
 Libs: -L${libdir} -lpets2
 Cflags: -I${includedir}
