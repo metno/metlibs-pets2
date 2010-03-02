@@ -30,6 +30,10 @@
 
 // ptDateElement.cc : Definitions for DateElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <ptDateElement.h>
 #include <iostream>

@@ -30,6 +30,10 @@
 
 // ptYaxisElement.cc : Definitions for yAxisElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <ptYaxisElement.h>
 #include <iostream>

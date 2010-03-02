@@ -30,6 +30,10 @@
 
 // ptPlotElement.cc : Class definition for generic plotelement
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <iostream>
 #include <math.h>

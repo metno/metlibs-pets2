@@ -30,6 +30,10 @@
 
 // ptIntervalElement.cc : Definitions for IntervalElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <fstream>
 #include <ptPlotElement.h>
 #include <ptIntervalElement.h>

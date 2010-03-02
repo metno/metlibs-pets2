@@ -30,6 +30,10 @@
 
 // ptUTCElement.cc : Definitions for UTCElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sstream>
 #include <iostream>
 #include <ptPlotElement.h>

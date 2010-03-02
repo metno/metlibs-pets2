@@ -30,6 +30,10 @@
 
 // ptQBoxElement.cc : Definitions for QBoxElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptQBoxElement.h>
 #include <iostream>
 #include <stdio.h>

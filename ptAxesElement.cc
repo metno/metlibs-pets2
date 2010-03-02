@@ -30,6 +30,10 @@
 
 // ptAxesElement.cc : Definitions for AxesElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <ptAxesElement.h>
 #include <iostream>

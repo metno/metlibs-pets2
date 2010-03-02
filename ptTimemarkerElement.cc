@@ -30,6 +30,10 @@
 
 // ptTimemarkerElement.cc : Definitions for TimemarkerElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <ptTimemarkerElement.h>
 #include <iostream>

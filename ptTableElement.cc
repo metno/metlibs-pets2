@@ -30,6 +30,10 @@
 
 // ptTableElement.cc : Definitions for TableElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <ptTableElement.h>
 #include <iostream>

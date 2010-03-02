@@ -29,6 +29,10 @@
 
 // ptEditLineElement.cc : Definitions for EditLineElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <fstream>
 #include <ptPlotElement.h>
 #include <ptEditLineElement.h>

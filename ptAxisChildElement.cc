@@ -30,6 +30,10 @@
 
 // ptAxisChildElement.cc : Definitions for AxisChildElement class
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ptPlotElement.h>
 #include <ptYaxisElement.h>
 #include <iostream>
