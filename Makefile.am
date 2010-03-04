@@ -84,7 +84,7 @@ libpets2_la_LIBADD = \
 	${PUTOOLS_LIBS} \
 	${TSDATA_LIBS}
 
-pkg_includedir = ${prefix}/include/pets2
+pkg_includedir = ${includedir}/pets2
 
 pkg_include_HEADERS = \
 	polyStipMasks.h \
