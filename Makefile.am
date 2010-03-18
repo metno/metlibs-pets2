@@ -55,7 +55,8 @@ libpets2_la_CPPFLAGS = \
 	${PUMET_CPPFLAGS} \
 	${PUCTOOLS_CPPFLAGS} \
 	${PUTOOLS_CPPFLAGS} \
-	${TSDATA_CPPFLAGS}
+	${TSDATA_CPPFLAGS} \
+	${PNG_CPPFLAGS}
 
 libpets2_la_LDFLAGS = \
 	${VERSION_INFO} \
@@ -69,7 +70,8 @@ libpets2_la_LDFLAGS = \
 	${PUMET_LDFLAGS} \
 	${PUCTOOLS_LDFLAGS} \
 	${PUTOOLS_LDFLAGS} \
-	${TSDATA_LDFLAGS}
+	${TSDATA_LDFLAGS} \
+	${PNG_LDFLAGS}
 
 libpets2_la_LIBADD = \
 	${GLP_LIBS} \
@@ -82,7 +84,8 @@ libpets2_la_LIBADD = \
 	${PUMET_LIBS} \
 	${PUCTOOLS_LIBS} \
 	${PUTOOLS_LIBS} \
-	${TSDATA_LIBS}
+	${TSDATA_LIBS} \
+	${PNG_LIBS}
 
 pkg_includedir = ${includedir}/pets2
 
