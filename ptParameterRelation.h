@@ -35,8 +35,6 @@
 #include <vector>
 
 
-using namespace std;
-
 class ParRel {
 private:
 protected:

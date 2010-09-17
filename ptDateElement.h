@@ -37,15 +37,15 @@
 class DateElement : public PlotElement
 {
   std::vector<miutil::miTime> timeLine;
-  miDate::lang lang;
-  miString labeltext;
-  miString language;
+  miutil::miDate::lang lang;
+  miutil::miString labeltext;
+  miutil::miString language;
   bool asNumber;
   ptDateStyle datestyle;
   bool plotlabel;
   int minSkipX;
 
-  miString dataAsString(const miDate& date);
+  miutil::miString dataAsString(const miutil::miDate& date);
 
 public:
   DateElement(const std::vector<miutil::miTime> tline,

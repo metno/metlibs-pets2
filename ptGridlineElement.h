@@ -48,10 +48,10 @@ class GridlineElement : public PlotElement
   bool plotDayPattern;
   int useTimes;
   ptColor daycolor;
-  vector<miTime> timeLine;
-  vector<int> daychanges;
+  std::vector<miutil::miTime> timeLine;
+  std::vector<int> daychanges;
 public:
-  GridlineElement(const vector<miTime> tline,
+  GridlineElement(const std::vector<miutil::miTime> tline,
 		  const ptVertFieldf& field, 
 		  const Layout& layout, 
 		  XAxisInfo* xtime);

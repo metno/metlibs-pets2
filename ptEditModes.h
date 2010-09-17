@@ -38,9 +38,9 @@ enum ptLineEditMode {
   LE_SINGLE, LE_MULTI, LE_ROTATE, LE_LINEAR
 };
 
-const miString ptLineEditModeName[ptNumLineEditModes] = 
+const miutil::miString ptLineEditModeName[ptNumLineEditModes] =
   {"Enkel","Linje","Rotér","Lineær"};
-const miString ptLineEditModeMnemonic[ptNumLineEditModes] =
+const miutil::miString ptLineEditModeMnemonic[ptNumLineEditModes] =
   {"E","L","R","I"};
 
 enum ptLineEditMarker {

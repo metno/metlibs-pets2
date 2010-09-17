@@ -35,33 +35,31 @@
 #include "ptPlotElement.h"
 #include <puTools/miTime.h>
 
-using namespace std;
-
 class IntervalElement : public PlotElement 
 {
 public:
   struct tinterval {
-    miTime start;
-    miTime stop;
-    vector<miString> text;
+    miutil::miTime start;
+    miutil::miTime stop;
+    std::vector<miutil::miString> text;
   };
 private:
-  miString label;
-  miString timetext;
+  miutil::miString label;
+  miutil::miString timetext;
   ptHorSides arrows;
-  vector<miString> vt; // timetext split by ';'
-  vector<tinterval> intervals;
+  std::vector<miutil::miString> vt; // timetext split by ';'
+  std::vector<tinterval> intervals;
   float lineWidth;
-  vector<miTime> timeLine;
+  std::vector<miutil::miTime> timeLine;
   ptLineStyle style;
 public:
-  IntervalElement(const vector<miTime> tline,
+  IntervalElement(const std::vector<miutil::miTime> tline,
 		  const ptVertFieldf& field, 
 		  const Layout& layout, 
 		  XAxisInfo* xtime);
 
   void plot();
-  void setTimes(const vector<tinterval>& t);
+  void setTimes(const std::vector<tinterval>& t);
   bool needsData() { return false; }
 };
 

@@ -35,8 +35,6 @@
 #include "ptPlotElement.h"
 #include <vector>
 
-using namespace std;
-
 class VectorElement : public dataPlotElement 
 {
   ptColor boxColor;
@@ -47,8 +45,8 @@ class VectorElement : public dataPlotElement
   bool arrow;
   bool polar;
   int useTimes;
-  miString text;
-  vector<miString> vtext;
+  miutil::miString text;
+  std::vector<miutil::miString> vtext;
 public:
   VectorElement(const DataSpec cds,
 		const ptVertFieldf& field, 

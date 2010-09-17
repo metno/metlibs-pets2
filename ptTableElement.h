@@ -36,8 +36,8 @@
 
 class TableElement : public dataPlotElement 
 {
-  miString label;
-  miString pformat; // numerical format
+  miutil::miString label;
+  miutil::miString pformat; // numerical format
   int skipX;
   bool vectorF;
   float cutoff;

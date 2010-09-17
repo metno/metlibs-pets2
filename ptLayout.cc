@@ -101,16 +101,16 @@ ptEditStyle Str2EditStyle(miString buf){
   else return ES_LINE;
 }
 
-vector<miString> Str2TextLabels(miString buf){
-  vector<miString> vs;
+std::vector<miString> Str2TextLabels(miString buf){
+  std::vector<miString> vs;
   vs= buf.split("|",false);
   return vs;
 }
 
-vector<float> Str2FloatList(miString buf){
-  vector<miString> vs;
+std::vector<float> Str2FloatList(miString buf){
+  std::vector<miString> vs;
   vs= buf.split(",",true);
-  vector<float> vf;
+  std::vector<float> vf;
   for ( int i=0; i<vs.size(); i++){
     if ( vs[i].isNumber() )
       vf.push_back( atof(vs[i].cStr()) );
@@ -120,10 +120,10 @@ vector<float> Str2FloatList(miString buf){
   return vf;
 }
 
-vector<int> Str2IntList(miString buf){
-  vector<miString> vs;
+std::vector<int> Str2IntList(miString buf){
+  std::vector<miString> vs;
   vs= buf.split(",",true);
-  vector<int> vf;
+  std::vector<int> vf;
   for ( int i=0; i<vs.size(); i++){
     if ( vs[i].isNumber() )
       vf.push_back( atoi(vs[i].cStr()) );
@@ -195,7 +195,7 @@ miString EditStyle2Str(ptEditStyle style){
   else return "LINE";
 }
 
-miString TextLabels2Str(const vector<miString>& vs)
+miString TextLabels2Str(const std::vector<miString>& vs)
 {
   miString s;
   for (int i=0; i<vs.size(); i++)
@@ -203,7 +203,7 @@ miString TextLabels2Str(const vector<miString>& vs)
   return s;
 }
 
-miString FloatList2Str(const vector<float>& vf)
+miString FloatList2Str(const std::vector<float>& vf)
 {
   miString s;
   for (int i=0; i<vf.size(); i++)
@@ -211,7 +211,7 @@ miString FloatList2Str(const vector<float>& vf)
   return s;
 }
 
-miString IntList2Str(const vector<int>& vf)
+miString IntList2Str(const std::vector<int>& vf)
 {
   miString s;
   for (int i=0; i<vf.size(); i++)

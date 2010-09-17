@@ -45,13 +45,11 @@
 #include <vector>
 #include <map>
 
-using namespace std;
-
 class ptDiagram {
 private:
   XAxisInfo xtime; // x-coordinates for the timepoints
-  vector<miutil::miTime> timeLine; // the actual time points
-  vector<int> timeLineIdx; // indices to complete timeline in DD
+  std::vector<miutil::miTime> timeLine; // the actual time points
+  std::vector<int> timeLineIdx; // indices to complete timeline in DD
   int nPlotElements; // number of plotelements
   PlotElement *first, *last;// pointers to plotelement list
   ptDiagramData *DD; // diagramdata

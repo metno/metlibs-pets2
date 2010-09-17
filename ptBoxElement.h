@@ -39,16 +39,16 @@ class BoxElement : public dataPlotElement
   miutil::miString label;
   float linewidth;
   ptFillStyle pattern;
-  vector<ptColor> colorlist;
-  vector<ptFillStyle> patternlist;
+  std::vector<ptColor> colorlist;
+  std::vector<ptFillStyle> patternlist;
   ptHorSides hsides;
   ptVerSides vsides;
   ptLineStyle style;
   int useTimes;
-  vector<miTime> timeLine;
+  std::vector<miutil::miTime> timeLine;
 public:
   BoxElement(const DataSpec cds,
-	     const vector<miTime> tline,
+	     const std::vector<miutil::miTime> tline,
 	     const ptVertFieldf& field,
 	     const Layout& layout,
 	     XAxisInfo* xtime);

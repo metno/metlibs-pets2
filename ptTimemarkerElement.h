@@ -39,15 +39,15 @@ class TimemarkerElement : public PlotElement {
   float deltaY;
   float lineWidth;
   ptLineStyle style;
-  vector<miTime> timeLine;
-  vector<miTime> markTimes;
+  std::vector<miutil::miTime> timeLine;
+  std::vector<miutil::miTime> markTimes;
 
 public:
-  TimemarkerElement(const vector<miTime> tline,
+  TimemarkerElement(const std::vector<miutil::miTime> tline,
 		    const ptVertFieldf& field, 
 		    const Layout& layout, 
 		    XAxisInfo* xtime);
-  void setTimes(const vector<miTime> mtimes)
+  void setTimes(const std::vector<miutil::miTime> mtimes)
     {markTimes= mtimes; }
   void plot();
   bool needsData() { return false; }

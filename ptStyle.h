@@ -92,7 +92,7 @@ class ptStyle {
   float rightOffset_;     // time offset right side, see XAXIS
   ptColor bgColor;
   int nprimF, nprim;
-  vector<Primitive> pprimF, pprim;
+  std::vector<Primitive> pprimF, pprim;
   int nAxes;
   bool localTime;
   int timeZone;

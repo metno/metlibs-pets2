@@ -39,13 +39,11 @@
 
 #include <vector>
 
-using namespace std;
-
 class EditLineElement : public AxisChildElement
 {
-  vector<float> accuvalues;  // accumulated delta-y for quantization;
-  vector<bool> markedPoints; // datapoints marked for moving
-  ring< vector<float> > *undobuffer; // ringbuffer with saved datapoints
+  std::vector<float> accuvalues;  // accumulated delta-y for quantization;
+  std::vector<bool> markedPoints; // datapoints marked for moving
+  ring< std::vector<float> > *undobuffer; // ringbuffer with saved datapoints
   int activePoint; // pointer to last grabbed point (used for moving)
   ptLineEditMode editMode;
   ptLineEditMarker markerType;
@@ -57,7 +55,7 @@ class EditLineElement : public AxisChildElement
   bool modified;
   bool activenodes;
   float actPx, actPy; // position of active point
-  miString pformat; // numerical format of small value-tip
+  miutil::miString pformat; // numerical format of small value-tip
   int priority;     // priority for editing
   bool wrapdegrees;
   float wraplimit;

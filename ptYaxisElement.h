@@ -46,7 +46,7 @@ protected:
   AxisChildElement *child[MAX_YAXIS_CHILDREN]; // the childelements
   ptColor childCol[MAX_YAXIS_CHILDREN]; // child color
   ptLineStyle childStyle[MAX_YAXIS_CHILDREN]; // child line style
-  miString Labels[MAX_YAXIS_CHILDREN+1]; // axistexts
+  miutil::miString Labels[MAX_YAXIS_CHILDREN+1]; // axistexts
   float labelY[MAX_YAXIS_CHILDREN+1]; // Plot-start
   float labelX[MAX_YAXIS_CHILDREN+1]; // --- " ---
   float labelW[MAX_YAXIS_CHILDREN+1]; // label widths
@@ -71,8 +71,8 @@ protected:
   float deltaY; // GL value to childelements
   bool recalcDims; // recalculate plot-interval etc.
   bool userlabels;
-  vector<miString> userLabels;
-  vector<miString> userValueLabels;
+  std::vector<miutil::miString> userLabels;
+  std::vector<miutil::miString> userValueLabels;
 
   int sign;
   int lsign;
@@ -110,12 +110,12 @@ public:
   // returns deltaY(gl),minPlotY and plotRange(physical)
   void dataInfo(float&, float&, float&);
   int Id(){return id; }
-  void setLabels(const vector<miString>& labels)
+  void setLabels(const std::vector<miutil::miString>& labels)
     {userLabels= labels; userlabels= true;}
   void resetLabels()
     {userlabels= false;}
   bool hasUserLabels() const { return userlabels; }
-  miString userValueLabel(const float value);
+  miutil::miString userValueLabel(const float value);
 };
 
 class staticYaxisElement : public yAxisElement
@@ -149,8 +149,8 @@ protected:
   bool labelOnLine;
   float lineLabelPos;
   ptVerSides labelside;
-  miString axisText;
-  miString labelText;
+  miutil::miString axisText;
+  miutil::miString labelText;
   float minPlotY, plotRange;
   float deltaY;
   float minLegal, maxLegal;
@@ -194,7 +194,7 @@ public:
   }
   void plotInterval(float& pmin, float& pmax) const
   { pmin= startY; pmax= pmin+deltaY; }
-  miString& labelName()
+  miutil::miString& labelName()
   { return axisText; }
   ptColor& Color()
   { return color; }

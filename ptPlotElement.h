@@ -51,8 +51,6 @@
 
 #include <vector>
 
-using namespace std;
-
 struct DataSpec {
   ptDiagramData *dData;// diagramData
   int index;           // index to weatherparameter vector

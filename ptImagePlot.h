@@ -42,13 +42,13 @@ private:
   ptImage image;
 public:
   ptImagePlot(){}
-  ptImagePlot(const miString& fname)
+  ptImagePlot(const miutil::miString& fname)
     {image.setImage(fname, true); }
   ptImagePlot(const ptImage& im)
     {image = im; }
   ~ptImagePlot(){}
 
-  void setimage(const miString& fname)
+  void setimage(const miutil::miString& fname)
     {image.setImage(fname, true); }
   void setimage(const ptImage& im)
     {image = im; }

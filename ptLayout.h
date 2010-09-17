@@ -44,8 +44,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 enum ptAxis {
   LEFTLEFT, RIGHTRIGHT, LEFTRIGHT, RIGHTLEFT, NO_AXIS
 };
@@ -85,16 +83,16 @@ struct Layout {
   ptColor color; // colour to use
   ptColor color2; // additional colour
   ptColor color3; // additional colour
-  vector<ptColor> colorlist; // list of colours
+  std::vector<ptColor> colorlist; // list of colours
   ptFontSize font; // size of font
   float lineWidth; // width of lines
   bool label; // plot label
   bool unit; // plot unit on axis
   bool patternInColour; // use line- and fill-pattern in colourmode
   ptLineStyle linePattern; // line pattern
-  vector<ptLineStyle> linepatternlist; // list of line patterns
+  std::vector<ptLineStyle> linepatternlist; // list of line patterns
   ptFillStyle fillstyle; // single polygon pattern
-  vector<ptFillStyle> patternlist; // list of polygon patterns
+  std::vector<ptFillStyle> patternlist; // list of polygon patterns
   ptAlign align; // alignment flag
   miutil::miString text; // text to output
   miutil::miString text2; // additional text
@@ -114,7 +112,7 @@ struct Layout {
   float axisWidth; // lineWidth of axis-line
   int minSkipX; // for printing of timelines
   int useTimes; // use timepoints modulo useTimes
-  vector<int> modhours; // use timepoints with hours modulo xx
+  std::vector<int> modhours; // use timepoints with hours modulo xx
   float tickWidth; // width of tickmarks
   float tickLen; // length of tickmarks
   float minRange; // minimum datavalue range for normal yaxis
@@ -158,15 +156,15 @@ struct Layout {
   miutil::miString language; // language ("NO" or "EN")
   bool drawbackground; // draw background
   ptEditStyle editstyle; // type of graphical editing
-  vector<miutil::miString> textlabels; // fixed textlabels for yaxis
-  vector<miutil::miString> valuetextlabels; // fixed textlabels for value-plotting (edit)
+  std::vector<miutil::miString> textlabels; // fixed textlabels for yaxis
+  std::vector<miutil::miString> valuetextlabels; // fixed textlabels for value-plotting (edit)
   bool printValueLock; // edit: lock current printValue switch
   bool lineBar; // line drawn as horisontal bars
   bool lineStep; // line drawn stepwise
   bool asNumber; // draw as number
   ptDateStyle datestyle; // DATE subtype
   bool legendlineinside; // plot axis-legend-lines inside diagram
-  vector<float> datalimits; // list of data values for switching colour, pattern etc
+  std::vector<float> datalimits; // list of data values for switching colour, pattern etc
   bool colorbyvalue; // use colorlist and datalimits to change colours
   bool linestylebyvalue; // use linepatternlist and datalimits to change line patterns
   bool fillbyvalue; // use patternlist and datalimits to change fill patterns
@@ -204,7 +202,7 @@ struct Layout {
   }
   void print() const
   {
-    cout << "Printing of layout:\n" << "\theight: " << height << "\tspacing: "
+    std::cout << "Printing of layout:\n" << "\theight: " << height << "\tspacing: "
         << spacing << "\tintSpacing: " << intSpacing << "\tcolor: " << color
         << "\tfont: " << font << "\tlineWidth: " << lineWidth << "\tlabel: "
         << label << "\tunit: " << unit << "\tlinePattern: " << linePattern
@@ -213,7 +211,7 @@ struct Layout {
         << "\tcolor2: " << color2 << "\ttickWidth: " << tickWidth
         << "\tminRange: " << minRange << "\tinterval: " << interval
         << "\tdelta: " << delta << "\tminMargin: " << minMargin
-        << "\tfromFile: " << fromFile << endl;
+        << "\tfromFile: " << fromFile << std::endl;
   }
 };
 
@@ -223,9 +221,9 @@ extern ptSize Str2Size(miutil::miString);
 extern ptHorSides Str2HorSides(miutil::miString);
 extern ptVerSides Str2VerSides(miutil::miString);
 extern ptEditStyle Str2EditStyle(miutil::miString);
-extern vector<miutil::miString> Str2TextLabels(miutil::miString);
-extern vector<float> Str2FloatList(miutil::miString);
-extern vector<int> Str2IntList(miutil::miString);
+extern std::vector<miutil::miString> Str2TextLabels(miutil::miString);
+extern std::vector<float> Str2FloatList(miutil::miString);
+extern std::vector<int> Str2IntList(miutil::miString);
 extern ptDateStyle Str2DateStyle(miutil::miString);
 
 extern miutil::miString Axis2Str(ptAxis);
@@ -234,9 +232,9 @@ extern miutil::miString Size2Str(ptSize);
 extern miutil::miString HorSides2Str(ptHorSides);
 extern miutil::miString VerSides2Str(ptVerSides);
 extern miutil::miString EditStyle2Str(ptEditStyle);
-extern miutil::miString TextLabels2Str(const vector<miutil::miString>&);
-extern miutil::miString FloatList2Str(const vector<float>&);
-extern miutil::miString IntList2Str(const vector<int>&);
+extern miutil::miString TextLabels2Str(const std::vector<miutil::miString>&);
+extern miutil::miString FloatList2Str(const std::vector<float>&);
+extern miutil::miString IntList2Str(const std::vector<int>&);
 extern miutil::miString DateStyle2Str(ptDateStyle);
 
 #endif

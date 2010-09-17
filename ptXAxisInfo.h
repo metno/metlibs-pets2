@@ -37,7 +37,7 @@
 struct XAxisInfo {
   float x1;  // right start
   float x2;  // left end
-  vector<float> xcoord; // coordinates for all timepoints
+  std::vector<float> xcoord; // coordinates for all timepoints
 };
 
 #endif

@@ -36,15 +36,15 @@
 
 class UTCElement : public PlotElement
 {
-  vector<miTime> timeLine;
+  std::vector<miutil::miTime> timeLine;
   int minSkipX;
   bool label;
-  miString text;
-  vector<int> modhours;
-  float plottime(const miTime& t, const int i,
+  miutil::miString text;
+  std::vector<int> modhours;
+  float plottime(const miutil::miTime& t, const int i,
 		 const bool minute, const float cwid);
 public:
-  UTCElement(const vector<miTime> tline,
+  UTCElement(const std::vector<miutil::miTime> tline,
 	     const ptVertFieldf& field, 
 	     const Layout& layout,
 	     XAxisInfo* xtime=0);

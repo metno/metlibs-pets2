@@ -36,8 +36,6 @@
 #include <vector>
 #include <map>
 
-using namespace std;
-
 struct ptColor {
   miutil::miString name;
   float colTable[4];

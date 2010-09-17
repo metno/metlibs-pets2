@@ -52,7 +52,7 @@ public:
 		   const ptVertFieldf& field, 
 		   const Layout& layout, 
 		   XAxisInfo* xtime,
-		   vector<miTime>& timeLine);
+		   std::vector<miutil::miTime>& timeLine);
   ~HistogramElement();
   void plot();
   void tst_print();

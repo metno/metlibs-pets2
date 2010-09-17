@@ -37,15 +37,15 @@
 
 class DayElement : public PlotElement
 {
-  vector<miTime> timeLine;
-  miDate::lang lang;
-  miString language;
+  std::vector<miutil::miTime> timeLine;
+  miutil::miDate::lang lang;
+  miutil::miString language;
   bool asNumber;
 
-  miString dataAsString(const miDate&);
+  miutil::miString dataAsString(const miutil::miDate&);
   
 public:
-  DayElement(const vector<miTime> tline, 
+  DayElement(const std::vector<miutil::miTime> tline,
 	     const ptVertFieldf& field, 
 	     const Layout& layout, 
 	     XAxisInfo* xtime);

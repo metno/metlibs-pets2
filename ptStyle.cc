@@ -38,6 +38,7 @@
 #include <iostream>
 
 using namespace miutil;
+using namespace std;
 
 stMother Str2Mother(miString buf)
 {
