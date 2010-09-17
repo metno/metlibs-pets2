@@ -33,6 +33,7 @@
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
+#include <puTools/miString.h>
 
 #define MAX_YAXIS_CHILDREN 32
 
