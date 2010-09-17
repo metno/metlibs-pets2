@@ -34,6 +34,7 @@
 #include "ptFontManager.h"
 
 using namespace miutil;
+using namespace std;
 
 FontManager FM;
 
