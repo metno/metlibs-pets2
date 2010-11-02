@@ -73,20 +73,6 @@ libpets2_la_LDFLAGS = \
 	${TSDATA_LDFLAGS} \
 	${PNG_LDFLAGS}
 
-libpets2_la_LIBADD = \
-	${GLP_LIBS} \
-	${GLTEXT_LIBS} \
-	${LOG4CXX_LIBS} \
-	${MILOGGER_LIBS} \
-	${OPENGL_LIBS} \
-	${PARAMETER_LIBS} \
-	${PUDATATYPES_LIBS} \
-	${PUMET_LIBS} \
-	${PUCTOOLS_LIBS} \
-	${PUTOOLS_LIBS} \
-	${TSDATA_LIBS} \
-	${PNG_LIBS}
-
 pkg_includedir = ${includedir}/pets2
 
 pkg_include_HEADERS = \
