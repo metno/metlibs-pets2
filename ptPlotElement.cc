@@ -34,13 +34,14 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
+#include "ptPlotElement.h"
+#include <glp/svgdocument.h>
 #include <iostream>
 #include <math.h>
 
 using namespace miutil;
 
-GLPfile* PlotElement::psoutput=0;       // PostScript module
+GLPcontext* PlotElement::psoutput=0;    // document factory module
 
 bool PlotElement::printing= false;      // postscript plotting
 bool PlotElement::useFakeStipple=false; // imitate linestippling
@@ -167,8 +168,13 @@ bool PlotElement::startPSoutput(const miString& fname,
     print_options = print_options | GLP_GREYSCALE;
   bool makeeps= doEPS;
 
-  psoutput = new GLPfile(const_cast<char*>(fname.cStr()),
-			 print_options, feedsize,0,makeeps);
+  if (fname.contains(".svg")){
+    psoutput = new SvgDocument(const_cast<char*>(fname.cStr()),
+        print_options, feedsize,0);
+  } else {
+    psoutput = new GLPfile(const_cast<char*>(fname.cStr()),
+        print_options, feedsize,0,makeeps);
+  }
 
   // set line and point scale
   psoutput->setScales(0.5, 0.5);
