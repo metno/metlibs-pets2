@@ -55,7 +55,7 @@ public:
   void plot(const float& x, const float& y,
 	    const float& scale,
 	    const float pixw =1, const float pixh =1,
-	    GLPfile* psoutput =0, const bool blend =false)
+	    GLPcontext* psoutput =0, const bool blend =false)
   {
     if (image.Size()) {
       glPixelZoom(scale,scale);
