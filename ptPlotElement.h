@@ -87,7 +87,7 @@ protected:
   static bool useFakeStipple; // imitate linestippling
   static bool useColour; // colour or black/white
   static bool printing; // postscript plotting
-  static GLPfile* psoutput; // PostScript module
+  static GLPcontext* psoutput; // document factory module
 
   void _printString(const miutil::miString& text, const float x, const float y)
   {
