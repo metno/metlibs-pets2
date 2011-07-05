@@ -25,7 +25,7 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 
 
 // ptMultiLineElement.cc : Definitions for MultiLineElement class
@@ -44,10 +44,10 @@
 using namespace miutil;
 
 MultiLineElement::MultiLineElement(yAxisElement* ya,
-				   const DataSpec cds,
-				   const ptVertFieldf& field,
-				   const Layout& layout, XAxisInfo* xtime)
-  :AxisChildElement(ya,cds,field,layout,xtime)
+    const DataSpec cds,
+    const ptVertFieldf& field,
+    const Layout& layout, XAxisInfo* xtime)
+:AxisChildElement(ya,cds,field,layout,xtime)
 {
 #ifdef DEBUG
   cout << "Inside MultiLineElement's constructor" << endl;
@@ -83,8 +83,8 @@ void MultiLineElement::plot()
     bool fakestipple=false;
     if ((!useColour) || pInColour){
       if (!useFakeStipple) {
-	glEnable(GL_LINE_STIPPLE);
-	glLineStipple(LineStyle[style][0],LineStyle[style][1]);
+        glEnable(GL_LINE_STIPPLE);
+        glLineStipple(LineStyle[style][0],LineStyle[style][1]);
       } else fakestipple=true;
     }
     glLineWidth(lineWidth);
@@ -96,9 +96,9 @@ void MultiLineElement::plot()
     j = datastart();
     for (i=startT; i<=stopT; i++) {
       if (valid(i)) {
-	Xval.push_back(xval(i));
-	Yidx.push_back(j);
-	j++;
+        Xval.push_back(xval(i));
+        Yidx.push_back(j);
+        j++;
       }
     }
 
@@ -109,24 +109,24 @@ void MultiLineElement::plot()
     int comp, ndim= datadimension();
     for (comp=0; comp<ndim; comp++){
       if (fakestipple)
-	_glBegin(GL_POINTS,1000);
+        _glBegin(GL_POINTS,1000);
       else
-	_glBegin(GL_LINE_STRIP,Xval.size()+1);
+        _glBegin(GL_LINE_STRIP,Xval.size()+1);
 
       firstsegment = true;
       for (i=0; i<Xval.size();i++){
-	if (fakestipple){
-	  if (i>0){
-	    lineSegment(Xval[i-1],yval(Yidx[i-1],comp),
-			Xval[i],yval(Yidx[i],comp),
-			LineStyle[style][0],
-			LineStyle[style][1],
-			firstsegment);
-	    firstsegment=false;
-	  }
-	} else {
-	  glVertex2f(Xval[i],yval(Yidx[i],comp));
-	}
+        if (fakestipple){
+          if (i>0){
+            lineSegment(Xval[i-1],yval(Yidx[i-1],comp),
+                Xval[i],yval(Yidx[i],comp),
+                LineStyle[style][0],
+                LineStyle[style][1],
+                firstsegment);
+            firstsegment=false;
+          }
+        } else {
+          glVertex2f(Xval[i],yval(Yidx[i],comp));
+        }
       }
       _glEnd();
       _updatePrinting();

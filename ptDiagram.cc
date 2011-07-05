@@ -372,7 +372,7 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
     case MULTI_LINE:
       yElm = yAxisElm[layout->yaid];
       if (yElm)
-        elm = new MultiLineElement(yElm, ds, field, *layout, &xtime);
+        elm = new LineElement(yElm, ds, field, *layout, &xtime,true);
       break;
     case QBOX:
       yElm = yAxisElm[layout->yaid];

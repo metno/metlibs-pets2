@@ -59,15 +59,18 @@ class LineElement : public AxisChildElement
   int smoothdiv;
   bool wrapdegrees;
   float wraplimit;
+  bool isMultiLine;
 
 public:
   LineElement(yAxisElement* ya,
 	      const DataSpec cds,
 	      const ptVertFieldf& field, 
 	      const Layout& layout, 
-	      XAxisInfo* xtime);
+	      XAxisInfo* xtime,
+	      bool ismulti=false);
   void plot();
   bool needsData() { return true; }
+  void dataInfo(float &min, float &max);
 };
 
 #endif
