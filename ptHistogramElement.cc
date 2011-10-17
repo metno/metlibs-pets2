@@ -87,7 +87,6 @@ HistogramElement::HistogramElement(const DataSpec cds,
   for (int i=0; i<nt;i++)
     cout<<" DELTAT["<<i<<"] = " << deltaT[i]<<endl;
 #endif
-  cout << "------------------------------------ end histogram constructor\n\n\n";
 }
 
 HistogramElement::~HistogramElement()
