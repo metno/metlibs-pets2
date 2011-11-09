@@ -81,7 +81,7 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
 
 void yAxisElement::plotAxis()
 {
-  if (!numChild) return;
+  if (!numChild || !visible ) return;
 #ifdef DEBUG
     cout << "yAxisElement::plotAxis()" << endl;
 #endif
