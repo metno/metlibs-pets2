@@ -63,12 +63,12 @@ private:
   map<miutil::miString, miutil::miString> keymap; // keywords for text-strings
   bool localTime; // use localtime
   int timeZone; // which timezone
-
+  bool showGridLines;
   void makeXtime();
   void toLocaltime(miutil::miTime& t);
 
 public:
-  ptDiagram(ptStyle*);
+  ptDiagram(ptStyle*, bool showGlines=true);
   ~ptDiagram();
 
   // attach a diagramdata to diagram

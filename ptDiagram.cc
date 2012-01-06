@@ -68,10 +68,10 @@ using namespace miutil;
 
 // should consider additional constructor for equally spaced time points????
 
-ptDiagram::ptDiagram(ptStyle *style) :
+ptDiagram::ptDiagram(ptStyle *style, bool showGlines) :
   nPlotElements(0), first(0), last(0), DD(0), scwidth(1), scheight(1),
   glwidth(1.0), glheight(1.0), pixWidth(1.0), pixHeight(1.0), Style(style),
-  startidx(0), stopidx(0), colourFlag(true), localTime(false)
+  startidx(0), stopidx(0), colourFlag(true), localTime(false), showGridLines(showGlines)
 {
   if (Style)
     Style->getTimeSetting(localTime, timeZone);
@@ -386,7 +386,8 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
         elm = new EditLineElement(yElm, ds, field, *layout, &xtime);
       break;
     case GRIDLINE:
-      elm = new GridlineElement(timeLine, field, *layout, &xtime);
+      if(showGridLines)
+        elm = new GridlineElement(timeLine, field, *layout, &xtime);
       break;
     case TIMEMARKER:
       elm = new TimemarkerElement(timeLine, field, *layout, &xtime);
