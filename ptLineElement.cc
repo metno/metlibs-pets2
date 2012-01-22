@@ -147,7 +147,12 @@ void LineElement::plot()
       for (i=startT; i<=stopT; i++) {
         if (valid(i)) {
           newx= xval(i);
-          newy= yval(j,n);
+          if(isMultiLine) {
+            newy= yval(j,n);
+          } else {
+            newy= yval(j,ds.comp);
+          }
+
 
           bool pointbad=false;
 
