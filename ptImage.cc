@@ -256,8 +256,8 @@ void ptImage::ReadPNGImage()
     return;
   }
 
-  //   if (setjmp(png_jmpbuf(png_ptr))){
-  if (setjmp(png_ptr->jmpbuf)){
+     if (setjmp(png_jmpbuf(png_ptr))){
+  //if (setjmp(png_ptr->jmpbuf)){
     png_destroy_read_struct(&png_ptr, &info_ptr,
 			    &end_info);
     cerr << "ReadPNGImage ERROR longjmp out of process" << endl;
