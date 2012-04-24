@@ -7,5 +7,5 @@ Name: pets2
 Description: The pets2 Library
 Version: @VERSION@
 Requires: @pets2_pc_requires@
-Libs: -L${libdir} -lpets2
-Cflags: -I${includedir}
+Libs: -L${libdir} -lpets2  @PNG_LDFLAGS@ @PNG_LIBS@
+Cflags: -I${includedir} @PNG_CPPFLAGS@
