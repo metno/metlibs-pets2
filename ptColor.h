@@ -32,38 +32,32 @@
 #define _ptColor_h
 
 #include <puTools/miString.h>
-
 #include <vector>
-#include <map>
 
-struct ptColor {
+class ptColor {
+public:
   miutil::miString name;
   float colTable[4];
-  static std::map<miutil::miString,ptColor> colorlist;
-  static bool initialised;
 
   ptColor();
   ptColor(const miutil::miString& n);
   ptColor(const miutil::miString& n, float r, float g, float b, float a=1);
 
-  static void initColorlist();
-  void fromStr(const miutil::miString&);
-  miutil::miString Color2Str() const;
+  void fromStr(miutil::miString);
+
+  miutil::miString     Color2Str() const;
+
   static std::vector<ptColor> Str2Colorlist(const miutil::miString&);
-  static miutil::miString Colorlist2Str(const std::vector<ptColor>&);
+  static miutil::miString     Colorlist2Str(const std::vector<ptColor>&);
+
 
   bool operator==(const ptColor &rhs) const
-  {
-    return (name == rhs.name);
-  }
+  { return (name == rhs.name); }
   bool operator!=(const ptColor &rhs) const
-  {
-    return (name != rhs.name);
-  }
+  { return (name != rhs.name); }
   friend std::ostream& operator<<(std::ostream& out, const ptColor& rhs)
-  {
-    return out << rhs.name;
-  }
+  { return out << rhs.name ;   }
+
 };
 
 

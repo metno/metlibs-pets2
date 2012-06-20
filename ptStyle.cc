@@ -36,6 +36,7 @@
 #include <fstream>
 #include <ptStyle.h>
 #include <iostream>
+#include <map>
 
 using namespace miutil;
 using namespace std;
