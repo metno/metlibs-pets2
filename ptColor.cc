@@ -117,7 +117,6 @@ void initColorlist()
   tmpList["YELLOW_RED"    ]=ptColor("YELLOW_RED"   , 0.920,0.176,0.180,1.00);
 
   colorlist=tmpList;
-  cerr << "list created" << endl;
 }
 
 
@@ -127,7 +126,6 @@ void initColorlist()
 
 ptColor::ptColor()
 {
-  cerr << "ptColor()" << endl;
   if (!petsColorTools::initialised)
     petsColorTools::initColorlist();
   name = "BLACK";
@@ -140,7 +138,6 @@ ptColor::ptColor()
 
 ptColor::ptColor(const miString& n)
 {
-   cerr <<"ptColor::ptColor(const miString& n)"  << endl;
   if (!petsColorTools::initialised)
     petsColorTools::initColorlist();
   fromStr(n);
@@ -151,7 +148,6 @@ ptColor::ptColor(const miString& n)
 
 ptColor::ptColor(const miString& n, float r, float g, float b, float a)
 {
- cerr <<"ptColor(const miString& n, float r, float g, float b, float a)" << endl;
   name=n;
   colTable[0] = r;
   colTable[1] = g;
@@ -164,15 +160,11 @@ ptColor::ptColor(const miString& n, float r, float g, float b, float a)
 void ptColor::fromStr(miString icol)
 {
   string col = icol,alpha;
-
-  cerr << "fromStr " << col << endl;
   
   vector<string> vs;
 
    boost::split(vs, col, boost::algorithm::is_any_of(":"));
 
-
-  cerr << "found : " << vs.size() << " elements " << endl;
 
   if (vs.size() == 5){         // full registration
     float r= atof(vs[1].c_str());
