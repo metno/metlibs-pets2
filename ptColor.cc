@@ -46,13 +46,10 @@ namespace petsColorTools
 {
 
 map<miString,ptColor> colorlist;
-bool initialised= false;
 
 void initColorlist()
 {
-
   map<miString,ptColor> tmpList;
-  petsColorTools::initialised = true;
 
   tmpList["BLACK"         ]=ptColor("BLACK"        , 0.00, 0.00, 0.00, 1.00);
   tmpList["BLUE"          ]=ptColor("BLUE"         , 0.00, 0.00, 1.00, 1.00);
@@ -120,14 +117,22 @@ void initColorlist()
 }
 
 
-}
+ptColor getColorFromList(miString col)
+{
+  if ( colorlist.empty() )
+    initColorlist();
 
+  if(!col.empty() && colorlist.count(col))
+    return colorlist[col];
+
+  ptColor dummy;
+  return dummy;
+}
+}
 
 
 ptColor::ptColor()
 {
-  if (!petsColorTools::initialised)
-    petsColorTools::initColorlist();
   name = "BLACK";
   colTable[0] = 0.0;
   colTable[1] = 0.0;
@@ -138,8 +143,6 @@ ptColor::ptColor()
 
 ptColor::ptColor(const miString& n)
 {
-  if (!petsColorTools::initialised)
-    petsColorTools::initColorlist();
   fromStr(n);
 }
 
@@ -164,7 +167,6 @@ void ptColor::fromStr(miString icol)
   vector<string> vs;
 
    boost::split(vs, col, boost::algorithm::is_any_of(":"));
-
 
   if (vs.size() == 5){         // full registration
     float r= atof(vs[1].c_str());
@@ -204,12 +206,7 @@ void ptColor::fromStr(miString icol)
     col=   vs[0];
   }
 
-  if (!col.empty() && petsColorTools::colorlist.count(col) > 0){
-    *this = petsColorTools::colorlist[col];
-  } else {
-    colTable[0]=colTable[1]=colTable[2]=0.0;
-    colTable[3]=1.0;
-  }
+  *this = petsColorTools::getColorFromList(col);
 
   if (alpha.length() > 0){
     float a= atof(alpha.c_str());
