@@ -118,7 +118,7 @@ protected:
     FM.setVpSize(scwidth, scheight);
     FM.setFontSize(fontSize);
   }
-  void _initPrinting(int size = 500)
+  void _initPrinting(int /*size*/ = 500)
   {
   }
   void _updatePrinting()
@@ -133,7 +133,7 @@ protected:
       psoutput->UpdatePage(true);
     }
   }
-  void _glBegin(const GLenum mode, int size = 0)
+  void _glBegin(const GLenum mode, int /*size*/ = 0)
   {
     glBegin(mode);
   }
