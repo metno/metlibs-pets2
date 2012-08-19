@@ -335,7 +335,7 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   if (models.size() > 0) {
     mainmodelName = *(models.begin());
     vector<miString> vs = DD->getTextLines(mainmodelName);
-    for (int k = 0; k < vs.size(); k++)
+    for (unsigned int k = 0; k < vs.size(); k++)
       modeltext += (miString(k > 0 ? "\n" : "") + vs[k]);
   }
   keymap["${MODEL}"] = mainmodelName;
@@ -437,9 +437,10 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
     case TEXT:
       if (layout->fromFile && layout->text.length() == 0)// print text from data file
         elm = new TextElement(modeltext, keymap, field, *layout, &xtime);
-      else
+      else {
         // print text from layout.text (specified in style)
         elm = new TextElement(layout->text, keymap, field, *layout, &xtime);
+      }
       break;
     case STAT:
       elm = new TextElement(stationName, keymap, field, *layout, &xtime);

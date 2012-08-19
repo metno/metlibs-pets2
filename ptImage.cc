@@ -136,14 +136,18 @@ void ptImage::ReadImage()
   vector<miString> parts= filename.split('.');
   if (parts.size()<2) return;
 
-  if (parts[1]=="ppm") {
+  miString extension=parts.back();
+
+  if (extension=="ppm") {
     ReadRawImage();
-  } else if (parts[1].contains("png")) {
+  } else if (extension.contains("png")) {
     ReadPNGImage();
-  } else if (parts[1].contains("xpm")) {
+  } else if (extension.contains("xpm")) {
     ReadXPMImage();
   } else {
-    cerr << "ptImage::ReadImage BAD EXTENSION:" << parts[1] << endl;
+#ifdef DEBUG
+    cerr << "ptImage::ReadImage BAD EXTENSION:" << extension << endl;
+#endif
   }
 
   if (data) {
