@@ -40,8 +40,8 @@
 const float F_UNDEF = -32767.0;
 const int   I_UNDEF = -32767;
 
-const int MAXPRIMF = 100; //max number of file primitives
-const int MAXPRIM  = 100; //max number of addititional primitives
+const int MAXPRIMF = 200; //max number of file primitives
+const int MAXPRIM  = 200; //max number of addititional primitives
 
 struct ptPointf {
   float x,y;
