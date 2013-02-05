@@ -46,10 +46,14 @@ WindVectorElement::WindVectorElement(const DataSpec cds,
 				     const ptVertFieldf& field,
 				     const Layout& layout,
 				     XAxisInfo* xtime)
-  :dataPlotElement(cds, layout, field, xtime),
-   boxColor(layout.color2), center(layout.centerVector),
-   lineWidth(layout.lineWidth),deltaY(field.y2-startY),
-   label(layout.label), useTimes(layout.useTimes), datainknots(layout.datainknots)
+  : dataPlotElement(cds, layout, field, xtime)
+  , boxColor(layout.color2)
+  , deltaY(field.y2-startY)
+  , lineWidth(layout.lineWidth)
+  , label(layout.label)
+  , center(layout.centerVector)
+  , useTimes(layout.useTimes)
+  , datainknots(layout.datainknots)
 {
 #ifdef DEBUG
   cout << "Inside WindVectorElement's constructor" << endl;
@@ -76,7 +80,6 @@ void WindVectorElement::plot()
     const float YLEN=0.9*deltaY/2;
     const float DELTAY=0.15*YLEN;
     const float FLAGY=3*DELTAY;
-    const float ktms = float(1847.0/3600.0);
     const float mskt = float(3600.0/1847.0);
 
     float fsc = ( datainknots ? 1.0 : mskt );

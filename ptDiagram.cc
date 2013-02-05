@@ -68,10 +68,18 @@ using namespace miutil;
 
 // should consider additional constructor for equally spaced time points????
 
-ptDiagram::ptDiagram(ptStyle *style, bool showGlines) :
-  nPlotElements(0), first(0), last(0), DD(0), scwidth(1), scheight(1),
-  glwidth(1.0), glheight(1.0), pixWidth(1.0), pixHeight(1.0), Style(style),
-  startidx(0), stopidx(0), colourFlag(true), localTime(false), showGridLines(showGlines)
+ptDiagram::ptDiagram(ptStyle *style, bool showGlines)
+    : nPlotElements(0)
+    , first(0), last(0)
+    , DD(0)
+    , Style(style)
+    , glwidth(1.0), glheight(1.0)
+    , scwidth(1), scheight(1)
+    , pixWidth(1.0), pixHeight(1.0)
+    , startidx(0), stopidx(0)
+    , colourFlag(true)
+    , localTime(false)
+    , showGridLines(showGlines)
 {
   if (Style)
     Style->getTimeSetting(localTime, timeZone);
@@ -675,7 +683,7 @@ void ptDiagram::removeElement(PlotElement *elm)
 void ptDiagram::removeElement(ptPrimitiveType type)
 {
   PlotElement *elm;
-  while (elm = findElement(type))
+  while ((elm = findElement(type)))
     removeElement(elm);
 }
 
@@ -683,7 +691,7 @@ void ptDiagram::removeElement(ptPrimitiveType type)
 void ptDiagram::enableElement(ptPrimitiveType type)
 {
   PlotElement *elm = 0;
-  while (elm = findElement(type, elm))
+  while ((elm = findElement(type, elm)))
     elm->enable();
 }
 
@@ -691,7 +699,7 @@ void ptDiagram::enableElement(ptPrimitiveType type)
 void ptDiagram::disableElement(ptPrimitiveType type)
 {
   PlotElement *elm = 0;
-  while (elm = findElement(type, elm))
+  while ((elm = findElement(type, elm)))
     elm->disable();
 }
 

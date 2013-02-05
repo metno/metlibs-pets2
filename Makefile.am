@@ -58,7 +58,7 @@ libpets2_la_CPPFLAGS = \
 	${TSDATA_CPPFLAGS} \
 	${PNG_CPPFLAGS}
 
-libpets2_la_LDFLAGS = ${VERSION_INFO}
+libpets2_la_LDFLAGS = ${pets2_VERSION_INFO}
 libpets2_la_LIBADD =
 if ENABLE_SHARED_LIBRARY
 libpets2_la_LDFLAGS += \

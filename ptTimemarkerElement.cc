@@ -44,10 +44,12 @@ TimemarkerElement::TimemarkerElement(const vector<miTime> tline,
 				     const ptVertFieldf& field,
 				     const Layout& layout,
 				     XAxisInfo* xtime)
-  :PlotElement(layout,field,xtime),
-   lineWidth(layout.lineWidth),style(layout.linePattern),
-   labelSpace(layout.labelSpace), axeStopY(field.y2),
-   timeLine(tline)
+    : PlotElement(layout,field,xtime)
+    , axeStopY(field.y2)
+    , labelSpace(layout.labelSpace)
+    , lineWidth(layout.lineWidth)
+    , style(layout.linePattern)
+    , timeLine(tline)
 {
 #ifdef DEBUG
   cout << "Inside TimemarkerElement's constructor" << endl;

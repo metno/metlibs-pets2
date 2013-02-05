@@ -45,7 +45,7 @@ using namespace miutil;
 
 
 ptImage::ptImage()
-  : data(0), size(0), width(0), height(0)
+    : width(0), height(0), data(0), size(0)
 {
 #ifdef DEBUG
   cout << "Inside ptImage constructor" << endl;
@@ -53,7 +53,7 @@ ptImage::ptImage()
 }
 
 ptImage::ptImage(const miString& fname, const bool blend)
-  : data(0), size(0), width(0), height(0)
+    : width(0), height(0), data(0), size(0)
 {
 #ifdef DEBUG
   cout << "Inside ptImage constructor, kaller setImage" << endl;
@@ -172,7 +172,7 @@ void ptImage::ReadRawImage()
   int npixels, nchannels, colours, i, j, pixidx;
   char ccom[3],acom;
 
-  if (fp=fopen(filename.cStr(),"r")) {
+  if ((fp=fopen(filename.cStr(),"r"))) {
 
     fscanf(fp,"%s \n",magic);
     if (strcmp(magic,"P6") != 0) {
@@ -517,7 +517,7 @@ void ptImage::ReadXPMImage()
 
   //   cerr << "RESULTING DATA:" << endl;
   char **tmpdata = new (char*[vs.size()]);
-  for (int i=0; i<vs.size(); i++){
+  for (size_t i=0; i<vs.size(); i++){
     tmpdata[i]= strdup(vs[i].cStr());
   }
 

@@ -83,9 +83,9 @@ miString Mother2Str(stMother mother)
     return "NO_MOTHER";
 }
 
-Primitive::Primitive(ptPrimitiveType t) :
-  type(t), order(-1), id(ID_UNDEF), nr(0), conv(NO_CONVERSION), mother(
-      NO_MOTHER), plotAll(false), enabled(true), component(0)
+Primitive::Primitive(ptPrimitiveType t)
+    : type(t), order(-1), enabled(true), id(ID_UNDEF), nr(0), conv(NO_CONVERSION)
+    , mother(NO_MOTHER), plotAll(false), component(0)
 {
 }
 
@@ -98,10 +98,13 @@ void Primitive::print() const
   layout.print();
 }
 
-ptStyle::ptStyle() :
-  topMargin_(50), bottomMargin_(50), leftMargin_(100), rightMargin_(100),
-      nprimF(0), nprim(0), bgColor("BLACK"), nAxes(0), localTime(false),
-      timeZone(0), leftOffset_(0), rightOffset_(0)
+ptStyle::ptStyle()
+    : topMargin_(50), bottomMargin_(50), leftMargin_(100), rightMargin_(100)
+    , leftOffset_(0), rightOffset_(0)
+    , bgColor("BLACK")
+    , nprimF(0), nprim(0)
+    , nAxes(0)
+    , localTime(false), timeZone(0)
 {
 }
 

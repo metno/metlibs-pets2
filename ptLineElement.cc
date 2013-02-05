@@ -47,17 +47,29 @@ LineElement::LineElement(yAxisElement* ya,
     const DataSpec cds,
     const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime, bool ismulti)
-: AxisChildElement(ya,cds,field,layout,xtime),
-  lineArrows(layout.lineArrows), reverse(layout.reverse),
-  arrowLength(layout.arrowLength), arrowcolor(layout.color2),
-  arrow(layout.vectorArrow), arrowSize(layout.arrowSize), arrowfill(layout.fillstyle),
-  marker(layout.marker), markercolor(layout.color2),
-  markersize(layout.size), markerfill(layout.markerFill),
-  shadow(layout.shadow), lineBar(layout.lineBar), barsize(layout.delta),
-  lineStep(layout.lineStep), colorbyvalue(layout.colorbyvalue),
-  colorlist(layout.colorlist),
-  smoothing(layout.smoothing), smoothdiv(layout.smoothdiv),
-  wrapdegrees(layout.wrapdegrees), wraplimit(layout.wraplimit), isMultiLine(ismulti)
+  : AxisChildElement(ya,cds,field,layout,xtime)
+  , marker(layout.marker)
+  , markercolor(layout.color2)
+  , arrowcolor(layout.color2)
+  , markerfill(layout.markerFill)
+  , markersize(layout.size)
+  , barsize(layout.delta)
+  , shadow(layout.shadow)
+  , lineBar(layout.lineBar)
+  , lineStep(layout.lineStep)
+  , lineArrows(layout.lineArrows)
+  , arrowLength(layout.arrowLength)
+  , arrowSize(layout.arrowSize)
+  , arrowfill(layout.fillstyle)
+  , arrow(layout.vectorArrow)
+  , reverse(layout.reverse)
+  , colorbyvalue(layout.colorbyvalue)
+  , colorlist(layout.colorlist)
+  , smoothing(layout.smoothing)
+  , smoothdiv(layout.smoothdiv)
+  , wrapdegrees(layout.wrapdegrees)
+  , wraplimit(layout.wraplimit)
+  , isMultiLine(ismulti)
 
 {
 #ifdef DEBUG

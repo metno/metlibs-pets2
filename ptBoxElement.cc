@@ -41,12 +41,18 @@
 using namespace miutil;
 
 BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
-    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime) :
-  dataPlotElement(cds, layout, field, xtime), label(layout.text), linewidth(
-      layout.lineWidth), pattern(layout.fillstyle),
-      colorlist(layout.colorlist), patternlist(layout.patternlist), hsides(
-          layout.horsides), vsides(layout.versides), useTimes(layout.useTimes),
-      timeLine(tline), style(layout.linePattern)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+    : dataPlotElement(cds, layout, field, xtime)
+    , label(layout.text)
+    , linewidth(layout.lineWidth)
+    , pattern(layout.fillstyle)
+    , colorlist(layout.colorlist)
+    , patternlist(layout.patternlist)
+    , hsides(layout.horsides)
+    , vsides(layout.versides)
+    , style(layout.linePattern)
+    , useTimes(layout.useTimes)
+    , timeLine(tline)
 {
 #ifdef DEBUG
   cout << "Inside BoxElement's constructor" << endl;

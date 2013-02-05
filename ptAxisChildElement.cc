@@ -47,11 +47,16 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
 				   const DataSpec cds,
 				   const ptVertFieldf& field,
 				   const Layout& layout, XAxisInfo* xtime)
-  :dataPlotElement(cds, layout, field, xtime),
-   lineWidth(layout.lineWidth),style(layout.linePattern),
-   Yaxis(ya),quantized(layout.quantized),quantum(layout.quantum),
-   labelOnLine(layout.labelOnLine), lineLabelPos(layout.lineLabelPos),
-   labelside(layout.versides),keepinaxis(layout.keepinaxis)
+  : dataPlotElement(cds, layout, field, xtime)
+  , Yaxis(ya)
+  , lineWidth(layout.lineWidth)
+  , style(layout.linePattern)
+  , quantized(layout.quantized)
+  , quantum(layout.quantum)
+  , labelOnLine(layout.labelOnLine)
+  , lineLabelPos(layout.lineLabelPos)
+  , labelside(layout.versides)
+  , keepinaxis(layout.keepinaxis)
 {
 #ifdef DEBUG
   cout << "Inside AxisChildElement's constructor" << endl;

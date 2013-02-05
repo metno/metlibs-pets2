@@ -46,11 +46,14 @@ VectorElement::VectorElement(const DataSpec cds,
 			     const ptVertFieldf& field,
 			     const Layout& layout,
 			     XAxisInfo* xtime)
-  :dataPlotElement(cds,layout,field,xtime),
-   boxColor(layout.color2),lineWidth(layout.lineWidth),
-   deltaY(field.y2-startY),label(layout.label),
-   arrow(layout.vectorArrow), useTimes(layout.useTimes),
-   reverse(layout.reverse)
+  : dataPlotElement(cds,layout,field,xtime)
+  , boxColor(layout.color2)
+  , deltaY(field.y2-startY)
+  , lineWidth(layout.lineWidth)
+  , reverse(layout.reverse)
+  , label(layout.label)
+  , arrow(layout.vectorArrow)
+  , useTimes(layout.useTimes)
 {
 #ifdef DEBUG
   cout << "Inside VectorElement's constructor" << endl;

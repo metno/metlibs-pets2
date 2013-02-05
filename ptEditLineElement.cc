@@ -43,15 +43,25 @@
 using namespace miutil;
 
 EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
-    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime) :
-  AxisChildElement(ya, cds, field, layout, xtime), editstyle(layout.editstyle),
-      fstyle(layout.fillstyle), pointAlign(layout.align), printValueLock(
-          layout.printValueLock), editMode(LE_SINGLE), markerType(LE_RECT),
-      pMarked(false), printValue(false), modified(false), activenodes(true),
-      backcolor(layout.color2), histocolor(layout.color3),
-      pformat(layout.pformat), priority(layout.priority), markerSize(
-          layout.size), wrapdegrees(layout.wrapdegrees), wraplimit(
-          layout.wraplimit)
+                                 const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+    : AxisChildElement(ya, cds, field, layout, xtime)
+    , editMode(LE_SINGLE)
+    , markerType(LE_RECT)
+    , markerSize(layout.size)
+    , backcolor(layout.color2)
+    , histocolor(layout.color3)
+    , printValue(false)
+    , printValueLock(layout.printValueLock)
+    , modified(false)
+    , activenodes(true)
+    , pformat(layout.pformat)
+    , priority(layout.priority)
+    , wrapdegrees(layout.wrapdegrees)
+    , wraplimit(layout.wraplimit)
+    , editstyle(layout.editstyle)
+    , fstyle(layout.fillstyle)
+    , pointAlign(layout.align)
+    , pMarked(false) // FIXME public
 {
 #ifdef DEBUG
   cout << "Inside EditLineElement's constructor" << endl;
@@ -60,7 +70,7 @@ EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
 
   // Reset marked points array and
   // accumulated values (for quantized lines)
-  for (int i = 0; i < xtime->xcoord.size(); i++) {
+  for (size_t i = 0; i < xtime->xcoord.size(); i++) {
     markedPoints.push_back(false);
     accuvalues.push_back(0.0);
   }
@@ -546,7 +556,7 @@ void EditLineElement::zero()
 // reset accumulated delta-y's
 void EditLineElement::_resetAccu()
 {
-  for (int i = 0; i < xtime->xcoord.size(); i++)
+  for (size_t i = 0; i < xtime->xcoord.size(); i++)
     accuvalues[i] = 0.0;
 }
 
@@ -832,15 +842,11 @@ void EditLineElement::movePoints(float dy)
 // -------------------------------------------------------------------------
 void EditLineElement::movePointsQuant(int dy)
 {
-  int i, j;
-  float diff = quantum * dy;
-  //float grad = plotRange/deltaY;
-  float lingrad, value;
-
   if (!activenodes)
     return;
-
-  for (i = 0; i < datasize(); i++)
+  
+  const float diff = quantum * dy;
+  for (int i = 0; i < datasize(); i++)
     if (markedPoints[i]) {
       if (diff != 0.0 && _legalValue(dval(i) + diff)) {
         setdval(i, dval(i) + diff);
@@ -853,8 +859,8 @@ void EditLineElement::movePointsQuant(int dy)
 
 void EditLineElement::releasePoints()
 {
-  int j = 0;
-  for (int i = 0; i < xtime->xcoord.size(); i++) {
+  size_t j = 0;
+  for (size_t i = 0; i < xtime->xcoord.size(); i++) {
     if (valid(i)) {
       markedPoints[j++] = false;
     }

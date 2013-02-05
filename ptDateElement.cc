@@ -47,11 +47,14 @@ DateElement::DateElement(const vector<miTime> tline,
 			 const Layout& layout,
 			 XAxisInfo* xtime)
 
-  : PlotElement(layout, field, xtime),
-    language(layout.language), timeLine(tline),
-    asNumber(layout.asNumber), datestyle(layout.datestyle),
-    plotlabel(layout.label), minSkipX(layout.minSkipX),
-    labeltext(layout.text)
+  : PlotElement(layout, field, xtime)
+  , timeLine(tline)
+  , labeltext(layout.text)
+  , language(layout.language)
+  , asNumber(layout.asNumber)
+  , datestyle(layout.datestyle)
+  , plotlabel(layout.label)
+  , minSkipX(layout.minSkipX)
 {
 #ifdef DEBUG
   cout << "Inside DateElement's constructor" << endl;

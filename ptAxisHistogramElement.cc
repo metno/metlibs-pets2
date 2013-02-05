@@ -45,10 +45,13 @@ using namespace miutil;
 
 AxisHistogramElement::AxisHistogramElement(yAxisElement* ya,
     const DataSpec cds, const ptVertFieldf& field, const Layout& layout,
-    XAxisInfo* xtime) :
-  AxisChildElement(ya, cds, field, layout, xtime), fstyle(layout.fillstyle),
-      lineWidth(layout.lineWidth), hstart(layout.histStart), hstop(
-          layout.histStop), drawlabel(layout.label)
+    XAxisInfo* xtime)
+    : AxisChildElement(ya, cds, field, layout, xtime)
+    , lineWidth(layout.lineWidth)
+    , fstyle(layout.fillstyle)
+    , hstart(layout.histStart)
+    , hstop(layout.histStop)
+    , drawlabel(layout.label)
 {
 #ifdef DEBUG
   cout << "Inside AxisHistogramElement's constructor" << endl;

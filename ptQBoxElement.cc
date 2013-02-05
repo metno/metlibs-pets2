@@ -46,11 +46,14 @@ QBoxElement::QBoxElement(yAxisElement* ya,
 			 const DataSpec cds,
 			 const ptVertFieldf& field,
 			 const Layout& layout, XAxisInfo* xtime)
-  : AxisChildElement(ya,cds,field,layout,xtime),
-    lineWidth(layout.lineWidth), tickLen(layout.tickLen),
-    hstart(layout.histStart), hstop(layout.histStop),
-    linecolor(layout.color), linestyle(layout.linePattern),
-    boxcolor(layout.color2), boxfill(layout.fillstyle)
+  : AxisChildElement(ya,cds,field,layout,xtime)
+  , lineWidth(layout.lineWidth)
+  , hstart(layout.histStart), hstop(layout.histStop)
+  , tickLen(layout.tickLen)
+  , linestyle(layout.linePattern)
+  , linecolor(layout.color)
+  , boxcolor(layout.color2)
+  , boxfill(layout.fillstyle)
 {
 #ifdef DEBUG
   cout << "Inside QBOXElement's constructor" << endl;

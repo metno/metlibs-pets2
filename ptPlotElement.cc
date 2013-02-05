@@ -52,14 +52,26 @@ PlotElement::PlotElement(const Layout& layout,
 			 XAxisInfo *pXtime,
 			 const bool& en,
 			 PlotElement* pNext)
-  :type(DUM_PRIMITIVE),name(layout.name),color(layout.color),
-   startY(field.y1), stopY(field.y2),
-   fontSize(layout.font),align(layout.align),xtime(pXtime),
-   enabled(en),next(pNext), startT(0), stopT(pXtime->xcoord.size()-1),
-   pInColour(layout.patternInColour), circle_list(0),
-   datalimits(layout.datalimits), colorlist(layout.colorlist),
-   visible(layout.visible), AllTimesAxisScale(true),
-   scwidth(1), scheight(1), glwidth(1.0), glheight(1.0), pixWidth(1.0), pixHeight(1.0)
+  : type(DUM_PRIMITIVE)
+  , name(layout.name)
+  , enabled(en)
+  , visible(layout.visible)
+  , startY(field.y1)
+  , stopY(field.y2)
+  , color(layout.color)
+  , xtime(pXtime)
+  , fontSize(layout.font)
+  , align(layout.align)
+  , glwidth(1.0), glheight(1.0)
+  , scwidth(1), scheight(1)
+  , pixWidth(1.0), pixHeight(1.0)
+  , startT(0), stopT(pXtime->xcoord.size()-1)
+  , AllTimesAxisScale(true)
+  , pInColour(layout.patternInColour)
+  , circle_list(0)
+  , datalimits(layout.datalimits)
+  , colorlist(layout.colorlist)
+  , next(pNext) // FIXME public
 {
 #ifdef DEBUG
   cout << "Inside PlotElement's constructor" << endl;

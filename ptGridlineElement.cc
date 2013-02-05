@@ -45,12 +45,18 @@ GridlineElement::GridlineElement(const vector<miTime> tline,
 				 const ptVertFieldf& field,
 				 const Layout& layout,
 				 XAxisInfo* xtime)
-  : PlotElement(layout,field,xtime),
-    lineWidth(layout.lineWidth), style(layout.linePattern),
-    numTickMajor(layout.numTickMajor), numTickMinor(layout.numTickMinor),
-    labelSpace(layout.labelSpace), axeStopY(field.y2),
-    useTimes(layout.useTimes), timeLine(tline), gridxonly(layout.gridxonly),
-    plotDayPattern(layout.plotDayPattern), daycolor(layout.color2)
+  : PlotElement(layout,field,xtime)
+  , numTickMajor(layout.numTickMajor)
+  , numTickMinor(layout.numTickMinor)
+  , axeStopY(field.y2)
+  , labelSpace(layout.labelSpace)
+  , lineWidth(layout.lineWidth)
+  , style(layout.linePattern)
+  , gridxonly(layout.gridxonly)
+  , plotDayPattern(layout.plotDayPattern)
+  , useTimes(layout.useTimes)
+  , daycolor(layout.color2)
+  , timeLine(tline)
 {
 #ifdef DEBUG
   cout << "Inside GridlineElement's constructor" << endl;

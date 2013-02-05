@@ -44,11 +44,15 @@ using namespace miutil;
 
 HistogramElement::HistogramElement(const DataSpec cds,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime,
-    vector<miTime>& timeLine) :
-    dataPlotElement(cds, layout, field, xtime), style(layout.fillstyle), lineWidth(
-        layout.lineWidth), deltaY(field.y2 - startY - layout.labelSpace), unit(
-        layout.unit), hstart(layout.histStart), hstop(layout.histStop), drawlabel(
-        layout.label)
+    vector<miTime>& timeLine)
+    : dataPlotElement(cds, layout, field, xtime)
+    , deltaY(field.y2 - startY - layout.labelSpace)
+    , lineWidth(layout.lineWidth)
+    , style(layout.fillstyle)
+    , unit(layout.unit)
+    , hstart(layout.histStart)
+    , hstop(layout.histStop)
+    , drawlabel(layout.label)
 {
 #ifdef DEBUG
   cout << "Inside HistogramElement's constructor" << endl;

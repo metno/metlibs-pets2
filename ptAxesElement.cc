@@ -44,11 +44,12 @@ AxesElement::AxesElement(const ptVertFieldf& field,
 			 const Layout& layout,
 			 const bool& hor,
 			 XAxisInfo* xtime)
-  : PlotElement(layout, field, xtime),
-    horizontal(hor), axisWidth(layout.axisWidth),
-    tickLineWidth(layout.tickWidth),
-    y1(field.y1+layout.tickLen), y2(field.y2-layout.labelSpace),
-    tickColor(layout.color2), rectangle(layout.axisRectangle)
+  : PlotElement(layout, field, xtime)
+  , y1(field.y1+layout.tickLen), y2(field.y2-layout.labelSpace)
+  , axisWidth(layout.axisWidth), tickLineWidth(layout.tickWidth)
+  , tickColor(layout.color2)
+  , rectangle(layout.axisRectangle)
+  , horizontal(hor)
 {
 #ifdef DEBUG
   cout << "Inside AxesElement's constructor" << endl;

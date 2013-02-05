@@ -46,23 +46,40 @@ using namespace miutil;
 yAxisElement::yAxisElement(const ptVertFieldf& field,
 			   const Layout& layout,
 			   XAxisInfo* xtime)
-  : PlotElement(layout, field, xtime),
-    lineWidth(layout.lineWidth),style(layout.linePattern),
-    axis(layout.axis),axisLineWidth(layout.axisWidth),
-    tickWidth(layout.tickWidth),tickLen(layout.tickLen),
-    interval(layout.interval), axeStopY(field.y2),
-    minRange(layout.minRange),delta(layout.delta),
-    minMargin(layout.minMargin), minIsSet(layout.minIsSet),
-    maxIsSet(layout.maxIsSet),minValue(layout.minValue),
-    maxValue(layout.maxValue),numChild(0),firstPlot(true),
-    id(layout.yaid),recalcDims(true),userlabels(false),
-    axisgrid(layout.axisgrid),gridstyle(layout.gridstyle),
-    gridwidth(layout.gridwidth), gridcolor(layout.gridcolor),
-    fittopage(layout.fittopage), linlen(48), horLabels(layout.horLabels),
-    horLabelOffset(layout.horLabelOffset), plotlegends(layout.label),
-    userLabels(layout.textlabels), userValueLabels(layout.valuetextlabels),
-    legendlineinside(layout.legendlineinside),
-    useMinMax(layout.useMinMax)
+  : PlotElement(layout, field, xtime)
+  , numChild(0)
+  , id(layout.yaid)
+  , firstPlot(true)
+  , axeStopY(field.y2)
+  , tickLen(layout.tickLen)
+  , lineWidth(layout.lineWidth)
+  , axisLineWidth(layout.axisWidth)
+  , tickWidth(layout.tickWidth)
+  , interval(layout.interval)
+  , minRange(layout.minRange)
+  , delta(layout.delta)
+  , minMargin(layout.minMargin)
+  , style(layout.linePattern)
+  , axis(layout.axis)
+  , minIsSet(layout.minIsSet)
+  , maxIsSet(layout.maxIsSet)
+  , minValue(layout.minValue)
+  , maxValue(layout.maxValue)
+  , recalcDims(true)
+  , userlabels(false)
+  , userLabels(layout.textlabels)
+  , userValueLabels(layout.valuetextlabels)
+  , fittopage(layout.fittopage)
+  , linlen(48)
+  , plotlegends(layout.label)
+  , horLabels(layout.horLabels)
+  , horLabelOffset(layout.horLabelOffset)
+  , legendlineinside(layout.legendlineinside)
+  , axisgrid(layout.axisgrid)
+  , gridwidth(layout.gridwidth)
+  , gridcolor(layout.gridcolor)
+  , gridstyle(layout.gridstyle)
+  , useMinMax(layout.useMinMax)
 {
 #ifdef DEBUG
   cout << "Inside yAxisElement's constructor" << endl;
@@ -105,7 +122,7 @@ void yAxisElement::plotAxis()
 
   // plot tickmarks for each interval step, and write value for each delta
   glLineWidth(tickWidth);
-  int i,n= minorticks.size();
+  size_t i,n= minorticks.size();
   for (i=0; i<n; i++){
     _glBegin(GL_LINES,2);
     glVertex2f(tickX,minorticks[i]);
@@ -465,8 +482,8 @@ miString yAxisElement::userValueLabel(const float value)
 
   int n = majorticks.size();
 
-  for ( int i=0; i<n; i++){
-    if ( value <= majorphys[i] && i < userValueLabels.size() ){
+  for (int i=0; i<n; i++) {
+    if (value <= majorphys[i] && i < userValueLabels.size()) {
       s = userValueLabels[i];
       break;
     }

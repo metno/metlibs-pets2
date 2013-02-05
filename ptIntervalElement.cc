@@ -46,10 +46,12 @@ IntervalElement::IntervalElement(const vector<miTime> tline,
 				 const ptVertFieldf& field,
 				 const Layout& layout,
 				 XAxisInfo* xtime)
-  : PlotElement(layout, field, xtime),
-    label(layout.text), arrows(layout.horsides),
-    timeLine(tline), timetext(layout.text2),
-    lineWidth(layout.lineWidth)
+  : PlotElement(layout, field, xtime)
+  , label(layout.text)
+  , timetext(layout.text2)
+  , arrows(layout.horsides)
+  , lineWidth(layout.lineWidth)
+  , timeLine(tline)
 {
 #ifdef DEBUG
   cout << "Inside IntervalElement's constructor" << endl;
@@ -94,11 +96,11 @@ void IntervalElement::plot()
     }
     glLineWidth(lineWidth);
 
-    int i,j;
+    int i;
     float th,tw;
     float xstart, midY= (startY+stopY)/2;
     float deltaY= stopY-startY;
-    for (j=0; j<intervals.size(); j++){
+    for (size_t j=0; j<intervals.size(); j++){
       xstart= -1;
       for (i=startT; i<=stopT; i++){
 	if (timeLine[i]==intervals[j].start)
