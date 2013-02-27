@@ -80,8 +80,8 @@ protected:
   bool AllTimesAxisScale;     // Axis scale calculated from all time points
   bool pInColour;             // use patterns in colour
   GLuint circle_list;         // display-list for circle
-  vector<float> datalimits;
-  vector<ptColor> colorlist;
+  std::vector<float> datalimits;
+  std::vector<ptColor> colorlist;
 
 
   static bool useFakeStipple; // imitate linestippling

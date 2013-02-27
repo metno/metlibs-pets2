@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2013 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -33,14 +31,15 @@
 #include "config.h"
 #endif
 
-#include <fstream>
 #include <ptPlotElement.h>
 #include <ptEditLineElement.h>
 #include <puCtools/puMath.h>
+#include <fstream>
 #include <iostream>
 #include <math.h>
 
 using namespace miutil;
+using namespace std;
 
 EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
                                  const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)

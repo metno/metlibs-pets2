@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2013 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -39,6 +37,7 @@
 #include <stdio.h>
 
 using namespace miutil;
+using namespace std;
 
 BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)

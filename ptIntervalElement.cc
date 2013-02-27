@@ -42,7 +42,7 @@
 
 using namespace miutil;
 
-IntervalElement::IntervalElement(const vector<miTime> tline,
+IntervalElement::IntervalElement(const std::vector<miTime> tline,
 				 const ptVertFieldf& field,
 				 const Layout& layout,
 				 XAxisInfo* xtime)
@@ -63,7 +63,7 @@ IntervalElement::IntervalElement(const vector<miTime> tline,
 }
 
 
-void IntervalElement::setTimes(const vector<tinterval>& t)
+void IntervalElement::setTimes(const std::vector<tinterval>& t)
 {
   intervals= t;
   if(vt.size()){

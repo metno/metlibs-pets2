@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -40,7 +38,7 @@
 
 using namespace miutil;
 
-TimemarkerElement::TimemarkerElement(const vector<miTime> tline,
+TimemarkerElement::TimemarkerElement(const std::vector<miTime> tline,
 				     const ptVertFieldf& field,
 				     const Layout& layout,
 				     XAxisInfo* xtime)

@@ -44,7 +44,7 @@
 using namespace miutil;
 
 TextElement::TextElement(const miString& pText,
-			 const map<miString,miString>& keymap,
+			 const std::map<miString,miString>& keymap,
 			 const ptVertFieldf& field,
 			 const Layout& layout,
 			 XAxisInfo* xtime)
@@ -68,7 +68,7 @@ TextElement::TextElement(const miString& pText,
   text= pText;
 
   if (keymap.size()>0) {
-    map<miString,miString>::const_iterator p;
+    std::map<miString,miString>::const_iterator p;
     for (p=keymap.begin(); p!=keymap.end(); p++){
       text.replace(p->first, p->second);
     }
@@ -82,12 +82,12 @@ void TextElement::plot()
 #ifdef DEBUG
     cout << "TextElement::plot(): " << text << endl;
 #endif
-    vector<float> vth, vtw;
+    std::vector<float> vth, vtw;
     float th, tw, allth=0;
     float x;
     _prepFont();
 
-    vector<miString> vs;
+    std::vector<miString> vs;
     if (text.contains("\n")){
       vs= text.split("\n");
       reverse(vs.begin(),vs.end());

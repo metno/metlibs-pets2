@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -42,7 +40,7 @@
 
 using namespace miutil;
 
-UTCElement::UTCElement(const vector<miTime> tline,
+UTCElement::UTCElement(const std::vector<miTime> tline,
 		       const ptVertFieldf& field,
 		       const Layout& layout,
 		       XAxisInfo* xtime)
@@ -69,13 +67,13 @@ UTCElement::UTCElement(const vector<miTime> tline,
 float UTCElement::plottime(const miTime& t, const int i,
 			   const bool minute, const float cwid)
 {
-  ostringstream ost;
+  std::ostringstream ost;
   float offset;
   if (minute){
-    ost << setw(2) << setfill('0') << t.hour() << ":" << setw(2) << t.min();
+    ost << std::setw(2) << std::setfill('0') << t.hour() << ":" << std::setw(2) << t.min();
     offset= cwid*2.5;
   } else {
-    ost << setw(2) << setfill('0') << t.hour();
+    ost << std::setw(2) << std::setfill('0') << t.hour();
     offset= cwid;
   }
   _printString(ost.str().c_str(),xtime->xcoord[i]-offset,startY);

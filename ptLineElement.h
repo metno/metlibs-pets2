@@ -1,9 +1,8 @@
+// -*- c++ -*-
 /*
   libpets2 - presentation and editing of time series
   
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -53,8 +52,8 @@ class LineElement : public AxisChildElement
   bool arrow;
   bool reverse;
   bool colorbyvalue;
-  vector<ptColor> colorlist;
-  vector<float> datalimits;
+  std::vector<ptColor> colorlist;
+  std::vector<float> datalimits;
   bool smoothing;
   int smoothdiv;
   bool wrapdegrees;

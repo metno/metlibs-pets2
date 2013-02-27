@@ -203,7 +203,7 @@ bool PlotElement::startPSnewpage()
   if (!printing || !psoutput) return false;
   glFlush();
   if (psoutput->EndPage() != 0) {
-    cerr << "startPSnewpage: EndPage BAD!!!" << endl;
+    std::cerr << "startPSnewpage: EndPage BAD!!!" << std::endl;
     return false;
   }
   psoutput->StartPage();

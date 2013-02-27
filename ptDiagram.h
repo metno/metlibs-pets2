@@ -1,9 +1,8 @@
+// -*- c++ -*-
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2013 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -60,7 +59,7 @@ private:
   miutil::miTime startT, stopT; // current timeinterval
   int startidx, stopidx; // current timeinterval xaxis-indices
   bool colourFlag; // diagram in colour or black/white
-  map<miutil::miString, miutil::miString> keymap; // keywords for text-strings
+  std::map<miutil::miString, miutil::miString> keymap; // keywords for text-strings
   bool localTime; // use localtime
   int timeZone; // which timezone
   bool showGridLines;
@@ -115,13 +114,13 @@ public:
   }
   void setPrinting(bool print);
   void setFakeStipple(bool use);
-  bool startPSoutput(const string& fname, const bool incolour,
+  bool startPSoutput(const std::string& fname, const bool incolour,
       const bool inlandscape, const bool doEPS = false);
   bool startPSnewpage();
   bool endPSoutput();
   // keyword/value pair methods
   void addKeyword(const miutil::miString&, const miutil::miString&);
-  void setKeymap(const map<miutil::miString, miutil::miString>&);
+  void setKeymap(const std::map<miutil::miString, miutil::miString>&);
   void clearKeywords();
 };
 

@@ -44,7 +44,7 @@ using namespace miutil;
 
 HistogramElement::HistogramElement(const DataSpec cds,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime,
-    vector<miTime>& timeLine)
+    std::vector<miTime>& timeLine)
     : dataPlotElement(cds, layout, field, xtime)
     , deltaY(field.y2 - startY - layout.labelSpace)
     , lineWidth(layout.lineWidth)

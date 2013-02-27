@@ -41,7 +41,7 @@
 
 using namespace miutil;
 
-ProgElement::ProgElement(vector<int>& data,
+ProgElement::ProgElement(std::vector<int>& data,
 			 const ptVertFieldf& field,
 			 const Layout& layout,
 			 XAxisInfo* xtime)

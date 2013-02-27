@@ -49,7 +49,7 @@ SymbolElement::SymbolElement(const DataSpec cds, const ptVertFieldf& field,
   type = SYMBOL;
 }
 
-void SymbolElement::setImages(const int min, const vector<miString>& files)
+void SymbolElement::setImages(const int min, const std::vector<miString>& files)
 {
   int i;
   minidx = min;

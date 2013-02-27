@@ -41,7 +41,7 @@
 
 using namespace miutil;
 
-GridlineElement::GridlineElement(const vector<miTime> tline,
+GridlineElement::GridlineElement(const std::vector<miTime> tline,
 				 const ptVertFieldf& field,
 				 const Layout& layout,
 				 XAxisInfo* xtime)
@@ -86,7 +86,7 @@ void GridlineElement::plot()
     _setColor(color);
 
     bool plotday= true;
-    vector<int> daych;
+    std::vector<int> daych;
     int i;
     bool fakestipple = false;
     if ((!useColour) || pInColour){

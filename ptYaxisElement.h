@@ -56,9 +56,9 @@ protected:
   float zerox, tickX; // xvalue of axisline and end of tickmark
   float charHeight, charWidth, charHeight_2;
   bool firstPlot;
-  vector<float> minorticks;
-  vector<float> majorticks;
-  vector<float> majorphys;
+  std::vector<float> minorticks;
+  std::vector<float> majorticks;
+  std::vector<float> majorphys;
 
   float axeStopY;
   float tickLen;

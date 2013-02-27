@@ -110,9 +110,9 @@ void LineElement::plot()
     cout << "LineElement::plot()" << endl;
 #endif
     // vertex points (legal datapoints)
-    vector<float> vertexx, vertexy;
+    std::vector<float> vertexx, vertexy;
     // vertex point data index (legal datapoints)
-    vector<int>   vertexi;
+    std::vector<int>   vertexi;
 
     // marker types
     float mSizeX = markersize*pixWidth;
@@ -139,8 +139,8 @@ void LineElement::plot()
       labelx = lineLabelPos*1.0*(stopT-startT)/100.0;
 
     float cx, cy; // crossing point
-    vector<float> plotx, ploty; // plot points
-    vector<int> ploti; // plot color index (for colorbyvalue)
+    std::vector<float> plotx, ploty; // plot points
+    std::vector<int> ploti; // plot color index (for colorbyvalue)
 
     int j,i;
 
@@ -247,7 +247,7 @@ void LineElement::plot()
                     for ( int k = 1; k<=ncr; k++ ){
                       int ind1= previ1+neg*(k-1);
                       int ind2= previ1+neg*k;
-                      float d = dataLimit( max(ind1,ind2) );
+                      float d = dataLimit( std::max(ind1,ind2) );
 
                       // find crossing
                       if (dataCrossPoint(d2,yc1,d2,yc2,d,cx,cy)){
@@ -329,7 +329,7 @@ void LineElement::plot()
                     for ( int k = 1; k<=ncr; k++ ){
                       int ind1= previ1+neg*(k-1);
                       int ind2= previ1+neg*k;
-                      float d = dataLimit( max(ind1,ind2) );
+                      float d = dataLimit( std::max(ind1,ind2) );
                       // find crossing
                       if (dataCrossPoint(xc1,yc1,xc2,yc2,d,cx,cy)){
                         // make line

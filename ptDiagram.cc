@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#include <fstream>
 #include <ptDiagram.h>
 
 #include <ptAxesElement.h>
@@ -61,10 +60,12 @@
 #include <ptIntervalElement.h>
 #include <ptQBoxElement.h>
 
-#include <iostream>
 #include <puTools/miString.h>
+#include <fstream>
+#include <iostream>
 
 using namespace miutil;
+using namespace std;
 
 // should consider additional constructor for equally spaced time points????
 

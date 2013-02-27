@@ -90,8 +90,8 @@ void MultiLineElement::plot()
     glLineWidth(lineWidth);
     glPointSize(lineWidth);
 
-    vector<float> Xval;
-    vector<int>   Yidx;
+    std::vector<float> Xval;
+    std::vector<int>   Yidx;
     int j,i;
     j = datastart();
     for (i=startT; i<=stopT; i++) {
