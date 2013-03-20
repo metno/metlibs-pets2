@@ -181,10 +181,10 @@ bool PlotElement::startPSoutput(const miString& fname,
   bool makeeps= doEPS;
 
   if (fname.contains(".svg")){
-    psoutput = new SvgDocument(const_cast<char*>(fname.cStr()),
+    psoutput = new SvgDocument(const_cast<char*>(fname.c_str()),
         print_options, feedsize,0);
   } else {
-    psoutput = new GLPfile(const_cast<char*>(fname.cStr()),
+    psoutput = new GLPfile(const_cast<char*>(fname.c_str()),
         print_options, feedsize,0,makeeps);
   }
 

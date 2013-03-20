@@ -114,9 +114,9 @@ void IntervalElement::plot()
 	    float dy= deltaY/(numt*2.0);
 	    float tY= stopY-dy;
 	    for (int k=0; k<numt; k++){
-	      _getStringSize(intervals[j].text[k].cStr(),tw,th);
+	      _getStringSize(intervals[j].text[k].c_str(),tw,th);
 	      t1= (xstart + xtime->xcoord[i] - tw)/2;
-	      _printString(intervals[j].text[k].cStr(),t1,tY-th/2);
+	      _printString(intervals[j].text[k].c_str(),t1,tY-th/2);
 	      if (tw > maxw) maxw= tw;
 	      tY-= dy*2;
 	    }

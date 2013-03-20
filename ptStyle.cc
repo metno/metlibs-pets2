@@ -802,8 +802,8 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
 
   if (verbose)
     cout << "ptStyle::readStyle. Reading stylefile: " << filename << endl;
-  ifstream sfile(filename.cStr());
-  //   sfile.open(filename.cStr());
+  ifstream sfile(filename.c_str());
+  //   sfile.open(filename.c_str());
   //   if (sfile.bad()){
   if (!sfile) {
     cerr << "ptStyle::readStyle. Can't open file: " << filename << endl;
@@ -945,42 +945,42 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     if (keyw == "bgcolor")
       bgColor.fromStr(argu);
     else if (keyw == "topmargin")
-      topMargin_ = atof(argu.cStr());
+      topMargin_ = atof(argu.c_str());
     else if (keyw == "bottommargin")
-      bottomMargin_ = atof(argu.cStr());
+      bottomMargin_ = atof(argu.c_str());
     else if (keyw == "leftmargin")
-      leftMargin_ = atof(argu.cStr());
+      leftMargin_ = atof(argu.c_str());
     else if (keyw == "rightmargin")
-      rightMargin_ = atof(argu.cStr());
+      rightMargin_ = atof(argu.c_str());
     else if (keyw == "localtime")
       localTime = (argu.upcase() == "TRUE");
     else if (keyw == "timezone")
-      timeZone = atoi(argu.cStr());
+      timeZone = atoi(argu.c_str());
     else if (keyw == "leftoffset")
-      leftOffset_ = atof(argu.cStr());
+      leftOffset_ = atof(argu.c_str());
     else if (keyw == "rightoffset")
-      rightOffset_ = atof(argu.cStr());
+      rightOffset_ = atof(argu.c_str());
     // primitive-attributes
     else if (keyw == "type")
       curp.type = Str2Primitive(argu);
     else if (keyw == "order")
-      curp.order = atoi(argu.cStr());
+      curp.order = atoi(argu.c_str());
     else if (keyw == "enabled")
       curp.enabled = (argu.upcase() == "TRUE");
     else if (keyw == "mother")
       curp.mother = Str2Mother(argu);
     else if (keyw == "component")
-      curp.component = atoi(argu.cStr());
+      curp.component = atoi(argu.c_str());
     else if (keyw == "parameter")
       curp.id = parDef.Str2ParId(argu);
     else if (keyw == "alias")
       curp.id.alias = argu;
     else if (keyw == "level")
-      curp.id.level = atoi(argu.cStr());
+      curp.id.level = atoi(argu.c_str());
     else if (keyw == "model")
       curp.id.model = argu;
     else if (keyw == "run")
-      curp.id.run = atoi(argu.cStr());
+      curp.id.run = atoi(argu.c_str());
     else if (keyw == "submodel")
       curp.id.submodel = argu;
     else if (keyw == "plotall")
@@ -1001,13 +1001,13 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "font")
       curl.font = Str2FontSize(argu);
     else if (keyw == "height")
-      curl.height = atoi(argu.cStr());
+      curl.height = atoi(argu.c_str());
     else if (keyw == "trueheight")
-      curl.trueheight = atoi(argu.cStr());
+      curl.trueheight = atoi(argu.c_str());
     else if (keyw == "position")
-      curl.position = atoi(argu.cStr());
+      curl.position = atoi(argu.c_str());
     else if (keyw == "size")
-      curl.size = atoi(argu.cStr());
+      curl.size = atoi(argu.c_str());
     else if (keyw == "marker")
       curl.marker = Str2Marker(argu);
     else if (keyw == "markerfill")
@@ -1033,33 +1033,33 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "patternincolour")
       curl.patternInColour = (argu.upcase() == "TRUE");
     else if (keyw == "linewidth")
-      curl.lineWidth = atof(argu.cStr());
+      curl.lineWidth = atof(argu.c_str());
     else if (keyw == "axiswidth")
-      curl.axisWidth = atof(argu.cStr());
+      curl.axisWidth = atof(argu.c_str());
     else if (keyw == "tickwidth")
-      curl.tickWidth = atof(argu.cStr());
+      curl.tickWidth = atof(argu.c_str());
     else if (keyw == "ticklen")
-      curl.tickLen = atof(argu.cStr());
+      curl.tickLen = atof(argu.c_str());
     else if (keyw == "minrange")
-      curl.minRange = atof(argu.cStr());
+      curl.minRange = atof(argu.c_str());
     else if (keyw == "interval")
-      curl.interval = atof(argu.cStr());
+      curl.interval = atof(argu.c_str());
     else if (keyw == "delta")
-      curl.delta = atof(argu.cStr());
+      curl.delta = atof(argu.c_str());
     else if (keyw == "minmargin")
-      curl.minMargin = atof(argu.cStr());
+      curl.minMargin = atof(argu.c_str());
     else if (keyw == "maxisset")
       curl.maxIsSet = (argu.upcase() == "TRUE");
     else if (keyw == "minisset")
       curl.minIsSet = (argu.upcase() == "TRUE");
     else if (keyw == "minvalue")
-      curl.minValue = atof(argu.cStr());
+      curl.minValue = atof(argu.c_str());
     else if (keyw == "maxvalue")
-      curl.maxValue = atof(argu.cStr());
+      curl.maxValue = atof(argu.c_str());
     else if (keyw == "useminmax")
       curl.useMinMax = (argu.upcase() == "TRUE");
     else if (keyw == "yaid")
-      curl.yaid = atoi(argu.cStr());
+      curl.yaid = atoi(argu.c_str());
     else if (keyw == "reverse")
       curl.reverse = (argu.upcase() == "TRUE");
     else if (keyw == "centervector")
@@ -1069,19 +1069,19 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "linearrows")
       curl.lineArrows = (argu.upcase() == "TRUE");
     else if (keyw == "arrowlength")
-      curl.arrowLength = atof(argu.cStr());
+      curl.arrowLength = atof(argu.c_str());
     else if (keyw == "arrowsize")
-      curl.arrowSize = atof(argu.cStr());
+      curl.arrowSize = atof(argu.c_str());
     else if (keyw == "numtickmajor")
-      curl.numTickMajor = atoi(argu.cStr());
+      curl.numTickMajor = atoi(argu.c_str());
     else if (keyw == "numtickminor")
-      curl.numTickMinor = atoi(argu.cStr());
+      curl.numTickMinor = atoi(argu.c_str());
     else if (keyw == "labelspace")
-      curl.labelSpace = atof(argu.cStr());
+      curl.labelSpace = atof(argu.c_str());
     else if (keyw == "quantized")
       curl.quantized = (argu.upcase() == "TRUE");
     else if (keyw == "quantum")
-      curl.quantum = atof(argu.cStr());
+      curl.quantum = atof(argu.c_str());
     else if (keyw == "gridxonly")
       curl.gridxonly = (argu.upcase() == "TRUE");
     else if (keyw == "plotdaypattern")
@@ -1089,17 +1089,17 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "axisgrid")
       curl.axisgrid = (argu.upcase() == "TRUE");
     else if (keyw == "gridwidth")
-      curl.gridwidth = atof(argu.cStr());
+      curl.gridwidth = atof(argu.c_str());
     else if (keyw == "gridcolor")
       curl.gridcolor.fromStr(argu);
     else if (keyw == "gridstyle")
       curl.gridstyle = Str2LineStyle(argu);
     else if (keyw == "minskipx")
-      curl.minSkipX = atoi(argu.cStr());
+      curl.minSkipX = atoi(argu.c_str());
     else if (keyw == "usetimes")
-      curl.useTimes = atoi(argu.cStr());
+      curl.useTimes = atoi(argu.c_str());
     else if (keyw == "modhours")
-      curl.modhours = Str2IntList(argu.cStr());
+      curl.modhours = Str2IntList(argu.c_str());
     else if (keyw == "axis")
       curl.axis = Str2Axis(argu);
     else if (keyw == "text")
@@ -1113,7 +1113,7 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "vectorf")
       curl.vectorF = (argu.upcase() == "TRUE");
     else if (keyw == "linelabelpos")
-      curl.lineLabelPos = atof(argu.cStr());
+      curl.lineLabelPos = atof(argu.c_str());
     else if (keyw == "labelonline")
       curl.labelOnLine = (argu.upcase() == "TRUE");
     else if (keyw == "keepinaxis")
@@ -1121,23 +1121,23 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "shadow")
       curl.shadow = (argu.upcase() == "TRUE");
     else if (keyw == "histogramstart")
-      curl.histStart = atoi(argu.cStr());
+      curl.histStart = atoi(argu.c_str());
     else if (keyw == "histogramstop")
-      curl.histStop = atoi(argu.cStr());
+      curl.histStop = atoi(argu.c_str());
     else if (keyw == "fittopage")
       curl.fittopage = (argu.upcase() == "TRUE");
     else if (keyw == "horlabels")
       curl.horLabels = (argu.upcase() == "TRUE");
     else if (keyw == "horlabeloffset")
-      curl.horLabelOffset = atof(argu.cStr());
+      curl.horLabelOffset = atof(argu.c_str());
     else if (keyw == "cutoff")
-      curl.cutoff = atof(argu.cStr());
+      curl.cutoff = atof(argu.c_str());
     else if (keyw == "horsides")
       curl.horsides = Str2HorSides(argu);
     else if (keyw == "versides")
       curl.versides = Str2VerSides(argu);
     else if (keyw == "priority")
-      curl.priority = atoi(argu.cStr());
+      curl.priority = atoi(argu.c_str());
     else if (keyw == "language")
       curl.language = argu.upcase();
     else if (keyw == "drawbackground")
@@ -1171,7 +1171,7 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "smoothing")
       curl.smoothing = (argu.upcase() == "TRUE");
     else if (keyw == "smoothdiv")
-      curl.smoothdiv = atoi(argu.cStr());
+      curl.smoothdiv = atoi(argu.c_str());
     else if (keyw == "datainknots")
       curl.datainknots = (argu.upcase() == "TRUE");
     else if (keyw == "scalewidth")
@@ -1179,7 +1179,7 @@ bool ptStyle::readStyle(const miString filename, bool verbose)
     else if (keyw == "wrapdegrees")
       curl.wrapdegrees = (argu.upcase() == "TRUE");
     else if (keyw == "wraplimit")
-      curl.wraplimit = atof(argu.cStr());
+      curl.wraplimit = atof(argu.c_str());
 
     else if (keyw.contains("$"))
       userkeys[keyw] = argu;

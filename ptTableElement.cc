@@ -87,7 +87,7 @@ void TableElement::plot()
 	    if (str>cutoff) {
 	      dir = dval(j,1);
 	      idir = int((dir+22.5) / 45.0);
-	      sprintf(temp, pformat.cStr(), str);
+	      sprintf(temp, pformat.c_str(), str);
 	      if (idir >= 8) idir = 7;
 	      if (idir>=0)
 		strcpy(text,direction[idir]);
@@ -102,7 +102,7 @@ void TableElement::plot()
 	  } else {
 	    str = dval(j);
 	    if (str>cutoff)
-	      sprintf(text, pformat.cStr(), str);
+	      sprintf(text, pformat.c_str(), str);
 	    else
 	      strcpy(text,"-");
 	    _getStringSize(text,tw,th);

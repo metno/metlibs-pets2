@@ -306,7 +306,7 @@ void EditLineElement::plot()
               //cerr << "Got label:" << label << " from value:" << dval(prepoints+i) << endl;
               sprintf(svalue, "%s", label.c_str());
             } else {
-              sprintf(svalue, pformat.cStr(), dval(prepoints + i));
+              sprintf(svalue, pformat.c_str(), dval(prepoints + i));
             }
             _getStringSize(svalue, sw, sh);
             _setColor(backcolor);

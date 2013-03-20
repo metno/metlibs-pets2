@@ -113,7 +113,7 @@ std::vector<float> Str2FloatList(miString buf){
   std::vector<float> vf;
   for ( int i=0; i<vs.size(); i++){
     if ( vs[i].isNumber() )
-      vf.push_back( atof(vs[i].cStr()) );
+      vf.push_back( atof(vs[i].c_str()) );
     else
       vf.push_back(0.0);
   }
@@ -126,7 +126,7 @@ std::vector<int> Str2IntList(miString buf){
   std::vector<int> vf;
   for ( int i=0; i<vs.size(); i++){
     if ( vs[i].isNumber() )
-      vf.push_back( atoi(vs[i].cStr()) );
+      vf.push_back( atoi(vs[i].c_str()) );
     else
       vf.push_back(0);
   }

@@ -172,7 +172,7 @@ void ptImage::ReadRawImage()
   int npixels, nchannels, colours, i, j, pixidx;
   char ccom[3],acom;
 
-  if ((fp=fopen(filename.cStr(),"r"))) {
+  if ((fp=fopen(filename.c_str(),"r"))) {
 
     fscanf(fp,"%s \n",magic);
     if (strcmp(magic,"P6") != 0) {
@@ -225,7 +225,7 @@ void ptImage::ReadPNGImage()
 //   cerr << "--------- read_png: " << filename << endl;
 
 #ifdef linux
-  FILE *fp = fopen(filename.cStr(), "rb");
+  FILE *fp = fopen(filename.c_str(), "rb");
   if (!fp){
     cerr << "ReadPNGImage ERROR can't open file:" << filename << endl;
     return;
@@ -389,10 +389,10 @@ bool ptImage::imageFromXpmdata(const char** xd){
     cerr << "imageFromXpmdata ERROR too few elements:" << buf << endl;
     return false;
   }
-  xsize= atoi(vs[0].cStr());
-  ysize= atoi(vs[1].cStr());
-  ncols= atoi(vs[2].cStr());
-  nchar= atoi(vs[3].cStr());
+  xsize= atoi(vs[0].c_str());
+  ysize= atoi(vs[1].c_str());
+  ncols= atoi(vs[2].c_str());
+  nchar= atoi(vs[3].c_str());
 
   if (xsize < 1 || ysize < 1 || ncols < 1 || nchar < 1){
     cerr << "imageFromXpmdata ERROR Illegal numbers "
@@ -518,7 +518,7 @@ void ptImage::ReadXPMImage()
   //   cerr << "RESULTING DATA:" << endl;
   char **tmpdata = new (char*[vs.size()]);
   for (size_t i=0; i<vs.size(); i++){
-    tmpdata[i]= strdup(vs[i].cStr());
+    tmpdata[i]= strdup(vs[i].c_str());
   }
 
   bool res=  imageFromXpmdata(const_cast<const char**>(tmpdata));

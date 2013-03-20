@@ -91,7 +91,7 @@ protected:
 
   void _printString(const miutil::miString& text, const float x, const float y)
   {
-    FM.printStr(text.cStr(), x, y);
+    FM.printStr(text.c_str(), x, y);
   }
   void _setColor(const ptColor& col)
   {
@@ -110,7 +110,7 @@ protected:
   }
   void _getStringSize(const miutil::miString& c, float& w, float& h)
   {
-    FM.getStringSize(c.cStr(), w, h);
+    FM.getStringSize(c.c_str(), w, h);
   }
   void _prepFont()
   {
