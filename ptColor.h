@@ -31,24 +31,24 @@
 #ifndef _ptColor_h
 #define _ptColor_h
 
-#include <puTools/miString.h>
+#include <string>
 #include <vector>
 
 class ptColor {
 public:
-  miutil::miString name;
+  std::string name;
   float colTable[4];
 
   ptColor();
-  ptColor(const miutil::miString& n);
-  ptColor(const miutil::miString& n, float r, float g, float b, float a=1);
+  ptColor(const std::string& n);
+  ptColor(const std::string& n, float r, float g, float b, float a=1);
 
-  void fromStr(miutil::miString);
+  void fromStr(const std::string&);
 
-  miutil::miString     Color2Str() const;
+  std::string     Color2Str() const;
 
-  static std::vector<ptColor> Str2Colorlist(const miutil::miString&);
-  static miutil::miString     Colorlist2Str(const std::vector<ptColor>&);
+  static std::vector<ptColor> Str2Colorlist(const std::string&);
+  static std::string Colorlist2Str(const std::vector<ptColor>&);
 
 
   bool operator==(const ptColor &rhs) const

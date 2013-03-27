@@ -43,9 +43,9 @@
 
 const int MAXFONTCOLL=10;
 
-const miutil::miString XFONTSET = "XFONTSET";
-const miutil::miString GLTTFONTSET = "GLTTFONTSET";
-const miutil::miString QTFONTSET = "QTFONTSET";
+extern const char XFONTSET[];
+extern const char GLTTFONTSET[];
+extern const char QTFONTSET[];
 
 class FontManager {
 private:

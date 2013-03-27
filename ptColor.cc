@@ -31,25 +31,24 @@
 #include "config.h"
 #endif
 
+#include <puTools/miString.h>
 #include "ptColor.h"
 #include <map>
-#include <string>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
 
-using namespace miutil;
 using namespace std;
 
 
 namespace petsColorTools 
 {
 
-map<miString,ptColor> colorlist;
+map<std::string,ptColor> colorlist;
 
 void initColorlist()
 {
-  map<miString,ptColor> tmpList;
+  map<std::string,ptColor> tmpList;
 
   tmpList["BLACK"         ]=ptColor("BLACK"        , 0.00, 0.00, 0.00, 1.00);
   tmpList["BLUE"          ]=ptColor("BLUE"         , 0.00, 0.00, 1.00, 1.00);
@@ -117,7 +116,7 @@ void initColorlist()
 }
 
 
-ptColor getColorFromList(miString col)
+ptColor getColorFromList(const std::string& col)
 {
   if ( colorlist.empty() )
     initColorlist();
@@ -141,7 +140,7 @@ ptColor::ptColor()
 }
 
 
-ptColor::ptColor(const miString& n)
+ptColor::ptColor(const std::string& n)
 {
   fromStr(n);
 }
@@ -149,7 +148,7 @@ ptColor::ptColor(const miString& n)
 
 
 
-ptColor::ptColor(const miString& n, float r, float g, float b, float a)
+ptColor::ptColor(const std::string& n, float r, float g, float b, float a)
 {
   name=n;
   colTable[0] = r;
@@ -160,13 +159,13 @@ ptColor::ptColor(const miString& n, float r, float g, float b, float a)
 
 
 
-void ptColor::fromStr(miString icol)
+void ptColor::fromStr(const std::string& icol)
 {
   string col = icol,alpha;
   
   vector<string> vs;
 
-   boost::split(vs, col, boost::algorithm::is_any_of(":"));
+  boost::split(vs, col, boost::algorithm::is_any_of(":"));
 
   if (vs.size() == 5){         // full registration
     float r= atof(vs[1].c_str());
@@ -214,15 +213,15 @@ void ptColor::fromStr(miString icol)
   }
 }
 
-miString ptColor::Color2Str() const
+std::string ptColor::Color2Str() const
 {
   return name;
 }
 
-vector<ptColor> ptColor::Str2Colorlist(const miString& s)
+vector<ptColor> ptColor::Str2Colorlist(const std::string& s)
 {
   vector<ptColor> list;
-  vector<miString> slist= s.split(",");
+  const vector<std::string> slist= miutil::split(s, ",");
 
   int n= slist.size();
   for (int i=0; i<n; i++){
@@ -234,9 +233,9 @@ vector<ptColor> ptColor::Str2Colorlist(const miString& s)
   return list;
 }
 
-miString ptColor::Colorlist2Str(const vector<ptColor>& list)
+std::string ptColor::Colorlist2Str(const vector<ptColor>& list)
 {
-  miString buf;
+  std::string buf;
   int n= list.size();
   for (int i=0; i<n; i++){
     if (i>0) buf+= ",";

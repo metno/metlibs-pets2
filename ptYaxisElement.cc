@@ -476,9 +476,9 @@ void yAxisElement::calcDims()
   recalcDims= false;
 }
 
-miString yAxisElement::userValueLabel(const float value)
+std::string yAxisElement::userValueLabel(const float value)
 {
-  miString s;
+  std::string s;
 
   int n = majorticks.size();
 

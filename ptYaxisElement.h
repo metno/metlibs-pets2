@@ -33,7 +33,6 @@
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
-#include <puTools/miString.h>
 
 #define MAX_YAXIS_CHILDREN 32
 
@@ -72,8 +71,8 @@ protected:
   float deltaY; // GL value to childelements
   bool recalcDims; // recalculate plot-interval etc.
   bool userlabels;
-  std::vector<miutil::miString> userLabels;
-  std::vector<miutil::miString> userValueLabels;
+  std::vector<std::string> userLabels;
+  std::vector<std::string> userValueLabels;
 
   int sign;
   int lsign;
@@ -111,12 +110,12 @@ public:
   // returns deltaY(gl),minPlotY and plotRange(physical)
   void dataInfo(float&, float&, float&);
   int Id(){return id; }
-  void setLabels(const std::vector<miutil::miString>& labels)
+  void setLabels(const std::vector<std::string>& labels)
     {userLabels= labels; userlabels= true;}
   void resetLabels()
     {userlabels= false;}
   bool hasUserLabels() const { return userlabels; }
-  miutil::miString userValueLabel(const float value);
+  std::string userValueLabel(const float value);
 };
 
 class staticYaxisElement : public yAxisElement
@@ -150,8 +149,8 @@ protected:
   bool labelOnLine;
   float lineLabelPos;
   ptVerSides labelside;
-  miutil::miString axisText;
-  miutil::miString labelText;
+  std::string axisText;
+  std::string labelText;
   float minPlotY, plotRange;
   float deltaY;
   float minLegal, maxLegal;
@@ -195,7 +194,7 @@ public:
   }
   void plotInterval(float& pmin, float& pmax) const
   { pmin= startY; pmax= pmin+deltaY; }
-  miutil::miString& labelName()
+  std::string& labelName()
   { return axisText; }
   ptColor& Color()
   { return color; }

@@ -343,7 +343,7 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   set<Model> models = DD->allModels();
   if (models.size() > 0) {
     mainmodelName = *(models.begin());
-    vector<miString> vs = DD->getTextLines(mainmodelName);
+    const vector<std::string> vs = DD->getTextLines(mainmodelName);
     for (unsigned int k = 0; k < vs.size(); k++)
       modeltext += (miString(k > 0 ? "\n" : "") + vs[k]);
   }

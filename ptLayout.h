@@ -39,9 +39,7 @@
 #include "ptMarker.h"
 #include "ptPatterns.h"
 
-#include <puTools/miString.h>
-
-#include <iostream>
+#include <string>
 #include <vector>
 
 enum ptAxis {
@@ -73,7 +71,7 @@ enum ptDateStyle {
 };
 
 struct Layout {
-  miutil::miString name; // name of primitive
+  std::string name; // name of primitive
   bool visible; // is visible in diagram
   float height; // height of element
   float trueheight;
@@ -94,8 +92,8 @@ struct Layout {
   ptFillStyle fillstyle; // single polygon pattern
   std::vector<ptFillStyle> patternlist; // list of polygon patterns
   ptAlign align; // alignment flag
-  miutil::miString text; // text to output
-  miutil::miString text2; // additional text
+  std::string text; // text to output
+  std::string text2; // additional text
   ptAxis axis; // which axis
   ptHorSides horsides; // for frames etc
   ptVerSides versides; // for frames etc
@@ -138,7 +136,7 @@ struct Layout {
   float arrowLength; // for line elements with arrows (length of arrows)
   float arrowSize; // for line elements with arrows (size of arrowhead)
   bool fromFile; // for text lines only
-  miutil::miString pformat; // print format Eks: %2.1f
+  std::string pformat; // print format Eks: %2.1f
   bool vectorF; // Vector Table element: write angle AND size
   bool keepinaxis; // keep axischildelements within axis
   bool labelOnLine; // label on line-elements
@@ -153,11 +151,11 @@ struct Layout {
   bool fittopage; // try to fit object within diagramborders
   float cutoff; // cutoff-value used by some elements
   int priority; // priority for editing etc
-  miutil::miString language; // language ("NO" or "EN")
+  std::string language; // language ("NO" or "EN")
   bool drawbackground; // draw background
   ptEditStyle editstyle; // type of graphical editing
-  std::vector<miutil::miString> textlabels; // fixed textlabels for yaxis
-  std::vector<miutil::miString> valuetextlabels; // fixed textlabels for value-plotting (edit)
+  std::vector<std::string> textlabels; // fixed textlabels for yaxis
+  std::vector<std::string> valuetextlabels; // fixed textlabels for value-plotting (edit)
   bool printValueLock; // edit: lock current printValue switch
   bool lineBar; // line drawn as horisontal bars
   bool lineStep; // line drawn stepwise
@@ -175,66 +173,30 @@ struct Layout {
   bool wrapdegrees; // wrap degree-lines around
   float wraplimit; // wrap degree-lines limit
 
-  Layout() :
-    visible(true), height(-1), trueheight(0), position(0), spacing(0),
-        intSpacing(0), font(NORMAL), lineWidth(1.0), label(true), unit(false),
-        patternInColour(false), linePattern(FULL), fillstyle(SOLID),
-        align(CENTER), axis(LEFTLEFT), horsides(SH_NONE), versides(SV_NONE),
-        yaid(0), axisgrid(false), gridwidth(1), gridcolor("GREY95"),
-        gridstyle(DOTTED), axisRectangle(false), gridxonly(true),
-        plotDayPattern(false), axisWidth(2.0), minSkipX(0), useTimes(1),
-        tickWidth(1.0), tickLen(10), minRange(0), interval(1), delta(1), numTickMajor(5),
-        numTickMinor(2), labelSpace(100), horLabels(false), horLabelOffset(0),
-        minMargin(0), minValue(-1000000), maxValue(1000000), maxIsSet(false),
-        minIsSet(false), useMinMax(false), quantized(false), quantum(1.0),
-        reverse(false), centerVector(true), vectorArrow(false),
-        lineArrows(false), arrowLength(40), arrowSize(0.25), fromFile(true),
-        pformat("%2.1f"), vectorF(false), keepinaxis(false), labelOnLine(false),
-        lineLabelPos(50), doubleLine(false), marker(NO_MARKER),
-        markerFill(SOLID), size(1), shadow(false), histStart(0), histStop(10),
-        fittopage(false), cutoff(-FLT_MAX), priority(0), language("EN"),
-        drawbackground(false), editstyle(ES_LINE), printValueLock(false),
-        lineBar(false), lineStep(false), asNumber(false), datestyle(DS_DATE),
-        legendlineinside(false), colorbyvalue(false), linestylebyvalue(false),
-        fillbyvalue(false), smoothing(false), smoothdiv(10), datainknots(true),
-        scalewidth(true), wrapdegrees(false), wraplimit(330)
-  {
-  }
-  void print() const
-  {
-    std::cout << "Printing of layout:\n" << "\theight: " << height << "\tspacing: "
-        << spacing << "\tintSpacing: " << intSpacing << "\tcolor: " << color
-        << "\tfont: " << font << "\tlineWidth: " << lineWidth << "\tlabel: "
-        << label << "\tunit: " << unit << "\tlinePattern: " << linePattern
-        << "\tfillstyle: " << fillstyle << "\talign: " << align << "\ttext: "
-        << text << /*"\taxis: " << axis <<*/"\taxisWidth: " << axisWidth
-        << "\tcolor2: " << color2 << "\ttickWidth: " << tickWidth
-        << "\tminRange: " << minRange << "\tinterval: " << interval
-        << "\tdelta: " << delta << "\tminMargin: " << minMargin
-        << "\tfromFile: " << fromFile << std::endl;
-  }
+  Layout();
+  void print() const;
 };
 
-extern ptAxis Str2Axis(miutil::miString);
-extern ptAlign Str2Align(miutil::miString);
-extern ptSize Str2Size(miutil::miString);
-extern ptHorSides Str2HorSides(miutil::miString);
-extern ptVerSides Str2VerSides(miutil::miString);
-extern ptEditStyle Str2EditStyle(miutil::miString);
-extern std::vector<miutil::miString> Str2TextLabels(miutil::miString);
-extern std::vector<float> Str2FloatList(miutil::miString);
-extern std::vector<int> Str2IntList(miutil::miString);
-extern ptDateStyle Str2DateStyle(miutil::miString);
+extern ptAxis Str2Axis(const std::string&);
+extern ptAlign Str2Align(const std::string&);
+extern ptSize Str2Size(const std::string&);
+extern ptHorSides Str2HorSides(const std::string&);
+extern ptVerSides Str2VerSides(const std::string&);
+extern ptEditStyle Str2EditStyle(const std::string&);
+extern std::vector<std::string> Str2TextLabels(const std::string&);
+extern std::vector<float> Str2FloatList(const std::string&);
+extern std::vector<int> Str2IntList(const std::string&);
+extern ptDateStyle Str2DateStyle(const std::string&);
 
-extern miutil::miString Axis2Str(ptAxis);
-extern miutil::miString Align2Str(ptAlign);
-extern miutil::miString Size2Str(ptSize);
-extern miutil::miString HorSides2Str(ptHorSides);
-extern miutil::miString VerSides2Str(ptVerSides);
-extern miutil::miString EditStyle2Str(ptEditStyle);
-extern miutil::miString TextLabels2Str(const std::vector<miutil::miString>&);
-extern miutil::miString FloatList2Str(const std::vector<float>&);
-extern miutil::miString IntList2Str(const std::vector<int>&);
-extern miutil::miString DateStyle2Str(ptDateStyle);
+extern std::string Axis2Str(ptAxis);
+extern std::string Align2Str(ptAlign);
+extern std::string Size2Str(ptSize);
+extern std::string HorSides2Str(ptHorSides);
+extern std::string VerSides2Str(ptVerSides);
+extern std::string EditStyle2Str(ptEditStyle);
+extern std::string TextLabels2Str(const std::vector<std::string>&);
+extern std::string FloatList2Str(const std::vector<float>&);
+extern std::string IntList2Str(const std::vector<int>&);
+extern std::string DateStyle2Str(ptDateStyle);
 
 #endif
