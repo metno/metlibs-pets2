@@ -86,7 +86,7 @@ void ProgElement::plot()
 
     _setColor(color);
     //print first prog time
-    sprintf(tmp,"%d",timeData[0]);
+    snprintf(tmp,sizeof(tmp),"%d",timeData[0]);
     if (strlen(tmp)==1)
       offset = signw + numWidth;
     else if (strlen(tmp)==2)
@@ -116,7 +116,7 @@ void ProgElement::plot()
 	text[0] = '\0';
 	signw = 0;
       }
-      sprintf(tmp,"%d",timeData[i]);
+      snprintf(tmp,sizeof(tmp),"%d",timeData[i]);
       if (strlen(tmp)==1)
 	offset = signw + numWidth;
       else if (strlen(tmp)==2)

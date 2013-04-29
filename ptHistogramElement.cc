@@ -153,7 +153,7 @@ void HistogramElement::plot()
           _updatePrinting();
           if (drawlabel) {
             glDisable(GL_POLYGON_STIPPLE);
-            sprintf(text, "%2.1f", dval(j));
+            snprintf(text, sizeof(text), "%2.1f", dval(j));
             _printString(text, x1 + (x2 - x1) / 2 - DELTAX, y + YSPACE);
             _updatePrinting();
             glEnable(GL_POLYGON_STIPPLE);

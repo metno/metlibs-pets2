@@ -143,11 +143,11 @@ void yAxisElement::plotAxis()
       // print value
       val= majorphys[i];
       if ( delta >= 5 && fmodf(delta,1.0)==0)
-	sprintf(txt,"%1.0f",val);
+	snprintf(txt,sizeof(txt),"%1.0f",val);
       else if (delta >= 0.1 ){
-	sprintf(txt,"%1.1f",val);
+	snprintf(txt,sizeof(txt),"%1.1f",val);
       } else {
-	sprintf(txt,"%1.2f",val);
+	snprintf(txt,sizeof(txt),"%1.2f",val);
       }
       _getStringSize(txt,swid,shei);
 

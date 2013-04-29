@@ -304,9 +304,9 @@ void EditLineElement::plot()
             if (Yaxis->hasUserLabels()) {
               miString label = Yaxis->userValueLabel(dval(prepoints + i));
               //cerr << "Got label:" << label << " from value:" << dval(prepoints+i) << endl;
-              sprintf(svalue, "%s", label.c_str());
+              snprintf(svalue, sizeof(svalue), "%s", label.c_str());
             } else {
-              sprintf(svalue, pformat.c_str(), dval(prepoints + i));
+              snprintf(svalue, sizeof(svalue), pformat.c_str(), dval(prepoints + i));
             }
             _getStringSize(svalue, sw, sh);
             _setColor(backcolor);

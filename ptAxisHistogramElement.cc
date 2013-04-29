@@ -71,7 +71,7 @@ void AxisHistogramElement::plot()
     _prepFont();
     _getCharSize('0', tw, th);
     float y;
-    char text[6];
+    char text[16];
     _setColor(color);
     glLineWidth(lineWidth);
     if (fstyle != SOLID) {
@@ -104,7 +104,7 @@ void AxisHistogramElement::plot()
           _updatePrinting();
           if (drawlabel) {
             glDisable(GL_POLYGON_STIPPLE);
-            sprintf(text, "%2.1f", dval(j));
+            snprintf(text, sizeof(text), "%2.1f", dval(j));
             _printString(text, x1 + (x2 - x1) / 2 - tw, y + YSPACE);
             _updatePrinting();
             glEnable(GL_POLYGON_STIPPLE);
