@@ -89,6 +89,16 @@ libpets2_la_LIBADD += \
 	${PNG_LIBS}
 endif
 
+if WITH_FIMEX
+libpets2_la_CPPFLAGS += \
+	-DFIMEX \
+	${FIMEX_CPPFLAGS}
+libpets2_la_LDFLAGS += \
+	${FIMEX_LDFLAGS}
+libpets2_la_LIBADD += \
+	${FIMEX_LIBS}
+endif
+
 pkg_includedir = ${includedir}/pets2
 
 pkg_include_HEADERS = \
