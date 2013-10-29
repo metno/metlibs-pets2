@@ -88,7 +88,6 @@ void BoxElement::plot()
     cout << "BoxElement::plot()" <<endl;
 #endif
     int i, j;
-    int numPoints = datasize();
 
     _prepFont();
 

@@ -74,7 +74,6 @@ void DayElement::plot()
 {
   miDate curDate = timeLine[startT].date();
   miString curDay;
-  int startHour = timeLine[startT].hour();
   float offset,th;
   float prevf;       // end of previous text
 #ifdef DEBUG

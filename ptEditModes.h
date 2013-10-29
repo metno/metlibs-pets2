@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
   
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2013 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,25 +25,23 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef _ptEditModes_h
 #define _ptEditModes_h
 
-#include <puTools/miString.h>
+#include <string>
 
 const int ptNumLineEditModes = 4;
 enum ptLineEditMode {
   LE_SINGLE, LE_MULTI, LE_ROTATE, LE_LINEAR
 };
 
-const miutil::miString ptLineEditModeName[ptNumLineEditModes] =
+const std::string ptLineEditModeName[ptNumLineEditModes] =
   {"Enkel","Linje","Rotér","Lineær"};
-const miutil::miString ptLineEditModeMnemonic[ptNumLineEditModes] =
+const std::string ptLineEditModeMnemonic[ptNumLineEditModes] =
   {"E","L","R","I"};
 
 enum ptLineEditMarker {
   LE_RECT, LE_CIRC, LE_DIAMOND
 };
-
 
 #endif
