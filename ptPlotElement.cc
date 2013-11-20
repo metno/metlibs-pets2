@@ -25,7 +25,7 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+ */
 
 
 // ptPlotElement.cc : Class definition for generic plotelement
@@ -48,30 +48,30 @@ bool PlotElement::useFakeStipple=false; // imitate linestippling
 bool PlotElement::useColour=true;       // colour or black/white
 
 PlotElement::PlotElement(const Layout& layout,
-			 const ptVertFieldf& field,
-			 XAxisInfo *pXtime,
-			 const bool& en,
-			 PlotElement* pNext)
-  : type(DUM_PRIMITIVE)
-  , name(layout.name)
-  , enabled(en)
-  , visible(layout.visible)
-  , startY(field.y1)
-  , stopY(field.y2)
-  , color(layout.color)
-  , xtime(pXtime)
-  , fontSize(layout.font)
-  , align(layout.align)
-  , glwidth(1.0), glheight(1.0)
-  , scwidth(1), scheight(1)
-  , pixWidth(1.0), pixHeight(1.0)
-  , startT(0), stopT(pXtime->xcoord.size()-1)
-  , AllTimesAxisScale(true)
-  , pInColour(layout.patternInColour)
-  , circle_list(0)
-  , datalimits(layout.datalimits)
-  , colorlist(layout.colorlist)
-  , next(pNext) // FIXME public
+    const ptVertFieldf& field,
+    XAxisInfo *pXtime,
+    const bool& en,
+    PlotElement* pNext)
+: type(DUM_PRIMITIVE)
+, name(layout.name)
+, enabled(en)
+, visible(layout.visible)
+, startY(field.y1)
+, stopY(field.y2)
+, color(layout.color)
+, xtime(pXtime)
+, fontSize(layout.font)
+, align(layout.align)
+, glwidth(1.0), glheight(1.0)
+, scwidth(1), scheight(1)
+, pixWidth(1.0), pixHeight(1.0)
+, startT(0), stopT(pXtime->xcoord.size()-1)
+, AllTimesAxisScale(true)
+, pInColour(layout.patternInColour)
+, circle_list(0)
+, datalimits(layout.datalimits)
+, colorlist(layout.colorlist)
+, next(pNext) // FIXME public
 {
 #ifdef DEBUG
   cout << "Inside PlotElement's constructor" << endl;
@@ -102,16 +102,16 @@ void PlotElement::setTimeInterval(const int start, const int stop)
 }
 
 void PlotElement::lineSegment(const float &x1, const float &y1,
-			      const float &x2, const float &y2,
-			      const unsigned int &repeat,
-			      const unsigned int &bitmask,
-			      const bool &reset)
+    const float &x2, const float &y2,
+    const unsigned int &repeat,
+    const unsigned int &bitmask,
+    const bool &reset)
 {
   const int stip = 16;
   const unsigned int mask[16] = {   1,   2,    4,    8,
-				   16,  32,   64,  128,
-				  256, 512, 1024, 2048,
-				 4096,8192,16384,32768};
+      16,  32,   64,  128,
+      256, 512, 1024, 2048,
+      4096,8192,16384,32768};
   static int bi=0; // static bit-index
   static int ri=0; // static repeat-index
   if (reset) {
@@ -145,11 +145,13 @@ void PlotElement::lineSegment(const float &x1, const float &y1,
 
 // plot an ellipse centered in x and y with major axes: rx and ry
 void PlotElement::ellipse(const float& x, const float& y,
-			  const float& rx, const float& ry)
+    const float& rx, const float& ry)
 {
+  // NOTE: maybe this works ?!
   if (circle_list==0){
     circle_list= glGenLists(1);
-    glNewList(circle_list,GL_COMPILE);
+    if (circle_list != 0)
+      glNewList(circle_list,GL_COMPILE);
 
     _glBegin(GL_POLYGON, 100);
     for(int i=0;i<100;i++){
@@ -157,21 +159,23 @@ void PlotElement::ellipse(const float& x, const float& y,
       glVertex2f(cos(a),sin(a));
     }
     _glEnd();
-    glEndList();
+    if (circle_list != 0)
+      glEndList();
   }
   glPushMatrix();
   glTranslatef(x,y,0.0);
   glScalef(rx,ry,0.0);
-  glCallList(circle_list);
+  if (circle_list != 0)
+    glCallList(circle_list);
   glPopMatrix();
 }
 
 
 // for postscript output
 bool PlotElement::startPSoutput(const miString& fname,
-				const bool incolour,
-				const bool inlandscape,
-				const bool doEPS){
+    const bool incolour,
+    const bool inlandscape,
+    const bool doEPS){
   if (printing) return false;
 
   int print_options = GLP_FIT_TO_PAGE | GLP_DRAW_BACKGROUND | GLP_AUTO_ORIENT;
@@ -226,15 +230,15 @@ bool PlotElement::endPSoutput(){
 }
 
 void PlotElement::psAddImage(const GLvoid* data,GLint size,GLint nx,GLint ny,
-			     GLfloat x,GLfloat y,GLfloat sx,GLfloat sy,
-			     GLint x1,GLint y1,GLint x2,GLint y2,
-			     GLenum format,GLenum type){
+    GLfloat x,GLfloat y,GLfloat sx,GLfloat sy,
+    GLint x1,GLint y1,GLint x2,GLint y2,
+    GLenum format,GLenum type){
   if (!psoutput || !printing) return;
   psoutput->AddImage(data,size,nx,ny,x,y,sx,sy,x1,y1,x2,y2,format,type);
 }
 
 void PlotElement::getRectangle(float& x1,float& y1,
-			       float& x2,float& y2)
+    float& x2,float& y2)
 {
   x1= globalWindow.x1;
   x2= globalWindow.x2;
@@ -243,7 +247,7 @@ void PlotElement::getRectangle(float& x1,float& y1,
 }
 
 void PlotElement::getTimeRectangle(float& x1,float& y1,
-				   float& x2,float& y2)
+    float& x2,float& y2)
 {
   x1= xtime->xcoord[startT];
   x2= xtime->xcoord[stopT];
@@ -291,9 +295,9 @@ ptColor PlotElement::colorfromindex(const int i)
 
 /*
   B-spline smooth
-*/
+ */
 int PlotElement::smoothline(int npos, float x[], float y[], int nfirst, int nlast,
-			    int ismooth, float xsmooth[], float ysmooth[])
+    int ismooth, float xsmooth[], float ysmooth[])
 {
   // Smooth line, make and return spline through points.
   //
@@ -335,81 +339,81 @@ int PlotElement::smoothline(int npos, float x[], float y[], int nfirst, int nlas
 
   n = nfirst;
   if (n > 0)
-    {
-      xl1 = x[n]-x[n-1];
-      yl1 = y[n]-y[n-1];
-      s1  = sqrtf(xl1*xl1+yl1*yl1);
-      xl2 = x[n+1]-x[n];
-      yl2 = y[n+1]-y[n];
-      s2  = sqrtf(xl2*xl2+yl2*yl2);
-      dx2 = (xl1*(s2/s1)+xl2*(s1/s2))/(s1+s2);
-      dy2 = (yl1*(s2/s1)+yl2*(s1/s2))/(s1+s2);
-    }
+  {
+    xl1 = x[n]-x[n-1];
+    yl1 = y[n]-y[n-1];
+    s1  = sqrtf(xl1*xl1+yl1*yl1);
+    xl2 = x[n+1]-x[n];
+    yl2 = y[n+1]-y[n];
+    s2  = sqrtf(xl2*xl2+yl2*yl2);
+    dx2 = (xl1*(s2/s1)+xl2*(s1/s2))/(s1+s2);
+    dy2 = (yl1*(s2/s1)+yl2*(s1/s2))/(s1+s2);
+  }
   else
-    {
-      xl2 = x[n+1]-x[n];
-      yl2 = y[n+1]-y[n];
-      s2  = sqrtf(xl2*xl2+yl2*yl2);
-      dx2 = xl2/s2;
-      dy2 = yl2/s2;
-    }
+  {
+    xl2 = x[n+1]-x[n];
+    yl2 = y[n+1]-y[n];
+    s2  = sqrtf(xl2*xl2+yl2*yl2);
+    dx2 = xl2/s2;
+    dy2 = yl2/s2;
+  }
 
   xsmooth[0] = x[nfirst];
   ysmooth[0] = y[nfirst];
   ns = 0;
 
   for (n=nfirst+1; n<=nlast; ++n)
-    {
-      xl1 = xl2;
-      yl1 = yl2;
-      s1  = s2;
-      dx1 = dx2;
-      dy1 = dy2;
+  {
+    xl1 = xl2;
+    yl1 = yl2;
+    s1  = s2;
+    dx1 = dx2;
+    dy1 = dy2;
 
-      if (n < npos-1) {
-        xl2 = x[n+1]-x[n];
-        yl2 = y[n+1]-y[n];
-        s2  = sqrtf(xl2*xl2+yl2*yl2);
-        dx2 = (xl1*(s2/s1)+xl2*(s1/s2))/(s1+s2);
-	dy2 = (yl1*(s2/s1)+yl2*(s1/s2))/(s1+s2);
-      }
-      else {
-        dx2 = xl1/s1;
-        dy2 = yl1/s1;
-      }
-
-      // four spline coefficients for x and y
-      c32 =  1./s1;
-      c42 =  c32*c32;
-      c31 =  c42*3.;
-      c41 =  c42*c32*2.;
-      fx1 =  x[n-1];
-      fx2 =  dx1;
-      fx3 =  c31*xl1-c32*(2.*dx1+dx2);
-      fx4 = -c41*xl1+c42*(dx1+dx2);
-      fy1 =  y[n-1];
-      fy2 =  dy1;
-      fy3 =  c31*yl1-c32*(2.*dy1+dy2);
-      fy4 = -c41*yl1+c42*(dy1+dy2);
-
-      // make 'ismooth' straight lines, from point 'n-1' to point 'n'
-
-      tstep = s1*rdivs;
-      t = 0.;
-
-      for (i=0; i<ndivs; ++i) {
-        t += tstep;
-        t2 = t*t;
-	t3 = t2*t;
-        ns++;
-        xsmooth[ns] = fx1 + fx2*t + fx3*t2 + fx4*t3;
-	ysmooth[ns] = fy1 + fy2*t + fy3*t2 + fy4*t3;
-      }
-
-      ns++;
-      xsmooth[ns] = x[n];
-      ysmooth[ns] = y[n];
+    if (n < npos-1) {
+      xl2 = x[n+1]-x[n];
+      yl2 = y[n+1]-y[n];
+      s2  = sqrtf(xl2*xl2+yl2*yl2);
+      dx2 = (xl1*(s2/s1)+xl2*(s1/s2))/(s1+s2);
+      dy2 = (yl1*(s2/s1)+yl2*(s1/s2))/(s1+s2);
     }
+    else {
+      dx2 = xl1/s1;
+      dy2 = yl1/s1;
+    }
+
+    // four spline coefficients for x and y
+    c32 =  1./s1;
+    c42 =  c32*c32;
+    c31 =  c42*3.;
+    c41 =  c42*c32*2.;
+    fx1 =  x[n-1];
+    fx2 =  dx1;
+    fx3 =  c31*xl1-c32*(2.*dx1+dx2);
+    fx4 = -c41*xl1+c42*(dx1+dx2);
+    fy1 =  y[n-1];
+    fy2 =  dy1;
+    fy3 =  c31*yl1-c32*(2.*dy1+dy2);
+    fy4 = -c41*yl1+c42*(dy1+dy2);
+
+    // make 'ismooth' straight lines, from point 'n-1' to point 'n'
+
+    tstep = s1*rdivs;
+    t = 0.;
+
+    for (i=0; i<ndivs; ++i) {
+      t += tstep;
+      t2 = t*t;
+      t3 = t2*t;
+      ns++;
+      xsmooth[ns] = fx1 + fx2*t + fx3*t2 + fx4*t3;
+      ysmooth[ns] = fy1 + fy2*t + fy3*t2 + fy4*t3;
+    }
+
+    ns++;
+    xsmooth[ns] = x[n];
+    ysmooth[ns] = y[n];
+  }
 
   ns++;
 
