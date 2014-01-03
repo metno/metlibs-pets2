@@ -88,3 +88,4 @@ libpets2_la_LIBADD += \
 endif
 
 
+INSTALL=install -p 
