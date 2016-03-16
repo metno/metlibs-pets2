@@ -508,8 +508,9 @@ void ptDiagram::setTimeInterval(int start, int stop)
     }
 
     makeXtime(); // calculate new x-values
-    for (PlotElement *elm = first; elm; elm = elm->next)
+    for (PlotElement *elm = first; elm; elm = elm->next) {
       elm->setTimeInterval(startidx, stopidx);
+    }
   }
 }
 
@@ -565,7 +566,6 @@ void ptDiagram::setProgInterval(int progstart, int progstop)
     start = 0;
   if (stop < 0)
     stop = tsize - 1;
-
   setTimeInterval(start, stop);
 
 }

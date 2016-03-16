@@ -165,7 +165,6 @@ void LineElement::plot()
             newy= yval(j,ds.comp);
           }
 
-
           bool pointbad=false;
 
           if (newy > stopY || newy < startY){ // illegal point
@@ -413,7 +412,6 @@ void LineElement::plot()
           int index = z[tyc];
           if ( co == smoothdiv ){
             tyc++;
-            //cerr << "increasing tyc=" << tyc << " size of z=" << npos << endl;
             co=-1;
           }
           plotx.push_back(x_s[i]);
@@ -439,7 +437,6 @@ void LineElement::plot()
     // plot line segments
     //glBegin(GL_LINES);
     for ( int i=0; i<npos; i+=2 ){
-
       // for multilines - stop drawing at the end of everly line restart at start
       if(currentPoint==numOfPoints) {
       currentPoint=0;

@@ -89,31 +89,67 @@ void DayElement::plot()
     bool active= false;
     float startx=startT, stopx;
     list<int> li12;
-
-    for (int i=startT; i<=stopT; i++) {
-      if (timeLine[i].hour() == 12){
-	li12.push_back(i);
+    // data may have seconds sampling time in the future
+    bool use_12_00_00 = false;
+    bool use_12_00 = false;
+    bool use_12 = false;
+    for (int i=startT; i<=stopT; i++){
+      // check for 12:00:00
+     if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0)
+        && (timeLine[i].sec() == 0)){
+        use_12_00_00 = true;
+        break;
+      } 
+    }
+    if (!use_12_00_00) {
+      for (int i=startT; i<=stopT; i++){
+        // check for 12:00:xx
+        if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0)){
+          use_12_00 = true;
+          break;
+        } 
+      }
+    }
+    if (!use_12_00_00 && !use_12_00) {
+      for (int i=startT; i<=stopT; i++){
+        // check for 12:xx:xx
+        if ((timeLine[i].hour() == 12)){
+          use_12 = true;
+          break;
+        } 
+      }
+    }
+    // data may have seconds sampling time in the future
+    for (int i=startT; i<=stopT; i++){
+      // check data time, 12:00:00, 12:00:01, 12:30:00
+      if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0)
+        && (timeLine[i].sec() == 0) && use_12_00_00){
+        li12.push_back(i);
+      } else if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0) && use_12_00){
+        li12.push_back(i);
+      } else if ((timeLine[i].hour() == 12) && use_12){
+        li12.push_back(i);
       }
       if (i!=startT && timeLine[i].date()==timeLine[i-1].date())
-	continue;
+        continue;
 
       if (active){
-	// print previous day
-	float sx;
-	if (li12.size() > 0){
-	  int i12= *(li12.begin());
-	  li12.pop_front();
-	  sx= xtime->xcoord[i12] - offset;
-	} else {
-	  stopx= xtime->xcoord[i];
-	  sx= (stopx+startx)/2.0 - offset;
-	}
-	// print if room
-	if (sx >= prevf){
-	  _printString(curDay,sx,startY);
-	  _updatePrinting();
-	  prevf= sx+2*offset;
-	}
+        // print previous day
+        float sx;
+        if (li12.size() > 0){
+          int i12= *(li12.begin());
+          li12.pop_front();
+          sx= xtime->xcoord[i12] - offset;
+        } else {
+          stopx= xtime->xcoord[i];
+          sx= (stopx+startx)/2.0 - offset;
+        }
+        // print if room
+        if (sx >= prevf){
+          _printString(curDay,sx,startY);
+          _updatePrinting();
+          prevf= sx+2*offset;
+        }
       }
       curDate = timeLine[i].date();
       curDay = dataAsString(curDate);
