@@ -129,45 +129,17 @@ void DateElement::plot()
     bool active= false;
     float startx=startT, stopx;
     list<int> li12;
-    bool use_12_00_00 = false;
-    bool use_12_00 = false;
-    bool use_12 = false;
-    for (int i=startT; i<=stopT; i++){
-      // check for 12:00:00
-     if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0)
-        && (timeLine[i].sec() == 0)){
-        use_12_00_00 = true;
-        break;
-      } 
-    }
-    if (!use_12_00_00) {
-      for (int i=startT; i<=stopT; i++){
-        // check for 12:00:xx
-        if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0)){
-          use_12_00 = true;
-          break;
-        } 
-      }
-    }
-    if (!use_12_00_00 && !use_12_00) {
-      for (int i=startT; i<=stopT; i++){
-        // check for 12:xx:xx
-        if ((timeLine[i].hour() == 12)){
-          use_12 = true;
-          break;
-        } 
-      }
-    }
     // data may have seconds sampling time in the future
     for (int i=startT; i<=stopT; i++){
       // check data time, 12:00:00, 12:00:01, 12:30:00
-      if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0)
-        && (timeLine[i].sec() == 0) && use_12_00_00){
-        li12.push_back(i);
-      } else if ((timeLine[i].hour() == 12) && (timeLine[i].min() == 0) && use_12_00){
-        li12.push_back(i);
-      } else if ((timeLine[i].hour() == 12) && use_12){
-        li12.push_back(i);
+      if (timeLine[i].hour() == 12){
+        if (i > 0) {
+          if (miTime::hourDiff(timeLine[i], timeLine[i-1]) > 0) {
+            li12.push_back(i);
+          }
+        } else {
+          li12.push_back(i);
+        }
       }
 
       if (i!=startT){
