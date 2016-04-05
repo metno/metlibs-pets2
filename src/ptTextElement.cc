@@ -38,16 +38,17 @@
 #include <ptPlotElement.h>
 #include <ptTextElement.h>
 #include <ptPatterns.h>
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <string.h>
 
 using namespace miutil;
 
-TextElement::TextElement(const miString& pText,
-			 const std::map<miString,miString>& keymap,
 			 const ptVertFieldf& field,
 			 const Layout& layout,
 			 XAxisInfo* xtime)
+TextElement::TextElement(const std::string& pText,
+    const std::map<std::string, std::string>& keymap,
   : PlotElement(layout, field, xtime), bcolor(layout.color2),
     fillstyle(layout.fillstyle), drawbackground(layout.drawbackground)
 {
@@ -68,9 +69,9 @@ TextElement::TextElement(const miString& pText,
   text= pText;
 
   if (keymap.size()>0) {
-    std::map<miString,miString>::const_iterator p;
+    std::map<std::string, std::string>::const_iterator p;
     for (p=keymap.begin(); p!=keymap.end(); p++){
-      text.replace(p->first, p->second);
+      miutil::replace(text, p->first, p->second);
     }
   }
 }
@@ -87,9 +88,9 @@ void TextElement::plot()
     float x;
     _prepFont();
 
-    std::vector<miString> vs;
-    if (text.contains("\n")){
-      vs= text.split("\n");
+    std::vector<std::string> vs;
+    if (miutil::contains(text, "\n")){
+      vs= miutil::split(text, "\n");
       reverse(vs.begin(),vs.end());
     } else
       vs.push_back(text);

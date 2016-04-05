@@ -31,8 +31,8 @@
 #include "config.h"
 #endif
 
-#include <puTools/miString.h>
 #include "ptColor.h"
+#include <puTools/miStringFunctions.h>
 #include <map>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>

@@ -36,8 +36,8 @@
 
 class TableElement : public dataPlotElement 
 {
-  miutil::miString label;
-  miutil::miString pformat; // numerical format
+  std::string label;
+  std::string pformat; // numerical format
   int skipX;
   bool vectorF;
   float cutoff;

@@ -33,13 +33,14 @@
 
 #include "ptFontDefs.h"
 
+#include <puTools/miStringFunctions.h>
+
 using namespace std;
-using namespace miutil;
 
 
-ptFontSize Str2FontSize(miString buf){
-  miString siz= buf.upcase();
-  siz.trim(true,true);
+ptFontSize Str2FontSize(const std::string& buf)
+{
+  const std::string siz = miutil::trimmed(miutil::to_upper(buf));
   if (siz=="HEADER1")        return HEADER1;
   else if (siz=="HEADER2")   return HEADER2;
   else if (siz=="HEADER3")   return HEADER3;
@@ -48,16 +49,17 @@ ptFontSize Str2FontSize(miString buf){
   else return NORMAL;
 }
 
-ptFontFace Str2FontFace(miString buf){
-  miString fac= buf.upcase();
-  fac.trim(true,true);
+ptFontFace Str2FontFace(const std::string& buf)
+{
+  const std::string fac = miutil::trimmed(miutil::to_upper(buf));
   if (fac=="F_NORMAL")      return F_NORMAL;
   else if (fac=="F_BOLD")   return F_BOLD;
   else if (fac=="F_ITALIC") return F_ITALIC;
   else return F_NORMAL;
 }
 
-miString FontSize2Str(ptFontSize siz){
+std::string FontSize2Str(ptFontSize siz)
+{
   if (siz==HEADER1)        return "HEADER1";
   else if (siz==HEADER2)   return "HEADER2";
   else if (siz==HEADER3)   return "HEADER3";
@@ -66,8 +68,8 @@ miString FontSize2Str(ptFontSize siz){
   else return "NORMAL";
 }
 
-
-miString FontFace2Str(ptFontFace fac){
+std::string FontFace2Str(ptFontFace fac)
+{
   if (fac==F_NORMAL)      return "F_NORMAL";
   else if (fac==F_BOLD)   return "F_BOLD";
   else if (fac==F_ITALIC) return "F_ITALIC";

@@ -302,7 +302,7 @@ void EditLineElement::plot()
           _updatePrinting();
           if (printValue && activePoint == i + prepoints) {
             if (Yaxis->hasUserLabels()) {
-              miString label = Yaxis->userValueLabel(dval(prepoints + i));
+              std::string label = Yaxis->userValueLabel(dval(prepoints + i));
               //cerr << "Got label:" << label << " from value:" << dval(prepoints+i) << endl;
               snprintf(svalue, sizeof(svalue), "%s", label.c_str());
             } else {

@@ -35,6 +35,7 @@
 #endif
 
 #include "ptLayout.h"
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 
 static std::string trimmed_upper(const std::string& text)

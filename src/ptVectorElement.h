@@ -45,8 +45,8 @@ class VectorElement : public dataPlotElement
   bool arrow;
   bool polar;
   int useTimes;
-  miutil::miString text;
-  std::vector<miutil::miString> vtext;
+  std::string text;
+  std::vector<std::string> vtext;
 public:
   VectorElement(const DataSpec cds,
 		const ptVertFieldf& field, 

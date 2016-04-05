@@ -43,8 +43,8 @@ class WindVectorElement : public dataPlotElement
   bool FF_DD;
   bool center; // windarrow rotates around center
   int useTimes;
-  miutil::miString text;
-  std::vector<miutil::miString> vtext;
+  std::string text;
+  std::vector<std::string> vtext;
   bool datainknots;
 public:
   WindVectorElement(const DataSpec cds,

@@ -46,7 +46,7 @@ protected:
   AxisChildElement *child[MAX_YAXIS_CHILDREN]; // the childelements
   ptColor childCol[MAX_YAXIS_CHILDREN]; // child color
   ptLineStyle childStyle[MAX_YAXIS_CHILDREN]; // child line style
-  miutil::miString Labels[MAX_YAXIS_CHILDREN+1]; // axistexts
+  std::string Labels[MAX_YAXIS_CHILDREN+1]; // axistexts
   float labelY[MAX_YAXIS_CHILDREN+1]; // Plot-start
   float labelX[MAX_YAXIS_CHILDREN+1]; // --- " ---
   float labelW[MAX_YAXIS_CHILDREN+1]; // label widths

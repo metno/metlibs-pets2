@@ -56,8 +56,9 @@ UTCElement::UTCElement(const std::vector<miTime> tline,
 #endif
   type=UTC;
   timeLine = tline;
-  if (label && !text.exists()) text= "UTC";
-  if (modhours.size()==0){
+  if (label && text.empty())
+    text= "UTC";
+  if (modhours.size()==0) {
     modhours.push_back(12);
     modhours.push_back(6);
     modhours.push_back(3);

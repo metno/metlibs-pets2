@@ -33,17 +33,16 @@
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
-#include <puTools/miString.h>
 
 class DayElement : public PlotElement
 {
   std::vector<miutil::miTime> timeLine;
   miutil::miDate::lang lang;
-  miutil::miString language;
+  std::string language;
   bool asNumber;
 
-  miutil::miString dataAsString(const miutil::miDate&);
-  
+  std::string dataAsString(const miutil::miDate&);
+
 public:
   DayElement(const std::vector<miutil::miTime> tline,
 	     const ptVertFieldf& field, 

@@ -31,7 +31,7 @@
 #ifndef _ptMarker_h
 #define _ptMarker_h
 
-#include <puTools/miString.h>
+#include <string>
 
 enum ptMarker {
   NO_MARKER,
@@ -42,7 +42,7 @@ enum ptMarker {
   M_STAR
 };
 
-extern ptMarker Str2Marker(miutil::miString);
-extern miutil::miString Marker2Str(ptMarker);
+extern ptMarker Str2Marker(const std::string&);
+extern std::string Marker2Str(ptMarker);
 
 #endif

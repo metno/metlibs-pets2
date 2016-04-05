@@ -60,7 +60,7 @@
 #include <ptIntervalElement.h>
 #include <ptQBoxElement.h>
 
-#include <puTools/miString.h>
+#include <puTools/miStringFunctions.h>
 #include <fstream>
 #include <iostream>
 
@@ -275,8 +275,8 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   if (!Style)
     return false;
 
-  miString stationName;
-  miString mainmodelName;
+  std::string stationName;
+  std::string mainmodelName;
   StyleOrder primOrderList[MAXPRIMF + MAXPRIM], primList[MAXPRIMF + MAXPRIM];
   int nPrimOut;
   int nPlotPrim;
@@ -327,7 +327,7 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   // loop through the primOrderList and create PlotElements for each element
   ErrorFlag ef; // OBS OBS
   ProgLine progLine; // OBS OBS
-  miString stmp;
+  std::string stmp;
   PlotElement *elm;
   DataSpec ds;
   ptVertFieldf field;
@@ -339,13 +339,13 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   keymap["#$"] = stationName;
   keymap["${POSITION}"] = stationName;
 
-  miString modeltext;
+  std::string modeltext;
   set<Model> models = DD->allModels();
   if (models.size() > 0) {
     mainmodelName = *(models.begin());
     const vector<std::string> vs = DD->getTextLines(mainmodelName);
     for (unsigned int k = 0; k < vs.size(); k++)
-      modeltext += (miString(k > 0 ? "\n" : "") + vs[k]);
+      modeltext += (std::string(k > 0 ? "\n" : "") + vs[k]);
   }
   keymap["${MODEL}"] = mainmodelName;
 
@@ -473,12 +473,12 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
 }
 
 // keyword/value pair methods
-void ptDiagram::addKeyword(const miString& key, const miString& value)
+void ptDiagram::addKeyword(const std::string& key, const std::string& value)
 {
   keymap[key] = value;
 }
 
-void ptDiagram::setKeymap(const map<miString, miString>& keym)
+void ptDiagram::setKeymap(const map<std::string, std::string>& keym)
 {
   keymap = keym;
 }
@@ -600,7 +600,7 @@ void ptDiagram::getTotalTimeInterval(miTime &start, miTime &stop)
 
 // find first plotelement with specific name
 // .. starting with plotelement start
-PlotElement* ptDiagram::findElement(const miString name, PlotElement* start)
+PlotElement* ptDiagram::findElement(const std::string& name, PlotElement* start)
 {
   if (!start)
     start = first;

@@ -34,6 +34,7 @@
 
 #include <ptPlotElement.h>
 #include <ptDateElement.h>
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <stdio.h>
 #include <list>

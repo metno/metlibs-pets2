@@ -36,6 +36,7 @@
 
 #include <ptPlotElement.h>
 #include <ptVectorElement.h>
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
@@ -62,7 +63,7 @@ VectorElement::VectorElement(const DataSpec cds,
   polar = datapolar();
   if (label){ // use layout.text if text is specified
     text = layout.text;
-    vtext= text.split("|");
+    vtext= miutil::split(text, "|");
   }
 }
 

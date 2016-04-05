@@ -33,12 +33,11 @@
 
 #include "ptFontManager.h"
 
-using namespace miutil;
 using namespace std;
 
 FontManager FM;
 
-miString FontManager::display_name_;
+std::string FontManager::display_name_;
 
 /*
 const float HEADER1_size = 24.0;
@@ -72,7 +71,7 @@ FontManager::~FontManager()
       delete FC[i].fontc;
 }
 
-miString FontManager::getCurrentFontCollection()
+std::string FontManager::getCurrentFontCollection()
 {
   if (curFC >= 0)
     return FC[curFC].name;
@@ -88,9 +87,9 @@ int FontManager::getNumFonts()
     return 0;
 }
 
-bool FontManager::addFontCollection(glText* fc, const miString s)
+bool FontManager::addFontCollection(glText* fc, const std::string& s)
 {
-  if (!s.exists() || !fc)
+  if (s.empty() || !fc)
     return false;
   for (int i = 0; i < MAXFONTCOLL; i++)
     if (!FC[i].fontc) {
@@ -102,7 +101,7 @@ bool FontManager::addFontCollection(glText* fc, const miString s)
   return false;
 }
 
-void FontManager::removeFontCollection(const miString s)
+void FontManager::removeFontCollection(const std::string& s)
 {
   for (int i = 0; i < MAXFONTCOLL; i++)
     if (FC[i].name == s) {
@@ -117,7 +116,7 @@ void FontManager::removeFontCollection(const miString s)
     }
 }
 
-bool FontManager::setFontColl(const miString s)
+bool FontManager::setFontColl(const std::string& s)
 {
   for (int i = 0; i < MAXFONTCOLL; i++)
     if (FC[i].name == s)
@@ -174,7 +173,7 @@ ptColor FontManager::getFontColor()
   return ptColor();
 }
 
-miString FontManager::getFontName(const int index)
+std::string FontManager::getFontName(int index)
 {
   if (curFC >= 0)
     return FC[curFC].fontc->getFontName(index);

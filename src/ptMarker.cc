@@ -32,14 +32,13 @@
 #endif
 
 #include <ptMarker.h>
+#include <puTools/miStringFunctions.h>
 
 using namespace std;
-using namespace miutil;
 
-
-ptMarker Str2Marker(miString buffer){
-  miString mar = buffer.upcase();
-  mar.trim(true,true);
+ptMarker Str2Marker(const std::string& buffer)
+{
+  const std::string mar = miutil::trimmed(miutil::to_upper(buffer), true, true);
 
   if (mar=="NO_MARKER")        return NO_MARKER;
   else if (mar=="M_CIRCLE")    return M_CIRCLE;
@@ -50,7 +49,8 @@ ptMarker Str2Marker(miString buffer){
   else return NO_MARKER;
 }
 
-miString Marker2Str(ptMarker mar){
+std::string Marker2Str(ptMarker mar)
+{
   if (mar==NO_MARKER)        return "NO_MARKER";
   else if (mar==M_CIRCLE)    return "M_CIRCLE";
   else if (mar==M_RECTANGLE) return "M_RECTANGLE";

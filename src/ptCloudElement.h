@@ -40,7 +40,7 @@ class CloudElement : public dataPlotElement
   ptFillStyle style;
   float width;
   float deltaX; // width of cloudbox
-  miutil::miString text;
+  std::string text;
 public:
   CloudElement(const DataSpec cds,
 	       const ptVertFieldf& field,

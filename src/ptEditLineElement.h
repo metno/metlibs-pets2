@@ -55,7 +55,7 @@ class EditLineElement : public AxisChildElement
   bool modified;
   bool activenodes;
   float actPx, actPy; // position of active point
-  miutil::miString pformat; // numerical format of small value-tip
+  std::string pformat; // numerical format of small value-tip
   int priority;     // priority for editing
   bool wrapdegrees;
   float wraplimit;

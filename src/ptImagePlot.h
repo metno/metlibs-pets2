@@ -43,7 +43,7 @@ public:
   ptImagePlot()
   {
   }
-  ptImagePlot(const miutil::miString& fname)
+  ptImagePlot(const std::string& fname)
   {
     image.setImage(fname, true);
   }
@@ -55,7 +55,7 @@ public:
   {
   }
 
-  void setimage(const miutil::miString& fname)
+  void setimage(const std::string& fname)
   {
     image.setImage(fname, true);
   }

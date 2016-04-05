@@ -37,7 +37,7 @@
 
 class TextElement : public PlotElement
 {
-  miutil::miString text;
+  std::string text;
   ptColor bcolor;
   ptFillStyle fillstyle;
   bool drawbackground;
@@ -46,11 +46,11 @@ class TextElement : public PlotElement
 
   //float getStartX_();
 public:
-  TextElement(const miutil::miString& pText,
-	      const std::map<miutil::miString,miutil::miString>& keymap,
 	      const ptVertFieldf& field, 
 	      const Layout& layout,
 	      XAxisInfo* xtime);
+  TextElement(const std::string& pText,
+      const std::map<std::string,std::string>& keymap,
   void plot();
   bool needsData() { return true; }
 };

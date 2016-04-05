@@ -59,7 +59,7 @@ private:
   miutil::miTime startT, stopT; // current timeinterval
   int startidx, stopidx; // current timeinterval xaxis-indices
   bool colourFlag; // diagram in colour or black/white
-  std::map<miutil::miString, miutil::miString> keymap; // keywords for text-strings
+  std::map<std::string, std::string> keymap; // keywords for text-strings
   bool localTime; // use localtime
   int timeZone; // which timezone
   bool showGridLines;
@@ -91,7 +91,7 @@ public:
   void getTotalTimeInterval(int &start, int &stop);
   void getTotalTimeInterval(miutil::miTime &start, miutil::miTime &stop);
 
-  PlotElement* findElement(const miutil::miString, PlotElement* start = 0);// search by name
+  PlotElement* findElement(const std::string&, PlotElement* start = 0);// search by name
   PlotElement* findElement(ptPrimitiveType, PlotElement* start = 0);// search by type
   PlotElement* findElement(ptPrimitiveType, ParId, PlotElement* start = 0);// search by type and pid
   void addElement(PlotElement*);
@@ -119,8 +119,8 @@ public:
   bool startPSnewpage();
   bool endPSoutput();
   // keyword/value pair methods
-  void addKeyword(const miutil::miString&, const miutil::miString&);
-  void setKeymap(const std::map<miutil::miString, miutil::miString>&);
+  void addKeyword(const std::string&, const std::string&);
+  void setKeymap(const std::map<std::string, std::string>&);
   void clearKeywords();
 };
 

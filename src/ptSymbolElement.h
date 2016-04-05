@@ -49,7 +49,7 @@ public:
 		const Layout& layout,
 		XAxisInfo* xtime);
 
-  void setImages(const int, const std::vector<miutil::miString>&);
+  void setImages(const int, const std::vector<std::string>&);
   void plot();
   bool needsData() { return true; }
 };

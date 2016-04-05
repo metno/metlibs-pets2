@@ -36,6 +36,7 @@
 
 #include <ptPlotElement.h>
 #include <ptWindVectorElement.h>
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
@@ -62,7 +63,7 @@ WindVectorElement::WindVectorElement(const DataSpec cds,
   FF_DD = datapolar();
   if (label) {
     text = layout.text;
-    vtext= text.split("|");
+    vtext= miutil::split(text, "|");
   }
 }
 

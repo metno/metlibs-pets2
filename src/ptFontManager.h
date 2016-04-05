@@ -37,9 +37,9 @@
 #include "ptFontDefs.h"
 #include "ptColor.h"
 
-#include <puTools/miString.h>
 #include <glp/GLP.h>
 #include <glText/glText.h>
+#include <string>
 
 const int MAXFONTCOLL=10;
 
@@ -50,35 +50,36 @@ extern const char QTFONTSET[];
 class FontManager {
 private:
   struct fontcoll {
-    miutil::miString name;
+    std::string name;
     glText* fontc;
   };
 private:
   int curFC; // current fontcollection
   int numFC; // number of fontcollections
   fontcoll FC[MAXFONTCOLL]; // list of..
-  static miutil::miString display_name_;
+  static std::string display_name_;
 
 public:
   FontManager();
   ~FontManager();
 
   // for use in batch - force different display
-  static void set_display_name(const miutil::miString name)
-  {display_name_= name;}
-  static miutil::miString display_name() { return display_name_; }
+  static void set_display_name(const std::string& name)
+    { display_name_ = name; }
+  static std::string display_name()
+    { return display_name_; }
 
-  bool addFontCollection(glText*, const miutil::miString);
-  void removeFontCollection(const miutil::miString);
-  bool setFontColl(const miutil::miString);
+  bool addFontCollection(glText*, const std::string&);
+  void removeFontCollection(const std::string&);
+  bool setFontColl(const std::string&);
 
   // return info
-  miutil::miString getCurrentFontCollection();
+  std::string getCurrentFontCollection();
   int getNumFonts();
   ptFontFace getFontFace();
   ptFontSize getFontSize();
   ptColor getFontColor();
-  miutil::miString getFontName(const int index);
+  std::string getFontName(int index);
 
   // choose font, size, face and colour
   int setFont(const int index);

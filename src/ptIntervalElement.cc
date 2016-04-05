@@ -34,6 +34,7 @@
 #include "config.h"
 #endif
 
+#include <puTools/miStringFunctions.h>
 #include <fstream>
 #include <ptPlotElement.h>
 #include <ptIntervalElement.h>
@@ -58,8 +59,8 @@ IntervalElement::IntervalElement(const std::vector<miTime> tline,
 #endif
   type=INTERVAL;
 
-  if (timetext.exists())
-    vt= timetext.split(";");
+  if (!timetext.empty())
+    vt= miutil::split(timetext, ";");
 }
 
 
@@ -71,7 +72,7 @@ void IntervalElement::setTimes(const std::vector<tinterval>& t)
     int m= vt.size();
     for (int i=0; i<n; i++){
       if (i<m){
-	intervals[i].text = vt[i].split("|");
+        intervals[i].text = miutil::split(vt[i], "|");
       }
     }
   }

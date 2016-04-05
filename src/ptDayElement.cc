@@ -34,6 +34,7 @@
 
 #include <ptPlotElement.h>
 #include <ptDayElement.h>
+#include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <list>
 #include <stdio.h>
@@ -58,14 +59,12 @@ DayElement::DayElement(const vector<miTime> tline,
 }
 
 
-miString DayElement::dataAsString(const miDate& date)
+std::string DayElement::dataAsString(const miDate& date)
 {
-  miString txt;
   if (asNumber)
-    txt= miString(date.dayOfYear());
+    return miutil::from_number(date.dayOfYear());
   else
-    txt= date.shortweekday(lang);
-  return txt;
+    return date.shortweekday(lang);
 }
 
 
@@ -73,7 +72,7 @@ miString DayElement::dataAsString(const miDate& date)
 void DayElement::plot()
 {
   miDate curDate = timeLine[startT].date();
-  miString curDay;
+  std::string curDay;
   float offset,th;
   float prevf;       // end of previous text
 #ifdef DEBUG

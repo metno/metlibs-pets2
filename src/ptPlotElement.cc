@@ -35,6 +35,7 @@
 #endif
 
 #include "ptPlotElement.h"
+#include <puTools/miStringFunctions.h>
 #include <glp/svgdocument.h>
 #include <iostream>
 #include <math.h>
@@ -172,7 +173,7 @@ void PlotElement::ellipse(const float& x, const float& y,
 
 
 // for postscript output
-bool PlotElement::startPSoutput(const miString& fname,
+bool PlotElement::startPSoutput(const std::string& fname,
     const bool incolour,
     const bool inlandscape,
     const bool doEPS){

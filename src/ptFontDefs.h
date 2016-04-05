@@ -31,7 +31,7 @@
 #ifndef _ptFontDefs_h
 #define _ptFontDefs_h
 
-#include <puTools/miString.h>
+#include <string>
 
 const int MAXFONTS = 4;
 const int MAXFONTSIZES = 11;
@@ -62,10 +62,10 @@ enum ptPrintMode {
   M_LINE
 };
 
-extern ptFontSize Str2FontSize(miutil::miString);
-extern miutil::miString FontSize2Str(ptFontSize);
+extern ptFontSize Str2FontSize(const std::string&);
+extern std::string FontSize2Str(ptFontSize);
 
-extern ptFontFace Str2FontFace(miutil::miString);
-extern miutil::miString FontFace2Str(ptFontFace);
+extern ptFontFace Str2FontFace(const std::string&);
+extern std::string FontFace2Str(ptFontFace);
 
 #endif

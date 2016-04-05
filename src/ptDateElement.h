@@ -38,14 +38,14 @@ class DateElement : public PlotElement
 {
   std::vector<miutil::miTime> timeLine;
   miutil::miDate::lang lang;
-  miutil::miString labeltext;
-  miutil::miString language;
+  std::string labeltext;
+  std::string language;
   bool asNumber;
   ptDateStyle datestyle;
   bool plotlabel;
   int minSkipX;
 
-  miutil::miString dataAsString(const miutil::miDate& date);
+  std::string dataAsString(const miutil::miDate& date);
 
 public:
   DateElement(const std::vector<miutil::miTime> tline,

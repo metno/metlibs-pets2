@@ -32,8 +32,6 @@
 #ifndef _ptstyle_h
 #define _ptstyle_h
 
-#include <puTools/miString.h>
-
 #include "ptGlobals.h"
 #include "ptStyleOrder.h"
 #include <tsData/ptPrimitiveType.h>
@@ -138,7 +136,7 @@ public:
   void disablePrimitive(const bool, const int);
   void disableAllPrimitives(const bool);
   void print() const;
-  bool readStyle(const miutil::miString filename, bool verbose= false);
+  bool readStyle(const std::string filename, bool verbose= false);
 
   bool addPrimitive(const Primitive& p);
 

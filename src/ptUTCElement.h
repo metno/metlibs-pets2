@@ -39,7 +39,7 @@ class UTCElement : public PlotElement
   std::vector<miutil::miTime> timeLine;
   int minSkipX;
   bool label;
-  miutil::miString text;
+  std::string text;
   std::vector<int> modhours;
   float plottime(const miutil::miTime& t, const int i,
 		 const bool minute, const float cwid);

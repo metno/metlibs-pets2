@@ -41,13 +41,13 @@ public:
   struct tinterval {
     miutil::miTime start;
     miutil::miTime stop;
-    std::vector<miutil::miString> text;
+    std::vector<std::string> text;
   };
 private:
-  miutil::miString label;
-  miutil::miString timetext;
+  std::string label;
+  std::string timetext;
   ptHorSides arrows;
-  std::vector<miutil::miString> vt; // timetext split by ';'
+  std::vector<std::string> vt; // timetext split by ';'
   std::vector<tinterval> intervals;
   float lineWidth;
   std::vector<miutil::miTime> timeLine;

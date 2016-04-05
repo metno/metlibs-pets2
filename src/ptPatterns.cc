@@ -32,11 +32,10 @@
 #endif
 
 #include "ptPatterns.h"
+#include <puTools/miStringFunctions.h>
 #include <polyStipMasks.h>
 
 using namespace std;
-using namespace miutil;
-
 
 const GLubyte* fillPattern(ptFillStyle fill)
 {
@@ -54,9 +53,9 @@ const GLubyte* fillPattern(ptFillStyle fill)
 }
 
 
-ptFillStyle Str2FillStyle(miString& buf){
-  miString fill = buf.upcase();
-  fill.trim(true,true);
+ptFillStyle Str2FillStyle(const std::string& buf)
+{
+  const std::string fill = miutil::trimmed(miutil::to_upper(buf), true, true);
   if (fill=="NONE")             return NONE;
   else if (fill=="DIAGRIGHT")   return DIAGRIGHT;
   else if (fill=="DIAGLEFT")    return DIAGLEFT;
@@ -70,9 +69,9 @@ ptFillStyle Str2FillStyle(miString& buf){
   else return SOLID;
 }
 
-vector<ptFillStyle> Str2FillStyleList(miString& fl)
+vector<ptFillStyle> Str2FillStyleList(const std::string& fl)
 {
-  vector<miString> l= fl.split(",");
+  const vector<std::string> l = miutil::split(fl, ",");
   int n= l.size();
   vector<ptFillStyle> vf;
 
@@ -82,9 +81,9 @@ vector<ptFillStyle> Str2FillStyleList(miString& fl)
   return vf;
 }
 
-ptLineStyle Str2LineStyle(miString& buf){
-  miString line = buf.upcase();
-  line.trim(true,true);
+ptLineStyle Str2LineStyle(const std::string& buf)
+{
+  const std::string line = miutil::trimmed(miutil::to_upper(buf), true, true);
   if (line=="FULL")                return FULL;
   else if (line=="DASHED")         return DASHED;
   else if (line=="DASHDOTTED")     return DASHDOTTED;
@@ -93,9 +92,9 @@ ptLineStyle Str2LineStyle(miString& buf){
   else return FULL;
 }
 
-vector<ptLineStyle> Str2LineStyleList(miString& fl)
+vector<ptLineStyle> Str2LineStyleList(const std::string& fl)
 {
-  vector<miString> l= fl.split(",");
+  vector<std::string> l= miutil::split(fl, ",");
   int n= l.size();
   vector<ptLineStyle> vf;
 
@@ -105,7 +104,8 @@ vector<ptLineStyle> Str2LineStyleList(miString& fl)
   return vf;
 }
 
-miString FillStyle2Str(ptFillStyle fill){
+std::string FillStyle2Str(ptFillStyle fill)
+{
   if (fill==NONE)             return "NONE";
   else if (fill==DIAGRIGHT)   return "DIAGRIGHT";
   else if (fill==DIAGLEFT)    return "DIAGLEFT";
@@ -119,9 +119,9 @@ miString FillStyle2Str(ptFillStyle fill){
   else return "SOLID";
 }
 
-miString FillStyleList2Str(vector<ptFillStyle>& vf)
+std::string FillStyleList2Str(const vector<ptFillStyle>& vf)
 {
-  miString s;
+  std::string s;
 
   int n= vf.size();
   if (n>0){
@@ -132,7 +132,8 @@ miString FillStyleList2Str(vector<ptFillStyle>& vf)
   return s;
 }
 
-miString LineStyle2Str(ptLineStyle line){
+std::string LineStyle2Str(ptLineStyle line)
+{
   if (line==FULL)                return "FULL";
   else if (line==DASHED)         return "DASHED";
   else if (line==DASHDOTTED)     return "DASHDOTTED";
@@ -141,9 +142,9 @@ miString LineStyle2Str(ptLineStyle line){
   else return "FULL";
 }
 
-miString LineStyleList2Str(vector<ptLineStyle>& vf)
+std::string LineStyleList2Str(const vector<ptLineStyle>& vf)
 {
-  miString s;
+  std::string s;
 
   int n= vf.size();
   if (n>0){

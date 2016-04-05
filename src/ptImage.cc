@@ -36,12 +36,12 @@
 #include <string.h>
 #include <iostream>
 #include <ptImage.h>
+#include <puTools/miStringFunctions.h>
 #include <png.h>
 #include <map>
 #include <fstream>
 
 using namespace std;
-using namespace miutil;
 
 
 ptImage::ptImage()
@@ -52,7 +52,7 @@ ptImage::ptImage()
 #endif
 }
 
-ptImage::ptImage(const miString& fname, const bool blend)
+ptImage::ptImage(const std::string& fname, const bool blend)
     : width(0), height(0), data(0), size(0)
 {
 #ifdef DEBUG
@@ -109,7 +109,7 @@ ptImage::~ptImage()
 
 
 
-void ptImage::setImage(const miString& fname, const bool blend)
+void ptImage::setImage(const std::string& fname, const bool blend)
 {
 #ifdef DEBUG
   cout << "RGBIMAGE: Initialiserer ny rgbimage med filnavn:" << fname << endl;
@@ -133,16 +133,16 @@ void ptImage::ReadImage()
   size=0;
 
   // Check filetype
-  vector<miString> parts= filename.split('.');
+  const vector<std::string> parts= miutil::split(filename, ".");
   if (parts.size()<2) return;
 
-  miString extension=parts.back();
+  const std::string& extension=parts.back();
 
   if (extension=="ppm") {
     ReadRawImage();
-  } else if (extension.contains("png")) {
+  } else if (miutil::contains(extension, "png")) {
     ReadPNGImage();
-  } else if (extension.contains("xpm")) {
+  } else if (miutil::contains(extension, "xpm")) {
     ReadXPMImage();
   } else {
 #ifdef DEBUG
@@ -402,23 +402,23 @@ bool ptImage::imageFromXpmdata(const char** xd){
     return false;
   }
 
-  map<miString,int> redmap;
-  map<miString,int> greenmap;
-  map<miString,int> bluemap;
-  map<miString,int> alphamap;
+  map<std::string,int> redmap;
+  map<std::string,int> greenmap;
+  map<std::string,int> bluemap;
+  map<std::string,int> alphamap;
 
   for (int i=0; i<ncols; i++){
     buf = xd[1+i];
-    miString key=    buf.substr(0,nchar);
-    miString rest=   buf.substr(nchar,buf.length()-nchar+1);
+    std::string key=    buf.substr(0,nchar);
+    std::string rest=   buf.substr(nchar,buf.length()-nchar+1);
     int j= rest.find_first_of("c");
     if (j < 0){
       cerr << "imageFromXpmdata ERROR Illegal colourdefinition (1):"
 	   << rest << endl;
       return false;
     }
-    miString colour= rest.substr(j+1,rest.length()-j-1);
-    colour.trim();
+    std::string colour= rest.substr(j+1,rest.length()-j-1);
+    miutil::trim(colour);
     if (colour == "None"){
       redmap[key]  = 255;
       greenmap[key]= 255;
@@ -434,14 +434,14 @@ bool ptImage::imageFromXpmdata(const char** xd){
       greenmap[key]= 0;
       bluemap[key] = 0;
       alphamap[key]= 255;
-    } else if (colour.contains("gray")){
-      miString sperc= colour.substr(4,colour.length()-4);
+    } else if (miutil::contains(colour, "gray")){
+      std::string sperc= colour.substr(4,colour.length()-4);
       float perc= atof(sperc.c_str()) / 100.0;
       redmap[key]  = static_cast<int>(255*perc);
       greenmap[key]= static_cast<int>(255*perc);
       bluemap[key] = static_cast<int>(255*perc);
       alphamap[key]= 255;
-    } else if (!colour.contains("#")){
+    } else if (!miutil::contains(colour, "#")){
       redmap[key]  = 255;
       greenmap[key]= 255;
       bluemap[key] = 255;
@@ -472,9 +472,9 @@ bool ptImage::imageFromXpmdata(const char** xd){
   data= new unsigned char [size];
   int pp= 0;
   for (int y=ysize-1; y>=0; y--){
-    miString line= xd[y+ncols+1];
+    std::string line= xd[y+ncols+1];
     for (int x=0; x<xsize*nchar; x+=nchar){
-      miString pixel= line.substr(x,nchar);
+      std::string pixel= line.substr(x,nchar);
       data[pp+0]= redmap[pixel];
       data[pp+1]= greenmap[pixel];
       data[pp+2]= bluemap[pixel];
@@ -499,11 +499,11 @@ void ptImage::ReadXPMImage()
     return;
   }
 
-  miString buf;
-  vector<miString> vs, vs2;
+  std::string buf;
+  vector<std::string> vs, vs2;
 
   while(getline(file,buf)){
-    buf.trim();
+    miutil::trim(buf);
     if (buf.length() == 0)
       continue;
     if (buf[0]!='\"')

@@ -31,11 +31,11 @@
 #ifndef _ptImage_h
 #define _ptImage_h
 
-#include <puTools/miString.h>
+#include <string>
 
 class ptImage {
 private:
-  miutil::miString filename;     // bitmap-filename
+  std::string filename;  // bitmap-filename
   int width, height;     // geometry in pixels
   bool blending;         // blending on/off
   unsigned char *data;   // the actual bitmap-data
@@ -50,19 +50,19 @@ private:
 public:
   ptImage(); // default constructor
   // constructor takes the bitmap filename and blending
-  ptImage(const miutil::miString& fname, const bool blend);
+  ptImage(const std::string& fname, bool blend);
   ptImage(const ptImage&); // copy constructor
   ptImage& operator=(const ptImage&); //equal operator
 
   ~ptImage();
 
-  void setImage(const miutil::miString& fname, const bool blend);
+  void setImage(const std::string& fname, bool blend);
 
   const unsigned char* Data() const {return data; }
   unsigned long Size() const {return size; }
   int Width() const {return width;  }
   int Height()const {return height; }
-  const miutil::miString& Filename() const {return filename; }
+  const std::string& Filename() const {return filename; }
   bool Alpha() const {return blending; }
 };
 

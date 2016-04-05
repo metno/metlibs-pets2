@@ -33,8 +33,9 @@
 #ifndef _patterns_h
 #define _patterns_h
 
-#include <puTools/miString.h>
 #include <GL/gl.h>
+
+#include <string>
 #include <vector>
 
 enum ptFillStyle {
@@ -69,14 +70,14 @@ const unsigned int LineStyle[][2] = {
 
 extern const GLubyte* fillPattern(ptFillStyle);
 
-extern ptFillStyle Str2FillStyle(miutil::miString&);
-extern ptLineStyle Str2LineStyle(miutil::miString&);
-extern std::vector<ptFillStyle> Str2FillStyleList(miutil::miString&);
-extern std::vector<ptLineStyle> Str2LineStyleList(miutil::miString&);
+extern ptFillStyle Str2FillStyle(const std::string&);
+extern ptLineStyle Str2LineStyle(const std::string&);
+extern std::vector<ptFillStyle> Str2FillStyleList(const std::string&);
+extern std::vector<ptLineStyle> Str2LineStyleList(const std::string&);
 
-extern miutil::miString FillStyle2Str(ptFillStyle);
-extern miutil::miString LineStyle2Str(ptLineStyle);
-extern miutil::miString FillStyleList2Str(std::vector<ptFillStyle>&);
-extern miutil::miString LineStyleList2Str(std::vector<ptLineStyle>&);
+extern std::string FillStyle2Str(ptFillStyle);
+extern std::string LineStyle2Str(ptLineStyle);
+extern std::string FillStyleList2Str(const std::vector<ptFillStyle>&);
+extern std::string LineStyleList2Str(const std::vector<ptLineStyle>&);
 
 #endif

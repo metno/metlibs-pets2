@@ -42,13 +42,13 @@
 #include "ptColor.h"
 #include "ptFontManager.h"
 
-#include <puTools/miString.h>
 #include <puTools/miTime.h>
 
 #include <glp/glpfile.h>
 
 #include <GL/gl.h>
 
+#include <string>
 #include <vector>
 
 struct DataSpec {
@@ -61,7 +61,7 @@ class PlotElement
 {
 protected:
   ptPrimitiveType type;       // Type of plotelement
-  miutil::miString name;              // label or name of element
+  std::string name;              // label or name of element
   bool enabled;               // plotElement is enabled
   bool visible;               // plotElement is visible
   float startY;               // vertical startposition
@@ -89,7 +89,7 @@ protected:
   static bool printing; // postscript plotting
   static GLPcontext* psoutput; // document factory module
 
-  void _printString(const miutil::miString& text, const float x, const float y)
+  void _printString(const std::string& text, const float x, const float y)
   {
     FM.printStr(text.c_str(), x, y);
   }
@@ -108,7 +108,7 @@ protected:
   {
     FM.getMaxCharSize(w, h);
   }
-  void _getStringSize(const miutil::miString& c, float& w, float& h)
+  void _getStringSize(const std::string& c, float& w, float& h)
   {
     FM.getStringSize(c.c_str(), w, h);
   }
@@ -173,7 +173,7 @@ public:
 
   void setViewport(int sw, int sh, float gw, float gh);
 
-  const miutil::miString& Name() const
+  const std::string& Name() const
   {
     return name;
   }
@@ -233,7 +233,7 @@ public:
     useFakeStipple = use;
   }
 
-  static bool startPSoutput(const miutil::miString& fname, const bool incolour,
+  static bool startPSoutput(const std::string& fname, const bool incolour,
       const bool inlandscape, const bool doEPS = false);
   static bool startPSnewpage();
   static bool endPSoutput();

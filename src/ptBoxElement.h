@@ -36,7 +36,7 @@
 
 class BoxElement : public dataPlotElement
 {
-  miutil::miString label;
+  std::string label;
   float linewidth;
   ptFillStyle pattern;
   std::vector<ptColor> colorlist;
