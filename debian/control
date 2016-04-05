@@ -4,7 +4,7 @@ Maintainer: Alexander Bürger <alexander.buerger@met.no>
 Build-Depends:  debhelper (>= 9),
  autoconf (>=2.61), automake (>= 1.11), libtool (>= 1.5),
  metlibs-putools-dev (>= 5.0.4),
- metlibs-tsdata-dev (>= 5.0.1),
+ metlibs-tsdata-dev (>= 5.2.0),
  metlibs-glp-dev (>= 5.0.0),
  metlibs-gltext-dev (>= 5.0.1),
  libpng-dev
