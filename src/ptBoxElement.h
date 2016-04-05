@@ -48,14 +48,12 @@ class BoxElement : public dataPlotElement
   std::vector<miutil::miTime> timeLine;
 public:
   BoxElement(const DataSpec cds,
-	     const std::vector<miutil::miTime> tline,
-	     const ptVertFieldf& field,
-	     const Layout& layout,
-	     XAxisInfo* xtime);
+      const std::vector<miutil::miTime> tline,
+      const ptVertFieldf& field,
+      const Layout& layout,
+      XAxisInfo* xtime);
   void plot();
   bool needsData() { return true; }
 };
-
-
 
 #endif

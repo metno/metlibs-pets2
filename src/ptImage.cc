@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -31,13 +29,15 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
-#include <ptImage.h>
+#include "ptImage.h"
 #include <puTools/miStringFunctions.h>
+
 #include <png.h>
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
 #include <map>
 #include <fstream>
 
@@ -174,18 +174,33 @@ void ptImage::ReadRawImage()
 
   if ((fp=fopen(filename.c_str(),"r"))) {
 
-    fscanf(fp,"%s \n",magic);
-    if (strcmp(magic,"P6") != 0) {
+    if (fscanf(fp,"%10s \n", magic) != 1 // should be sizeof(magic)
+        || strcmp(magic,"P6") != 0)
+    {
       cout << "RAWIMAGE: invalid fileformat" << endl;
       return;
     }
 
-    fgets(dataline,100,fp);
-    while (dataline[0] == '#') fgets(dataline,100,fp);
+    if (!fgets(dataline, sizeof(dataline), fp)) {
+      cout << "RAWIMAGE: invalid fileformat" << endl;
+      return;
+    }
+    while (dataline[0] == '#') {
+      if (!fgets(dataline, sizeof(dataline), fp)) {
+        cout << "RAWIMAGE: invalid fileformat" << endl;
+        return;
+      }
+    }
 
     sscanf(dataline, "%d %d",&width,&height);
-    fgets(dataline,100,fp);
-    sscanf(dataline,"%d",&colours);
+    if (!fgets(dataline, sizeof(dataline), fp)) {
+      cout << "RAWIMAGE: invalid fileformat" << endl;
+      return;
+    }
+    if (sscanf(dataline, "%d", &colours) != 1) {
+      cout << "RAWIMAGE: invalid fileformat" << endl;
+      return;
+    }
 
     npixels = width * height;
     if (blending)
@@ -198,17 +213,23 @@ void ptImage::ReadRawImage()
     acom=0xff;
     if (data) {
       for (i=0; i<height; i++) {
- 	for (j=0; j<width*nchannels; j+=nchannels) {
- 	  fread(ccom,sizeof(char),3,fp);
- 	  if (blending) {
- 	    if (ccom[0]==0 && ccom[1]==0 && ccom[2]==0) acom=0; else acom=0xff;
- 	  }
-	  pixidx = (height-(i+1))*width*nchannels + j;
- 	  data[pixidx  ]= ccom[0];
- 	  data[pixidx+1]= ccom[1];
- 	  data[pixidx+2]= ccom[2];
- 	  if (blending) data[pixidx+3]= acom;
- 	}
+        for (j=0; j<width*nchannels; j+=nchannels) {
+          if (fread(ccom, sizeof(char), 3, fp) != 3) {
+            ccom[0] = ccom[1] = ccom[2] = 0;
+          }
+          if (blending) {
+            if (ccom[0]==0 && ccom[1]==0 && ccom[2]==0)
+              acom=0;
+            else
+              acom=0xff;
+          }
+          pixidx = (height-(i+1))*width*nchannels + j;
+          data[pixidx  ]= ccom[0];
+          data[pixidx+1]= ccom[1];
+          data[pixidx+2]= ccom[2];
+          if (blending)
+            data[pixidx+3]= acom;
+        }
       }
     } else {
       cout << "RAWIMAGE: Allocation error" << endl;
@@ -245,7 +266,7 @@ void ptImage::ReadPNGImage()
   png_infop info_ptr = png_create_info_struct(png_ptr);
   if (!info_ptr){
     png_destroy_read_struct(&png_ptr,
-			    (png_infopp)NULL, (png_infopp)NULL);
+        (png_infopp)NULL, (png_infopp)NULL);
     cerr << "ReadPNGImage ERROR creating info_struct" << endl;
     fclose(fp);
     return;
@@ -254,16 +275,15 @@ void ptImage::ReadPNGImage()
   png_infop end_info = png_create_info_struct(png_ptr);
   if (!end_info){
     png_destroy_read_struct(&png_ptr, &info_ptr,
-			    (png_infopp)NULL);
+        (png_infopp)NULL);
     cerr << "ReadPNGImage ERROR creating end_info_struct" << endl;
     fclose(fp);
     return;
   }
 
      if (setjmp(png_jmpbuf(png_ptr))){
-  //if (setjmp(png_ptr->jmpbuf)){
     png_destroy_read_struct(&png_ptr, &info_ptr,
-			    &end_info);
+        &end_info);
     cerr << "ReadPNGImage ERROR longjmp out of process" << endl;
     fclose(fp);
     return;
@@ -284,8 +304,8 @@ void ptImage::ReadPNGImage()
   int filter_type;//=      PNG_FILTER_TYPE_DEFAULT;
 
   png_get_IHDR(png_ptr, info_ptr, &uwidth, &uheight,
-	       &bit_depth, &color_type, &interlace_type,
-	       &compression_type, &filter_type);
+      &bit_depth, &color_type, &interlace_type,
+      &compression_type, &filter_type);
   width= uwidth;
   height= uheight;
 
@@ -309,11 +329,11 @@ void ptImage::ReadPNGImage()
     //cout << "PNG_COLOR_TYPE_GRAY" << endl;
   } else if (color_type == PNG_COLOR_TYPE_PALETTE){
     cerr << "PNG_COLOR_TYPE_PALETTE"
-	 << " ..exiting" << endl;
+         << " ..exiting" << endl;
     return;
   } else {
     cerr << "Unknown color_type:" << color_type
-	 << " ..exiting" << endl;
+         << " ..exiting" << endl;
     return;
   }
 
@@ -321,9 +341,6 @@ void ptImage::ReadPNGImage()
 
   png_bytep *row_pointers;
   row_pointers = png_get_rows(png_ptr, info_ptr);
-
-  //png_read_image(png_ptr, row_pointers);
-  //png_read_end(png_ptr, end_info);
 
   // unpack image from row-based structure
   size= width*height*nchannels;
@@ -336,8 +353,7 @@ void ptImage::ReadPNGImage()
   }
 
   // clean up
-  png_destroy_read_struct(&png_ptr, &info_ptr,
-			  &end_info);
+  png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
   fclose(fp);
 
 #endif
@@ -369,8 +385,9 @@ int chartoint_(const char c)
   return 0;
 }
 
-int hexToInt(const miString& p){
-  miString up= p.upcase();
+int hexToInt(const std::string& p)
+{
+  const std::string up = miutil::to_upper(p);
   int l= up.length(), res=0, fact=1;
   for (int i=l-1; i>=0; i--,fact*=15)
     res += chartoint_(up[i])*fact;
@@ -379,12 +396,12 @@ int hexToInt(const miString& p){
 }
 
 
-bool ptImage::imageFromXpmdata(const char** xd){
+bool ptImage::imageFromXpmdata(const char** xd)
+{
   int xsize=-1,ysize,ncols,nchar;
-  vector<miString> vs;
-  miString buf= xd[0];
+  std::string buf = xd[0];
 
-  vs= buf.split(" ");
+  const vector<std::string> vs = miutil::split(buf, " ");
   if (vs.size() < 4){
     cerr << "imageFromXpmdata ERROR too few elements:" << buf << endl;
     return false;
@@ -396,9 +413,9 @@ bool ptImage::imageFromXpmdata(const char** xd){
 
   if (xsize < 1 || ysize < 1 || ncols < 1 || nchar < 1){
     cerr << "imageFromXpmdata ERROR Illegal numbers "
-	 << " xsize:" << xsize << " ysize:" << ysize
-	 << " ncols:" << ncols << " nchar:" << nchar
-	 << endl;
+         << " xsize:" << xsize << " ysize:" << ysize
+         << " ncols:" << ncols << " nchar:" << nchar
+         << endl;
     return false;
   }
 
@@ -414,7 +431,7 @@ bool ptImage::imageFromXpmdata(const char** xd){
     int j= rest.find_first_of("c");
     if (j < 0){
       cerr << "imageFromXpmdata ERROR Illegal colourdefinition (1):"
-	   << rest << endl;
+           << rest << endl;
       return false;
     }
     std::string colour= rest.substr(j+1,rest.length()-j-1);
@@ -447,12 +464,12 @@ bool ptImage::imageFromXpmdata(const char** xd){
       bluemap[key] = 255;
       alphamap[key]= 255;
       cerr << "imageFromXpmdata File:" << filename
-	   << " WARNING unknown colour:" << colour << endl;
+           << " WARNING unknown colour:" << colour << endl;
     } else {
       if (colour.size() < 2){
-	cerr << "imageFromXpmdata ERROR Illegal colourdefinition (2):"
-	     << rest << endl;
-	return false;
+        cerr << "imageFromXpmdata ERROR Illegal colourdefinition (2):"
+             << rest << endl;
+        return false;
       }
       colour= colour.substr(1,colour.length()-1);
       int numcomp = colour.length()/3;
@@ -495,7 +512,7 @@ void ptImage::ReadXPMImage()
 
   if (!file){
     cerr << "readXpmFile ERROR: Unable to open file:"
-	 << filename << endl;
+         << filename << endl;
     return;
   }
 
@@ -516,7 +533,7 @@ void ptImage::ReadXPMImage()
     return;
 
   //   cerr << "RESULTING DATA:" << endl;
-  char **tmpdata = new (char*[vs.size()]);
+  char** tmpdata = new char*[vs.size()];
   for (size_t i=0; i<vs.size(); i++){
     tmpdata[i]= strdup(vs[i].c_str());
   }
@@ -526,9 +543,4 @@ void ptImage::ReadXPMImage()
   // OBS: free !!!!!!!!!!!!!!!!!!!!!!!!
 
   delete[] tmpdata;
-
-//   return res;
 }
-
-
-

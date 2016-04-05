@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -41,7 +39,7 @@
 using namespace std;
 
 
-namespace petsColorTools 
+namespace petsColorTools
 {
 
 map<std::string,ptColor> colorlist;
@@ -162,7 +160,7 @@ ptColor::ptColor(const std::string& n, float r, float g, float b, float a)
 void ptColor::fromStr(const std::string& icol)
 {
   string col = icol,alpha;
-  
+
   vector<string> vs;
 
   boost::split(vs, col, boost::algorithm::is_any_of(":"));

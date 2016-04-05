@@ -45,14 +45,13 @@ class SymbolElement : public dataPlotElement
   bool scalewidth;
 public:
   SymbolElement(const DataSpec cds,
-		const ptVertFieldf& field,
-		const Layout& layout,
-		XAxisInfo* xtime);
+      const ptVertFieldf& field,
+      const Layout& layout,
+      XAxisInfo* xtime);
 
   void setImages(const int, const std::vector<std::string>&);
   void plot();
   bool needsData() { return true; }
 };
-
 
 #endif

@@ -1,8 +1,6 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
  Copyright (C) 2006 met.no
 
  Contact information:
@@ -181,7 +179,7 @@ std::string FontManager::getFontName(int index)
     return "";
 }
 
-int FontManager::setFont(const int index)
+int FontManager::setFont(int index)
 {
   if (curFC >= 0) {
     string fs = getFontName(index);
@@ -190,7 +188,7 @@ int FontManager::setFont(const int index)
     return 0;
 }
 
-int FontManager::setFontFace(const ptFontFace face)
+int FontManager::setFontFace(ptFontFace face)
 {
   if (curFC >= 0) {
     glText::FontFace ff = glText::F_NORMAL;
@@ -205,7 +203,7 @@ int FontManager::setFontFace(const ptFontFace face)
     return 0;
 }
 
-int FontManager::setFontSize(const ptFontSize size)
+int FontManager::setFontSize(ptFontSize size)
 {
   if (curFC >= 0) {
     float fs = NORMAL_size;

@@ -43,11 +43,8 @@
 using namespace miutil;
 
 UTCElement::UTCElement(const std::vector<miTime> tline,
-		       const ptVertFieldf& field,
-		       const Layout& layout,
-		       XAxisInfo* xtime)
-
-  :PlotElement(layout, field, xtime),
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+  : PlotElement(layout, field, xtime),
    minSkipX(layout.minSkipX), label(layout.label), text(layout.text),
    modhours(layout.modhours)
 {
@@ -68,7 +65,7 @@ UTCElement::UTCElement(const std::vector<miTime> tline,
 
 
 float UTCElement::plottime(const miTime& t, const int i,
-			   const bool minute, const float cwid)
+    bool minute, const float cwid)
 {
   std::ostringstream ost;
   float offset;
@@ -104,111 +101,37 @@ void UTCElement::plot()
     for ( int k=0; k<modhours.size(); k++){
       prev= -1000;
       for (int i=startT; i<=stopT; i++) {
-	if (!taken[i]){
-	  miTime t= timeLine[i];
-	  if (t.hour() % modhours[k] == 0){
-	    if (!plotallmin)
-	      if (t.min()!=0)
-		continue;
-	    if ((xtime->xcoord[i]-guess-prev) < minw)
-	      continue;
-	    if ( k!=0 ){
-	      // find next taken
-	      int nextt=i+1;
-	      for (int j=i+1; j<stopT; j++){
-		if (taken[j]){
-		  nextt=j;
-		  break;
-		}
-	      }
-	      if (taken[nextt])
-		if (((xtime->xcoord[nextt]-guess)-(xtime->xcoord[i]+guess)) < minw)
-		  continue;
-	    }
-	    prev= plottime(t,i,plotmin,tw);
-	    taken[i]= true;
-	  }
-	} else
-	  prev= xtime->xcoord[i] + guess;
+        if (!taken[i]){
+          miTime t= timeLine[i];
+          if (t.hour() % modhours[k] == 0){
+            if (!plotallmin)
+              if (t.min()!=0)
+                continue;
+            if ((xtime->xcoord[i]-guess-prev) < minw)
+              continue;
+            if ( k!=0 ){
+              // find next taken
+              int nextt=i+1;
+              for (int j=i+1; j<stopT; j++){
+                if (taken[j]){
+                  nextt=j;
+                  break;
+                }
+              }
+              if (taken[nextt])
+                if (((xtime->xcoord[nextt]-guess)-(xtime->xcoord[i]+guess)) < minw)
+                  continue;
+            }
+            prev= plottime(t,i,plotmin,tw);
+            taken[i]= true;
+          }
+        } else
+          prev= xtime->xcoord[i] + guess;
       }
     }
-
-//     // plot 0,12
-//     prev= -1000;
-//     for (int i=startT; i<=stopT; i++) {
-//       miTime t= timeLine[i];
-//       if (t.hour() % 12 == 0){
-// 	if (!plotallmin)
-// 	  if (t.min()!=0)
-// 	    continue;
-// 	if ((xtime->xcoord[i]-guess-prev) < minw)
-// 	  continue;
-// 	prev= plottime(t,i,plotmin,tw);
-// 	taken[i]= true;
-//       }
-//     }
-//     // plot 6,18
-//     prev= -1000;
-//     for (int i=startT; i<=stopT; i++) {
-//       if (!taken[i]){
-// 	miTime t= timeLine[i];
-// 	if (t.hour() % 6 == 0){
-// 	  if (!plotallmin)
-// 	    if (t.min()!=0)
-// 	      continue;
-// 	  if ((xtime->xcoord[i]-guess-prev) < minw)
-// 	    continue;
-// 	  if (taken[i+1])
-// 	    if (((xtime->xcoord[i+1]-guess)-(xtime->xcoord[i]+guess)) < minw)
-// 	      continue;
-// 	  prev= plottime(t,i,plotmin,tw);
-// 	  taken[i]= true;
-// 	}
-//       } else
-// 	prev= xtime->xcoord[i] + guess;
-//     }
-//     // plot 3,9,15,21
-//     prev= -1000;
-//     for (int i=startT; i<=stopT; i++) {
-//       if (!taken[i]){
-// 	miTime t= timeLine[i];
-// 	if (t.hour() % 3 == 0){
-// 	  if (!plotallmin)
-// 	    if (t.min()!=0)
-// 	      continue;
-// 	  if ((xtime->xcoord[i]-guess-prev) < minw)
-// 	    continue;
-// 	  if (taken[i+1])
-// 	    if (((xtime->xcoord[i+1]-guess)-(xtime->xcoord[i]+guess)) < minw)
-// 	      continue;
-// 	  prev= plottime(t,i,plotmin,tw);
-// 	  taken[i]= true;
-// 	}
-//       } else
-// 	prev= xtime->xcoord[i] + guess;
-//     }
-//     // plot the rest
-//     prev= -1000;
-//     for (int i=startT; i<=stopT; i++) {
-//       if (!taken[i]){
-// 	miTime t= timeLine[i];
-// 	if (!plotallmin)
-// 	  if (t.min()!=0)
-// 	    continue;
-// 	if ((xtime->xcoord[i]-guess-prev) < minw)
-// 	  continue;
-// 	if (taken[i+1])
-// 	  if (((xtime->xcoord[i+1]-guess)-(xtime->xcoord[i]+guess)) < minw)
-// 	    continue;
-// 	prev= plottime(t,i,plotmin,tw);
-// 	taken[i]= true;
-//       } else
-// 	prev= xtime->xcoord[i] + guess;
-//     }
 
     delete[] taken;
     _printString(text,20,startY);
     _updatePrinting();
   }
 }
-

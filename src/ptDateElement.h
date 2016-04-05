@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -49,9 +47,9 @@ class DateElement : public PlotElement
 
 public:
   DateElement(const std::vector<miutil::miTime> tline,
-	      const ptVertFieldf& field,
-	      const Layout& layout,
-	      XAxisInfo* xtime);
+      const ptVertFieldf& field,
+      const Layout& layout,
+      XAxisInfo* xtime);
   void plot();
 };
 

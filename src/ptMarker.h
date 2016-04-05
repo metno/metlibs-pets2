@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:

@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -100,7 +98,7 @@ class ptStyle {
   void _enablePrimitive(const bool, const int);
   void _disablePrimitive(const bool, const int);
   ptAxis _findFirstFreeAxis(bool usedAxes[][MAXLINES_IN_ONE],
-			    const stMother mother);
+      const stMother mother);
   void _sortArray(Out***, const int&, const stMother&, const int*);
 public:
   ptStyle();
@@ -113,7 +111,7 @@ public:
   const float& topMargin()   { return topMargin_; }
   const float& bottomMargin(){ return bottomMargin_; }
   void setMargins(const float lm, const float rm,
-		  const float tm, const float bm)
+      const float tm, const float bm)
   {
     leftMargin_= lm; rightMargin_ = rm;
     topMargin_ = tm; bottomMargin_= bm;
@@ -124,15 +122,15 @@ public:
 
   void clear();
 
-  bool organize(StyleOrder*, int*, StyleOrder*,	int);
+  bool organize(StyleOrder*, int*, StyleOrder*, int);
   void enablePrimitive(const bool, const ptPrimitiveType);
   void enablePrimitive(const ParId,
-		       const ptPrimitiveType type = DUM_PRIMITIVE);
+      const ptPrimitiveType type = DUM_PRIMITIVE);
   void enablePrimitive(const bool, const int);
   void enableAllPrimitives(const bool);
   void disablePrimitive(const bool, const ptPrimitiveType);
   void disablePrimitive(const ParId,
-			const ptPrimitiveType type = DUM_PRIMITIVE);
+      const ptPrimitiveType type = DUM_PRIMITIVE);
   void disablePrimitive(const bool, const int);
   void disableAllPrimitives(const bool);
   void print() const;
@@ -146,7 +144,7 @@ public:
   { lc= localTime; tz= timeZone; }
 };
 
-extern stMother Str2Mother(miutil::miString);
-extern miutil::miString Mother2Str(stMother);
+extern stMother Str2Mother(const std::string&);
+extern std::string Mother2Str(stMother);
 
 #endif

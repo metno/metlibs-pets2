@@ -51,7 +51,6 @@ enum ptFillStyle {
   SOLID
 };
 
-
 enum ptLineStyle {
   FULL,
   DASHED,

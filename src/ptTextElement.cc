@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -27,28 +25,26 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-
 // ptTextElement.cc : Definitions for TextElement class
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptTextElement.h>
-#include <ptPatterns.h>
+#include "ptTextElement.h"
+#include "ptPlotElement.h"
+#include "ptPatterns.h"
 #include <puTools/miStringFunctions.h>
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 using namespace miutil;
 
-			 const ptVertFieldf& field,
-			 const Layout& layout,
-			 XAxisInfo* xtime)
 TextElement::TextElement(const std::string& pText,
     const std::map<std::string, std::string>& keymap,
+    const ptVertFieldf& field,
+    const Layout& layout,
+    XAxisInfo* xtime)
   : PlotElement(layout, field, xtime), bcolor(layout.color2),
     fillstyle(layout.fillstyle), drawbackground(layout.drawbackground)
 {
@@ -107,8 +103,8 @@ void TextElement::plot()
       startX= globalWindow.x1;
       stopX = globalWindow.x2;
       if (fillstyle != SOLID){
-	glEnable(GL_POLYGON_STIPPLE);
-	glPolygonStipple(fillPattern(fillstyle));
+        glEnable(GL_POLYGON_STIPPLE);
+        glPolygonStipple(fillPattern(fillstyle));
       }
       _setColor(bcolor);
       glRectf(startX,startY,stopX,stopY);
@@ -121,14 +117,14 @@ void TextElement::plot()
     for (int i=0; i<n; i++){
       switch(align) {
       case LEFT :
-	x= 20;
-	break;
+        x= 20;
+        break;
       case RIGHT :
-	x = globalWindow.x2-20-vtw[i];
-	break;
+        x = globalWindow.x2-20-vtw[i];
+        break;
       case CENTER :
-	x = ((globalWindow.x2 - globalWindow.x1) - vtw[i])/2.0;
-	break;
+        x = ((globalWindow.x2 - globalWindow.x1) - vtw[i])/2.0;
+        break;
       }
 
       _setColor(color);

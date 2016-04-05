@@ -68,10 +68,10 @@ class EditLineElement : public AxisChildElement
   bool _accumulate(const int,float&); //change accuvalues; return new diff
 public:
   EditLineElement(yAxisElement* ya,
-		  const DataSpec cds,
-		  const ptVertFieldf& field,
-		  const Layout& layout,
-		  XAxisInfo* xtime);
+      const DataSpec cds,
+      const ptVertFieldf& field,
+      const Layout& layout,
+      XAxisInfo* xtime);
   ~EditLineElement();
   void plot();
   bool needsData() { return true; }
@@ -101,6 +101,5 @@ public:
   void getActivePos(float& px, float& py){ px= actPx; py= actPy;}
   int  Priority() const { return priority;}
 };
-
 
 #endif

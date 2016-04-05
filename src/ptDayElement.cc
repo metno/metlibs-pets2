@@ -32,21 +32,18 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptDayElement.h>
+#include "ptDayElement.h"
+#include "ptPlotElement.h"
 #include <puTools/miStringFunctions.h>
 #include <iostream>
 #include <list>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace miutil;
 using namespace std;
 
 DayElement::DayElement(const vector<miTime> tline,
-		       const ptVertFieldf& field,
-		       const Layout& layout,
-		       XAxisInfo* xtime)
-
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime),
     timeLine(tline),
     language(layout.language), asNumber(layout.asNumber)
@@ -66,7 +63,6 @@ std::string DayElement::dataAsString(const miDate& date)
   else
     return date.shortweekday(lang);
 }
-
 
 
 void DayElement::plot()

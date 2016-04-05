@@ -32,20 +32,20 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptDateElement.h>
+#include "ptDateElement.h"
+
+#include "ptPlotElement.h"
 #include <puTools/miStringFunctions.h>
+
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <list>
 
 using namespace miutil;
 using namespace std;
 
 DateElement::DateElement(const vector<miTime> tline,
-			 const ptVertFieldf& field,
-			 const Layout& layout,
-			 XAxisInfo* xtime)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
 
   : PlotElement(layout, field, xtime)
   , timeLine(tline)
@@ -62,7 +62,7 @@ DateElement::DateElement(const vector<miTime> tline,
   type=DATE;
   lang= (language=="NO" ? miDate::Norwegian :  miDate::English);
 
-  if (plotlabel && !labeltext.exists()){
+  if (plotlabel && labeltext.empty()) {
     if (datestyle == DS_DATE)
       labeltext= (lang==miDate::English ? "Date" : "Dato");
     else if (datestyle == DS_WEEK)
@@ -76,32 +76,32 @@ DateElement::DateElement(const vector<miTime> tline,
   }
 }
 
-miString DateElement::dataAsString(const miDate& date)
+std::string DateElement::dataAsString(const miDate& date)
 {
-  miString txt;
-  if (datestyle == DS_DATE){
-    txt= miString(date.day())+"/"+miString(date.month());
+  std::string txt;
+  if (datestyle == DS_DATE) {
+    txt = miutil::from_number(date.day()) + "/" + miutil::from_number(date.month());
   } else if (datestyle == DS_WEEK){
-    txt= miString(date.weekNo());
+    txt = miutil::from_number(date.weekNo());
   } else if (datestyle == DS_MONTH){
     if (asNumber)
-      txt= miString(date.month());
+      txt= miutil::from_number(date.month());
     else
       txt= date.shortmonthname(lang);
   } else if (datestyle == DS_DAY){
     if (asNumber)
-      txt= miString(date.dayOfYear());
+      txt= miutil::from_number(date.dayOfYear());
     else
       txt= date.shortweekday(lang);
   } else if (datestyle == DS_YEAR){
-    txt= miString(date.year());
+    txt= miutil::from_number(date.year());
   }
   return txt;
 }
 
 void DateElement::plot()
 {
-  miString txt;
+  std::string txt;
   miDate curDate = timeLine[startT].date();
   float offset,th;
   float prevf; // end of previous text
@@ -118,7 +118,7 @@ void DateElement::plot()
     if (plotlabel){
       txt= labeltext;
       if (labeltext=="$YEAR")
-	txt= miString(curDate.year());
+        txt = miutil::from_number(curDate.year());
       _printString(txt,20,startY);
       _updatePrinting();
       _getStringSize(txt,offset,th);

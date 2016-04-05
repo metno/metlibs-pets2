@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -43,12 +41,11 @@ class CloudElement : public dataPlotElement
   std::string text;
 public:
   CloudElement(const DataSpec cds,
-	       const ptVertFieldf& field,
-	       const Layout& layout,
-	       XAxisInfo* xtime);
+      const ptVertFieldf& field,
+      const Layout& layout,
+      XAxisInfo* xtime);
   void plot();
   bool needsData() { return true; }
 };
-
 
 #endif

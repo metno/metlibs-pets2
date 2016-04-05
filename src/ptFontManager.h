@@ -82,9 +82,9 @@ public:
   std::string getFontName(int index);
 
   // choose font, size, face and colour
-  int setFont(const int index);
-  int setFontFace(const ptFontFace face);
-  int setFontSize(const ptFontSize size);
+  int setFont(int index);
+  int setFontFace(ptFontFace face);
+  int setFontSize(ptFontSize size);
   int setFontColor(const ptColor color);
   int setPrintMode(const ptPrintMode mode);
   void setGlSize(float width, float height);

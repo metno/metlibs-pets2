@@ -34,19 +34,17 @@
 #include "config.h"
 #endif
 
+#include "ptIntervalElement.h"
+#include "ptPlotElement.h"
 #include <puTools/miStringFunctions.h>
 #include <fstream>
-#include <ptPlotElement.h>
-#include <ptIntervalElement.h>
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace miutil;
 
 IntervalElement::IntervalElement(const std::vector<miTime> tline,
-				 const ptVertFieldf& field,
-				 const Layout& layout,
-				 XAxisInfo* xtime)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime)
   , label(layout.text)
   , timetext(layout.text2)

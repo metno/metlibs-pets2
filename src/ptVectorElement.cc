@@ -1,8 +1,6 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
   Copyright (C) 2006 met.no
 
   Contact information:
@@ -34,19 +32,19 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptVectorElement.h>
+#include "ptVectorElement.h"
+#include "ptPlotElement.h"
+
 #include <puTools/miStringFunctions.h>
+
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 using namespace miutil;
 
 VectorElement::VectorElement(const DataSpec cds,
-			     const ptVertFieldf& field,
-			     const Layout& layout,
-			     XAxisInfo* xtime)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : dataPlotElement(cds,layout,field,xtime)
   , boxColor(layout.color2)
   , deltaY(field.y2-startY)

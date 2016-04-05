@@ -176,7 +176,8 @@ void PlotElement::ellipse(const float& x, const float& y,
 bool PlotElement::startPSoutput(const std::string& fname,
     const bool incolour,
     const bool inlandscape,
-    const bool doEPS){
+    const bool doEPS)
+{
   if (printing) return false;
 
   int print_options = GLP_FIT_TO_PAGE | GLP_DRAW_BACKGROUND | GLP_AUTO_ORIENT;
@@ -185,7 +186,7 @@ bool PlotElement::startPSoutput(const std::string& fname,
     print_options = print_options | GLP_GREYSCALE;
   bool makeeps= doEPS;
 
-  if (fname.contains(".svg")){
+  if (miutil::contains(fname, ".svg")){
     psoutput = new SvgDocument(const_cast<char*>(fname.c_str()),
         print_options, feedsize,0);
   } else {
