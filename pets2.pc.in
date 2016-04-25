@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: pets2
 Description: The pets2 Library
 Version: @VERSION@
-Requires: puTools >= 5.0 , tsData >= 5.0 , glText >= 4.0.0
-Libs: -L${libdir} -lpets2  @PNG_LDFLAGS@ @PNG_LIBS@
-Cflags: -I${includedir} @PNG_CPPFLAGS@
+Requires: puTools >= 5.0.4, tsData >= 5.2.0, QtCore, QtGui
+Libs: -L${libdir} -lpets2
+Cflags: -I${includedir}

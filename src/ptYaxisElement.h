@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -28,13 +26,15 @@
 */
 
 
-#ifndef _yaxiselement_h
-#define _yaxiselement_h
+#ifndef PETS2_YAXISELEMENT_H
+#define PETS2_YAXISELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
 
-#define MAX_YAXIS_CHILDREN 32
+namespace pets2 {
+
+enum { MAX_YAXIS_CHILDREN=32 };
 
 class AxisChildElement;
 
@@ -53,7 +53,7 @@ protected:
   float labelH[MAX_YAXIS_CHILDREN+1]; // label heights
   float lineSt[MAX_YAXIS_CHILDREN+1]; // children linesample starts
   float zerox, tickX; // xvalue of axisline and end of tickmark
-  float charHeight, charWidth, charHeight_2;
+  float charHeight, charWidth;
   bool firstPlot;
   std::vector<float> minorticks;
   std::vector<float> majorticks;
@@ -91,17 +91,16 @@ protected:
 
   bool useMinMax;
 
-  void plotAxis();
-  void plotGrid();
-  void plotLabels();
+  void plotAxis(ptPainter& painter);
+  void plotGrid(ptPainter& painter);
+  void plotLabels(ptPainter& painter);
   virtual void calcPlotVal();
   virtual void calcDims();
-public:
-  yAxisElement(const ptVertFieldf& field,
-	       const Layout& layout,
-	       XAxisInfo* xtime);
 
-  virtual void plot();
+public:
+  yAxisElement(const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
+
+  virtual void plot(ptPainter& painter);
   virtual bool needsData() { return true; }
   virtual void setTimeInterval(const int start, const int stop);
   // called from yaxis childelements to report their presence..
@@ -109,11 +108,12 @@ public:
   bool callinn(AxisChildElement*, float&, float&);
   // returns deltaY(gl),minPlotY and plotRange(physical)
   void dataInfo(float&, float&, float&);
-  int Id(){return id; }
+  int Id()
+    { return id; }
   void setLabels(const std::vector<std::string>& labels)
-    {userLabels= labels; userlabels= true;}
+    { userLabels = labels; userlabels = true; }
   void resetLabels()
-    {userlabels= false;}
+    { userlabels = false; }
   bool hasUserLabels() const { return userlabels; }
   std::string userValueLabel(const float value);
 };
@@ -125,15 +125,14 @@ private:
   int numTickMinor;
   float labelSpace; // vertical space for labels
 protected:
-  void calcPlotVal();
-  void calcDims();
+  void calcPlotVal() /*override*/;
+  void calcDims() /*override*/;
 public:
   staticYaxisElement(const ptVertFieldf& field,
-		     const Layout& layout,
-		     XAxisInfo* xtime);
+      const Layout& layout, XAxisInfo* xtime);
   ~staticYaxisElement();
 
-  virtual void setTimeInterval(const int start, const int stop);
+  void setTimeInterval(const int start, const int stop) /*override*/;
 };
 
 
@@ -158,11 +157,8 @@ protected:
 
 
   bool _informYaxis()
-    {
-      if (Yaxis)
-	return Yaxis->callinn(this,minLegal,maxLegal);
-      else return false;
-    }
+    { if (Yaxis) return Yaxis->callinn(this,minLegal,maxLegal); else return false; }
+
   bool _legalValue(float val)
     { return (val >= minLegal && val <= maxLegal);}
   void _prePlot()
@@ -172,36 +168,38 @@ protected:
   float yval(const int& time, const int& comp)
     { return startY + deltaY*((dval(time,comp) - minPlotY)/plotRange);}
   bool crossPoint(const float x1, const float y1,
-		  const float x2, const float y2,
-		  float& cx, float& cy);
+      const float x2, const float y2, float& cx, float& cy);
+
   bool dataCrossPoint(const float x1, const float y1,
-		      const float x2, const float y2,
-		      const float d,
-		      float& cx, float& cy);
+      const float x2, const float y2,
+      const float d,
+      float& cx, float& cy);
+
 public:
-  AxisChildElement(yAxisElement* ya,
-		   const DataSpec cds,
-		   const ptVertFieldf& field,
-		   const Layout& layout,
-		   XAxisInfo* xtime);
+  AxisChildElement(yAxisElement* ya, const DataSpec cds,
+      const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
   ~AxisChildElement();
-  virtual void plot() = 0;
-  virtual bool needsData() { return true; }
-  virtual void dataInfo(float &min, float &max)
-  {
-    min   = datamin();
-    max   = datamax();
-  }
+  bool needsData() /*override*/
+    { return true; }
+  void dataInfo(float &min, float &max) /*override*/
+    { min = datamin(); max = datamax(); }
+
   void plotInterval(float& pmin, float& pmax) const
-  { pmin= startY; pmax= pmin+deltaY; }
-  std::string& labelName()
-  { return axisText; }
-  ptColor& Color()
-  { return color; }
-  ptLineStyle& lStyle()
-  { return style; }
+    { pmin= startY; pmax= pmin+deltaY; }
+
+  const std::string& labelName()
+    { return axisText; }
+
+  const ptColor& Color()
+    { return color; }
+
+  const ptLineStyle& lStyle()
+    { return style; }
+
   void setMinMax(float min, float max)
-  {minLegal= min; maxLegal= max; }
+    { minLegal= min; maxLegal= max; }
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_YAXISELEMENT_H

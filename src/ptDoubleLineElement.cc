@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2013 met.no
+  Copyright (C) 2013-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -32,22 +32,21 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptDoubleLineElement.h>
-#include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#include "ptDoubleLineElement.h"
 
-using namespace miutil;
+#include <QPolygonF>
+
+#include <cmath>
+#include <cfloat>
+
 using namespace std;
 
-DoubleLineElement::DoubleLineElement(yAxisElement* ya,
-				     const DataSpec cds,
-				     const ptVertFieldf& field,
-				     const Layout& layout, XAxisInfo* xtime)
-  :AxisChildElement(ya,cds,field,layout,xtime),
-   fillColor(layout.color2)
+namespace pets2 {
+
+DoubleLineElement::DoubleLineElement(yAxisElement* ya, const DataSpec cds,
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+  : AxisChildElement(ya,cds,field,layout,xtime)
+  , fillColor(layout.color2)
 {
 #ifdef DEBUG
   cout << "Inside DoubleLineElement's constructor" << endl;
@@ -67,25 +66,16 @@ void DoubleLineElement::dataInfo(float &min, float &max)
   if (ma>max) max= ma;
 }
 
-void DoubleLineElement::plot()
+void DoubleLineElement::plot(ptPainter& painter)
 {
   if(enabled && Yaxis && visible) {
 #ifdef DEBUG
-    cout << "DoubleLineElement::plot()" << endl;
+    cout << "DoubleLineElement::plot(ptPainter& painter)" << endl;
 #endif
     _prePlot();
-    _setColor(color);
+    painter.setLine(color, lineWidth, style);
 
     // plot curve
-    bool fakestipple=false;
-    if ((!useColour) || pInColour){
-      if (!useFakeStipple) {
-	glEnable(GL_LINE_STIPPLE);
-	glLineStipple(LineStyle[style][0],LineStyle[style][1]);
-      } else fakestipple=true;
-    }
-    glLineWidth(lineWidth);
-    glPointSize(lineWidth);
 
     // find x-startcoordinate for line-label
     float labelx, labely1, labely2;
@@ -97,111 +87,61 @@ void DoubleLineElement::plot()
     j = datastart();
     for (i=startT; i<=stopT; i++) {
       if (valid(i)) {
-	// find correct position for line-label
-	if (labelOnLine)
-	  if (i>=labelx) {
-	    labelx = xval(i);
-	    labely1 = yval(j,0)*1.04;
-	    labely2 = yval(j,1)*1.04;
-	  }
+        // find correct position for line-label
+        if (labelOnLine)
+          if (i>=labelx) {
+            labelx = xval(i);
+            labely1 = yval(j,0)*1.04;
+            labely2 = yval(j,1)*1.04;
+          }
 
-	Xval.push_back(xval(i));
-	Y1val.push_back(yval(j,0));
-	Y2val.push_back(yval(j,1));
-	j++;
+        Xval.push_back(xval(i));
+        Y1val.push_back(yval(j,0));
+        Y2val.push_back(yval(j,1));
+        j++;
       }
     }
 
     // fill the area between the two lines
-    _setColor(fillColor);
-    glBegin(GL_TRIANGLE_STRIP);
-    for (i=0; i<Xval.size();i++){
-      glVertex2f(Xval[i],Y2val[i]);
-      glVertex2f(Xval[i],Y1val[i]);
+    painter.setFill(fillColor);
+    QPolygonF between, line1, line2;
+    for (i=0; i<Xval.size();i++) {
+      QPointF p1(Xval[i], Y1val[i]);
+      between << p1;
+      line1 << p1;
     }
-    _glEnd();
-    _updatePrinting();
-
-    _setColor(color);
-
-    // the first line..
-    bool firstsegment;
-
-    if (fakestipple)
-      glBegin(GL_POINTS);
-    else
-      glBegin(GL_LINE_STRIP);
-
-    firstsegment = true;
-    for (i=0; i<Xval.size();i++){
-      if (fakestipple){
-	if (i>0){
-	  lineSegment(Xval[i-1],Y1val[i-1],Xval[i],Y1val[i],
-		      LineStyle[style][0],
-		      LineStyle[style][1],
-		      firstsegment);
-	  firstsegment=false;
-	}
-      } else {
-	glVertex2f(Xval[i],Y1val[i]);
-      }
+    for (int i=Xval.size()-1; i>=0; --i) {
+      QPointF p2(Xval[i], Y2val[i]);
+      between << p2;
+      line2 << p2;
     }
-    _glEnd();
-    _updatePrinting();
-
-    // ..then the second line
-    if (fakestipple)
-      _glBegin(GL_POINTS,1000);
-    else
-      _glBegin(GL_LINE_STRIP,Xval.size()+1);
-
-    firstsegment = true;
-    for (i=0; i<Xval.size();i++){
-      if (fakestipple){
-	if (i>0){
-	  lineSegment(Xval[i-1],Y2val[i-1],Xval[i],Y2val[i],
-		      LineStyle[style][0],
-		      LineStyle[style][1],
-		      firstsegment);
-	  firstsegment=false;
-	}
-      } else {
-	glVertex2f(Xval[i],Y2val[i]);
-      }
-    }
-    _glEnd();
-    _updatePrinting();
-
-    glDisable(GL_LINE_STIPPLE);
-
+    painter.drawPolygon(between);
+    painter.drawPolyline(line1);
+    painter.drawPolyline(line2);
 
     if (labelOnLine){
-      _prepFont();
-      _setColor(ptColor("WHITE"));
+      painter.setFontSize(fontSize);
       float bx1, bx2, by1, by2;
-      float th, tw, mw;
-      _getStringSize(labelText, tw, th);
-      _getMaxCharSize(mw, th);
-      float marg= th*0.15;
+
+      const QString qtext = QString::fromStdString(labelText);
+      const QSizeF bbx = painter.getTextSize(qtext);
+
+      float marg= bbx.height()*0.15;
       float labely= (labely1>labely2)?labely1:labely2;
       bx1= labelx - marg;
-      bx2= bx1 + 2*marg + tw;
-      by1= labely - marg - th*0.3;
-      by2= by1 + th + 2*marg;
-      _glBegin(GL_POLYGON, 4);
-      glVertex2f(bx1,by1);
-      glVertex2f(bx2,by1);
-      glVertex2f(bx2,by2);
-      glVertex2f(bx1,by2);
-      _glEnd();
-      _updatePrinting();
+      bx2= bx1 + 2*marg + bbx.width();
+      by1= labely - marg - bbx.height()*0.3;
+      by2= by1 + bbx.height() + 2*marg;
+      painter.setFill(ptColor("WHITE"));
+      painter.drawRect(bx1, by1, bx2, by2);
 
-      _setColor(color);
-      _printString(labelText,labelx,labely);
-      _updatePrinting();
+      painter.setLine(color, 1);
+      painter.drawText(QPointF(labelx,labely), qtext);
     }
 #ifdef DEBUG
-    cout << "DoubleLineElement::plot() finished" << endl;
+    cout << "DoubleLineElement::plot(ptPainter& painter) finished" << endl;
 #endif
   }
 }
+
+} // namespace pets2

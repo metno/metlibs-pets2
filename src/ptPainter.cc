@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
-  
-  $Id$
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -11,7 +9,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,35 +19,47 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include "ptPainter.h"
 
-#ifndef parameter_relation_h
-#define parameter_relation_h
+namespace pets2 {
 
-#include "ptGlobals.h"
-#include <vector>
+ptPainter::ptPainter(ptCanvas* canvas)
+  : mCanvas(canvas)
+{
+}
 
+void ptPainter::setLine(const ptColor& color, int width, pets2::ptLineStyle style)
+{
+  setColor(color);
+  setLineWidth(width);
+  setLineStyle(style);
+}
 
-class ParRel {
-private:
-protected:
+void ptPainter::setFill(const ptColor& color, pets2::ptFillStyle style)
+{
+  setColor(color);
+  setFillStyle(style);
+}
 
+void ptPainter::drawText(const QString& text, float x, float y)
+{
+  drawText(QPointF(x, y), text);
+}
 
-public:
-  ParRel(){}
-  ~ParRel(){}
+void ptPainter::drawText(const std::string& text, float x, float y)
+{
+  drawText(QString::fromStdString(text), x, y);
+}
 
-  const float& Data(const int i, const int comp) const
-    {
-      //return wp[0]->Data(i,comp);
-    }
+void ptPainter::drawText(const char* text, float x, float y)
+{
+  drawText(QString::fromLatin1(text), x, y);
+}
 
-};
-
-
-#endif
+} // namespace pets2

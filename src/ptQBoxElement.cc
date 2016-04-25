@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,18 +32,17 @@
 #include "config.h"
 #endif
 
-#include <ptQBoxElement.h>
-#include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#include "ptQBoxElement.h"
 
-using namespace miutil;
+#include <QPolygonF>
 
-QBoxElement::QBoxElement(yAxisElement* ya,
-			 const DataSpec cds,
-			 const ptVertFieldf& field,
-			 const Layout& layout, XAxisInfo* xtime)
+#include <cmath>
+#include <cfloat>
+
+namespace pets2 {
+
+QBoxElement::QBoxElement(yAxisElement* ya, const DataSpec cds,
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : AxisChildElement(ya,cds,field,layout,xtime)
   , lineWidth(layout.lineWidth)
   , hstart(layout.histStart), hstop(layout.histStop)
@@ -76,26 +73,22 @@ void QBoxElement::dataInfo(float &min, float &max)
   max= ma;
 }
 
-void QBoxElement::plot()
+void QBoxElement::plot(ptPainter& painter)
 {
   if(enabled && Yaxis) {
 #ifdef DEBUG
-    cout << "QBoxElement::plot()" << endl;
+    cout << "QBoxElement::plot(ptPainter& painter)" << endl;
 #endif
 
     _prePlot();
 
-    glLineStipple(LineStyle[linestyle][0],LineStyle[linestyle][1]);
-    glLineWidth(lineWidth);
-
-    if (boxfill != NONE) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      if (boxfill != SOLID){
-	glEnable(GL_POLYGON_STIPPLE);
-	glPolygonStipple(fillPattern(boxfill));
-      }
-    } else
-      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (boxfill != pets2::NONE) {
+      painter.setFill(boxcolor, boxfill);
+      painter.setLineStyle(pets2::NOLINE);
+    } else {
+      painter.setLine(linecolor, lineWidth, linestyle);
+      painter.setFillStyle(pets2::NONE);
+    }
 
     float prevx = xtime->x1; //xval(startT);
     float newx;
@@ -103,72 +96,59 @@ void QBoxElement::plot()
 
     for (i=startT; i<=stopT; i++) {
       if (valid(i)) {
-	newx= xval(i);
-	float del= (newx-prevx)/10.0;
-	float x1 = prevx+hstart*del;
-	float x2 = prevx+hstop*del;
-	float xm = (x1 + x2)/2.0;
-	float tx1= xm- (xm-x1)*tickLen;
-	float tx2= xm+ (x2-xm)*tickLen;
+        newx= xval(i);
+        float del= (newx-prevx)/10.0;
+        float x1 = prevx+hstart*del;
+        float x2 = prevx+hstop*del;
+        float xm = (x1 + x2)/2.0;
+        float tx1= xm- (xm-x1)*tickLen;
+        float tx2= xm+ (x2-xm)*tickLen;
 
-	float y0 = yval(j,0);
-	float y1 = yval(j,1);
-	float y2 = yval(j,2);
-	float y3 = yval(j,3);
-	float y4 = yval(j,4);
+        float y0 = yval(j,0);
+        float y1 = yval(j,1);
+        float y2 = yval(j,2);
+        float y3 = yval(j,3);
+        float y4 = yval(j,4);
 
-	_setColor(linecolor);
-	// draw vertical lines
-	glEnable(GL_LINE_STIPPLE);
-	glBegin(GL_LINES);
-	glVertex2f(xm,y0);
-	glVertex2f(xm,y1);
-	glVertex2f(xm,y3);
-	glVertex2f(xm,y4);
-	glEnd();
-	_updatePrinting();
-	glDisable(GL_LINE_STIPPLE);
-	// draw horisontal lines
-	glBegin(GL_LINES);
-	glVertex2f(tx1,y0);
-	glVertex2f(tx2,y0);
-	glVertex2f(tx1,y4);
-	glVertex2f(tx2,y4);
-	glEnd();
-	_updatePrinting();
-	// draw box
-	_setColor(boxcolor);
-	glRectf(x1,y1,x2,y3);
-	_updatePrinting();
-	// draw box frame
-	_setColor(linecolor);
-	glBegin(GL_LINE_STRIP);
-	glVertex2f(x1,y1);
-	glVertex2f(x1,y3);
-	glVertex2f(x2,y3);
-	glVertex2f(x2,y1);
-	glVertex2f(x1,y1);
-	glEnd();
-	_updatePrinting();
-	// draw 50-line
-	_setColor(linecolor);
-	glBegin(GL_LINES);
-	glVertex2f(x1,y2);
-	glVertex2f(x2,y2);
-	glEnd();
-	_updatePrinting();
+        // draw vertical lines
+        painter.setLine(linecolor, lineWidth, linestyle);
+        painter.drawLine(xm, y0, xm, y1);
+        painter.drawLine(xm, y3, xm, y4);
 
-	prevx= newx;
-	j++;
+        // draw horisontal lines
+        painter.drawLine(tx1,y0,tx2,y0);
+        painter.drawLine(tx1,y4,tx2,y4);
+
+        // draw box
+        painter.setFill(boxcolor, boxfill);
+        painter.setLineStyle(pets2::NOLINE);
+        painter.drawRect(x1, y1, x2, y3);
+
+        // draw box frame
+        painter.setLine(linecolor, lineWidth, linestyle);
+        QPolygonF line;
+        line << QPointF(x1,y1)
+             << QPointF(x1,y3)
+             << QPointF(x2,y3)
+             << QPointF(x2,y1)
+             << QPointF(x1,y1);
+        painter.drawPolyline(line);
+
+        // draw 50-line
+        line.clear();
+        line << QPointF(x1,y2)
+             << QPointF(x2,y2);
+        painter.drawPolyline(line);
+
+        prevx= newx;
+        j++;
       }
     }
-    _updatePrinting();
-    glDisable(GL_LINE_STIPPLE);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDisable(GL_POLYGON_STIPPLE);
 
 #ifdef DEBUG
-    cout << "QBoxElement::plot() finished" << endl;
+    cout << "QBoxElement::plot(ptPainter& painter) finished" << endl;
 #endif
   }
 }
+
+} // namespace pets2

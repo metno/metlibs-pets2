@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -26,11 +26,13 @@
 */
 
 
-#ifndef _utcelement_h
-#define _utcelement_h
+#ifndef PETS2_UTCELEMENT_H
+#define PETS2_UTCELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
+
+namespace pets2 {
 
 class UTCElement : public PlotElement
 {
@@ -39,15 +41,17 @@ class UTCElement : public PlotElement
   bool label;
   std::string text;
   std::vector<int> modhours;
-  float plottime(const miutil::miTime& t, const int i,
-      bool minute, const float cwid);
+  float plottime(ptPainter& painter, const miutil::miTime& t, int i, bool minute, float cwid);
+
 public:
-  UTCElement(const std::vector<miutil::miTime> tline,
+  UTCElement(const std::vector<miutil::miTime>& tline,
       const ptVertFieldf& field,
       const Layout& layout,
       XAxisInfo* xtime=0);
 
-  void plot();
+  void plot(ptPainter& painter);
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_UTCELEMENT_H

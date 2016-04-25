@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -38,6 +36,8 @@
 
 using namespace miutil;
 
+namespace pets2 {
+
 SymbolElement::SymbolElement(const DataSpec cds, const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime) :
   dataPlotElement(cds, layout, field, xtime), minidx(0), maxidx(0),
@@ -51,12 +51,10 @@ SymbolElement::SymbolElement(const DataSpec cds, const ptVertFieldf& field,
 
 void SymbolElement::setImages(const int min, const std::vector<std::string>& files)
 {
-  int i;
   minidx = min;
   maxidx = min + files.size() - 1;
   maxwidth = maxheight = 0;
-  int n = files.size();
-  for (i = 0; i < n && i < MAXIMAGES; i++) {
+  for (int i = 0; i < files.size() && i < MAXIMAGES; i++) {
     images[i].setimage(files[i]);
     if (images[i].Width() > maxwidth)
       maxwidth = images[i].Width();
@@ -65,56 +63,49 @@ void SymbolElement::setImages(const int min, const std::vector<std::string>& fil
   }
 }
 
-void SymbolElement::plot()
+void SymbolElement::plot(ptPainter& painter)
 {
   if (enabled && visible) {
 #ifdef DEBUG
-    cout << "SymbolElement::plot()" <<endl;
+    cout << "SymbolElement::plot(ptPainter& painter)" <<endl;
 #endif
 
-    int i, j;
     // find minimum delta T for calculation of image width
-    float testx, minx = 10000;
+    float minx = 10000;
     int k = startT;
-    for (i = startT + 1; i <= stopT; i++) {
+    for (int i = startT + 1; i <= stopT; i++) {
       if (valid(i)){
         if (valid(k)) {
-          testx = xtime->xcoord[i] - xtime->xcoord[k];
+          float testx = xtime->xcoord[i] - xtime->xcoord[k];
           if (testx < minx)
             minx = testx;
         }
         k = i;
       }
     }
-    float scalex = 1, scaley = 1, scale;
-    if (scalewidth && maxwidth * pixWidth > minx)
-      scalex = minx / (pixWidth * maxwidth);
-    if (maxheight * pixHeight > (stopY - startY))
-      scaley = (stopY - startY) / (pixHeight * maxheight);
-    scale = (scalex < scaley) ? scalex : scaley;
+    float scalex = 1, scaley = 1;
+    if (scalewidth && maxwidth * painter.pixWidth() > minx)
+      scalex = minx / (painter.pixWidth() * maxwidth);
+    if (maxheight * painter.pixHeight() > (stopY - startY))
+      scaley = (stopY - startY) / (painter.pixHeight() * maxheight);
+    const float scale = std::min(scalex, scaley);
 
-    j = datastart();
+    int j = datastart();
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-
-    float halfw;
-    int index;
-    for (i = startT; i <= stopT; i++) {
+    for (int i = startT; i <= stopT; i++) {
       if (valid(i)) {
         if (dval(j) >= minidx && dval(j) <= maxidx) {
-          index = int(dval(j)) - minidx;
+          int index = int(dval(j)) - minidx;
           if (index < 0 || index >= MAXIMAGES) {
             continue;
           }
-          halfw = images[index].Width() * pixWidth * scale / 2.0;
-          images[index].plot(xtime->xcoord[i] - halfw, startY, scale, pixWidth,
-              pixHeight, psoutput, true);
-          _updatePrinting();
+          float halfw = images[index].Width() * painter.pixWidth() * scale / 2.0;
+          images[index].plot(painter, xtime->xcoord[i] - halfw, startY, scale);
         }
         j++;
       }
     }
-    glDisable(GL_BLEND);
   }
 }
+
+} // namespace pets2

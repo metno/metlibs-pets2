@@ -2,7 +2,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- Copyright (C) 2013 met.no
+ Copyright (C) 2013-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -28,8 +28,8 @@
 
 // ptDiagram.h : Declarations for the ptDiagram class
 
-#ifndef _diagram_h
-#define _diagram_h
+#ifndef PETS2_DIAGRAM_H
+#define PETS2_DIAGRAM_H
 
 #include "ptGlobals.h"
 #include <tsData/ptWeatherParameter.h>
@@ -44,6 +44,8 @@
 #include <vector>
 #include <map>
 
+namespace pets2 {
+
 class ptDiagram {
 private:
   XAxisInfo xtime; // x-coordinates for the timepoints
@@ -53,9 +55,6 @@ private:
   PlotElement *first, *last;// pointers to plotelement list
   ptDiagramData *DD; // diagramdata
   ptStyle *Style; // current style
-  float glwidth, glheight; // current GL width and height
-  int scwidth, scheight; // current screen width and height (in pixels)
-  float pixWidth, pixHeight;// current width and height of screenpixel
   miutil::miTime startT, stopT; // current timeinterval
   int startidx, stopidx; // current timeinterval xaxis-indices
   bool colourFlag; // diagram in colour or black/white
@@ -73,9 +72,9 @@ public:
   // attach a diagramdata to diagram
   bool attachData(ptDiagramData*);
   // make plotelements based on style and DD
-  bool makeDefaultPlotElements(ptColor *bgColor);
+  bool makeDefaultPlotElements();
   // set current viewport both in screen pixels and in GL coordinates
-  void setViewport(int sw, int sh, float gw, float gh);
+  void setViewport(ptCanvas* canvas);
 
   // turn on scaling of Yaxis based on data from all timepoints
   void setAllTimesAxisScale(bool b);
@@ -104,7 +103,7 @@ public:
   void disableElement(ptPrimitiveType);
   void disableAll();
   void enableAll();
-  void plot();
+  void plot(ptPainter& painter);
   void tst_print();
 
   void toggleColour(bool use);
@@ -124,4 +123,6 @@ public:
   void clearKeywords();
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_DIAGRAM_H

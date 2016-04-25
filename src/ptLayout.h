@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -29,8 +27,8 @@
 
 // ptLayout.h: definition of Layout struct
 
-#ifndef _layout_h
-#define _layout_h
+#ifndef PETS2_LAYOUT_H
+#define PETS2_LAYOUT_H
 
 #include "ptGlobals.h"
 #include <tsData/ptParameterDefinition.h>
@@ -41,6 +39,8 @@
 
 #include <string>
 #include <vector>
+
+namespace pets2 {
 
 enum ptAxis {
   LEFTLEFT, RIGHTRIGHT, LEFTRIGHT, RIGHTLEFT, NO_AXIS
@@ -199,4 +199,6 @@ extern std::string FloatList2Str(const std::vector<float>&);
 extern std::string IntList2Str(const std::vector<int>&);
 extern std::string DateStyle2Str(ptDateStyle);
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_LAYOUT_H

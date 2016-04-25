@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2013 met.no
+  Copyright (C) 2013-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,17 +34,21 @@
 
 #include "ptDateElement.h"
 
-#include "ptPlotElement.h"
 #include <puTools/miStringFunctions.h>
 
-#include <iostream>
-#include <cstdio>
 #include <list>
 
-using namespace miutil;
-using namespace std;
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
 
-DateElement::DateElement(const vector<miTime> tline,
+using namespace std;
+using namespace miutil;
+
+namespace pets2 {
+
+DateElement::DateElement(const std::vector<miTime>& tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
 
   : PlotElement(layout, field, xtime)
@@ -99,7 +103,7 @@ std::string DateElement::dataAsString(const miDate& date)
   return txt;
 }
 
-void DateElement::plot()
+void DateElement::plot(ptPainter& painter)
 {
   std::string txt;
   miDate curDate = timeLine[startT].date();
@@ -108,10 +112,10 @@ void DateElement::plot()
 
   if (enabled && visible) {
 #ifdef DEBUG
-    cout << "DateElement::plot()" << endl;
+    cout << "DateElement::plot(ptPainter& painter)" << endl;
 #endif
-    _prepFont();
-    _setColor(color);
+    painter.setFontSize(fontSize);
+    painter.setLine(color);
 
     // print label on left margin
     prevf= 0;
@@ -119,10 +123,11 @@ void DateElement::plot()
       txt= labeltext;
       if (labeltext=="$YEAR")
         txt = miutil::from_number(curDate.year());
-      _printString(txt,20,startY);
-      _updatePrinting();
-      _getStringSize(txt,offset,th);
-      prevf= 20+offset;
+
+      const QString qtext = QString::fromStdString(txt);
+      const float tw = painter.getTextWidth(qtext);
+      painter.drawText(qtext, 20, startY);
+      prevf= 20 + tw;
     }
 
     // print date for each new day/week/month/year
@@ -164,29 +169,31 @@ void DateElement::plot()
       }
 
       if (active){
-	// print previous day/week/month/year
-	float sx;
-	if (li12.size() > 0){
-	  int i12= *(li12.begin());
-	  li12.pop_front();
-	  sx= xtime->xcoord[i12] - offset;
-	} else {
-	  stopx= xtime->xcoord[i];
-	  sx= (stopx+startx)/2.0 - offset;
-	}
-	// print if room
-	if (sx >= prevf){
-	  _printString(txt,sx,startY);
-	  _updatePrinting();
-	  prevf= sx+2*offset;
-	}
+        // print previous day/week/month/year
+        float sx;
+        if (li12.size() > 0){
+          int i12= *(li12.begin());
+          li12.pop_front();
+          sx= xtime->xcoord[i12] - offset;
+        } else {
+          stopx= xtime->xcoord[i];
+          sx= (stopx+startx)/2.0 - offset;
+        }
+        // print if room
+        if (sx >= prevf){
+          painter.drawText(txt, sx, startY);
+          prevf= sx+2*offset;
+        }
       }
 
       curDate = timeLine[i].date();
       txt= dataAsString(curDate);
-      _getStringSize(txt,offset,th);
+
+      const QString qtext = QString::fromStdString(txt);
+      const float tw = painter.getTextWidth(qtext);
+
       startx= xtime->xcoord[i];
-      offset = offset/2.0;
+      offset = tw / 2;
       active=true;
     }
 
@@ -195,18 +202,18 @@ void DateElement::plot()
       // print previous day...
       float sx;
       if (li12.size() > 0){
-	int i12= *(li12.begin());
-	sx= xtime->xcoord[i12] - offset;
+        int i12= *(li12.begin());
+        sx= xtime->xcoord[i12] - offset;
       } else {
-	stopx= xtime->xcoord[stopT];
-	sx= (stopx+startx)/2.0 - offset;
+        stopx= xtime->xcoord[stopT];
+        sx= (stopx+startx)/2.0 - offset;
       }
       // print if room
       if (sx >= prevf){
-	_printString(txt,sx,startY);
-	_updatePrinting();
+        painter.drawText(txt, sx, startY);
       }
     }
-
   }
 }
+
+} // namespace pets2

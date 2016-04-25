@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,12 +25,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#ifndef PETS2_PTCOLOR_H
+#define PETS2_PTCOLOR_H
 
-#ifndef _ptColor_h
-#define _ptColor_h
-
+#include <iosfwd>
 #include <string>
 #include <vector>
+
+namespace pets2 {
 
 class ptColor {
 public:
@@ -45,20 +45,21 @@ public:
 
   void fromStr(const std::string&);
 
-  std::string     Color2Str() const;
+  std::string Color2Str() const;
 
   static std::vector<ptColor> Str2Colorlist(const std::string&);
   static std::string Colorlist2Str(const std::vector<ptColor>&);
 
-
   bool operator==(const ptColor &rhs) const
-  { return (name == rhs.name); }
-  bool operator!=(const ptColor &rhs) const
-  { return (name != rhs.name); }
-  friend std::ostream& operator<<(std::ostream& out, const ptColor& rhs)
-  { return out << rhs.name ;   }
+    { return (name == rhs.name); }
 
+  bool operator!=(const ptColor &rhs) const
+    { return !(*this == rhs); }
+
+  friend std::ostream& operator<<(std::ostream& out, const ptColor& rhs)
+    { return out << rhs.name; }
 };
 
+} // namespace pets2
 
-#endif
+#endif // PETS2_PTCOLOR_H

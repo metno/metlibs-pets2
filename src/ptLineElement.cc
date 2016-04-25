@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,14 +32,21 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptLineElement.h>
-#include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#include "ptLineElement.h"
 
-using namespace miutil;
+#include <QPolygonF>
+
+#include <cmath>
+#include <cfloat>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif // DEBUG
+
+namespace pets2 {
 
 LineElement::LineElement(yAxisElement* ya,
     const DataSpec cds,
@@ -103,11 +108,11 @@ void LineElement::dataInfo(float &min, float &max)
 
 
 
-void LineElement::plot()
+void LineElement::plot(ptPainter& painter)
 {
   if(enabled && Yaxis && visible) {
 #ifdef DEBUG
-    cout << "LineElement::plot()" << endl;
+    cout << "LineElement::plot(ptPainter& painter)" << endl;
 #endif
     // vertex points (legal datapoints)
     std::vector<float> vertexx, vertexy;
@@ -115,21 +120,14 @@ void LineElement::plot()
     std::vector<int>   vertexi;
 
     // marker types
-    float mSizeX = markersize*pixWidth;
-    float mSizeY = markersize*pixHeight;
+    float mSizeX = markersize * painter.pixWidth();
+    float mSizeY = markersize * painter.pixHeight();
     bool noc = (lineWidth < 0);
 
     _prePlot();
-    _setColor(color);
+    painter.setLine(color, lineWidth, style);
 
     // plot curve
-    if ( !useColour || pInColour ){
-      glEnable(GL_LINE_STIPPLE);
-      glLineStipple(LineStyle[style][0],LineStyle[style][1]);
-    }
-    glLineWidth(lineWidth);
-    //     glPointSize(lineWidth);
-
     float prevx=-2000,prevy,newx,newy;
     int previ1=-2000;
 
@@ -201,11 +199,14 @@ void LineElement::plot()
               prevy= newy;
             }
             float d2;
-            if (align == LEFT) d2= prevx;
-            else if (align == RIGHT) d2= newx;
-            else d2= (prevx+newx)/2.0;
-            if (!noc){
-              if ( colorbyvalue ) {
+            if (align == LEFT)
+              d2= prevx;
+            else if (align == RIGHT)
+              d2= newx;
+            else
+              d2= (prevx+newx)/2.0;
+            if (!noc) {
+              if (colorbyvalue) {
                 int i1 = dataLimitIndex(dval(j));
                 if ( previ1 > -1000 ){
                   if ( i1 == previ1 ){
@@ -435,134 +436,105 @@ void LineElement::plot()
     int currentPoint=0;
 
     // plot line segments
-    //glBegin(GL_LINES);
-    for ( int i=0; i<npos; i+=2 ){
+    for (int i=0; i<npos; i+=2) {
       // for multilines - stop drawing at the end of everly line restart at start
-      if(currentPoint==numOfPoints) {
-      currentPoint=0;
-      glEnd();
-      }
-      if(!currentPoint)
-        glBegin(GL_LINES);
-      currentPoint++;
       // end multilines
 
-      if ( colorbyvalue ) _setColor( colorfromindex(ploti[i]) );
-      if ( keepinaxis ){
-        if ( ( ploty[i] > stopY && ploty[i+1] > stopY ) ||
-            ( ploty[i] < startY && ploty[i+1] < startY ) ){ // both outside
+      if (colorbyvalue)
+        painter.setColor(colorfromindex(ploti[i]));
+
+      if (keepinaxis) {
+        if ((ploty[i] > stopY && ploty[i+1] > stopY) ||
+            (ploty[i] < startY && ploty[i+1] < startY)) { // both outside
           continue;
-        } else if ( ploty[i] > stopY   ||
-            ploty[i+1] > stopY ||
-            ploty[i] < startY  ||
-            ploty[i+1] < startY ){ // one outside
+        } else if (ploty[i] > stopY
+            || ploty[i+1] > stopY
+            || ploty[i] < startY
+            || ploty[i+1] < startY)
+        { // one outside
           // find crossing
-          if ( crossPoint(plotx[i],ploty[i],plotx[i+1],ploty[i+1],cx,cy) ){
-            if ( ploty[i] < startY ||  ploty[i] > stopY ){ // first bad
-              glVertex2f(cx,cy);
-              glVertex2f(plotx[i+1],ploty[i+1]);
-            } else if ( ploty[i+1] < startY || ploty[i+1] > stopY ){ // second bad
-              glVertex2f(plotx[i],ploty[i]);
-              glVertex2f(cx,cy);
+          if (crossPoint(plotx[i],ploty[i],plotx[i+1],ploty[i+1],cx,cy)) {
+            if (ploty[i] < startY ||  ploty[i] > stopY) { // first bad
+              painter.drawLine(cx, cy, plotx[i+1], ploty[i+1]);
+            } else if (ploty[i+1] < startY || ploty[i+1] > stopY) { // second bad
+              painter.drawLine(plotx[i], ploty[i], cx, cy);
             }
           }
-
         } else { // all inside
-          glVertex2f(plotx[i],ploty[i]);
-          glVertex2f(plotx[i+1],ploty[i+1]);
+          painter.drawLine(plotx[i], ploty[i], plotx[i+1], ploty[i+1]);
         }
       } else { // no keepinaxis checking
-        glVertex2f(plotx[i],ploty[i]);
-        glVertex2f(plotx[i+1],ploty[i+1]);
+        painter.drawLine(plotx[i], ploty[i], plotx[i+1], ploty[i+1]);
       }
-
-
     }
-    glEnd(); // GL_LINES
-
-    _updatePrinting();
-    glDisable(GL_LINE_STIPPLE);
 
     // draw a marker at each point
-    if ( marker != NO_MARKER ){
+    if (marker != NO_MARKER) {
       int n=vertexx.size();
-      _setColor(markercolor);
-
-      if (markerfill != NONE) {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        if (markerfill != SOLID){
-          glEnable(GL_POLYGON_STIPPLE);
-          glPolygonStipple(fillPattern(markerfill));
-        }
-      } else
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      painter.setColor(markercolor);
+      painter.setFillStyle(markerfill);
 
       switch (marker) {
       case NO_MARKER :
         break;
       case M_RECTANGLE :
-        for (i=0; i<n; i++){
-          glRectf(vertexx[i]-mSizeX,vertexy[i]-mSizeY,
-              vertexx[i]+mSizeX,vertexy[i]+mSizeY);
-          _updatePrinting();
+        for (int i=0; i<n; i++) {
+          painter.drawRect(vertexx[i]-mSizeX, vertexy[i]-mSizeY, vertexx[i]+mSizeX, vertexy[i]+mSizeY);
         }
         break;
-      case M_TRIANGLE :
+      case M_TRIANGLE : {
         mSizeX*= 1.2;
         mSizeY*= 1.2*0.866;
-        _glBegin(GL_TRIANGLES,3*n);
-        for (i=0; i<n; i++){
-          glVertex2f(vertexx[i]-mSizeX,vertexy[i]+mSizeY);
-          glVertex2f(vertexx[i]+mSizeX,vertexy[i]+mSizeY);
-          glVertex2f(vertexx[i],vertexy[i]-mSizeY);
+        QPolygonF triangle;
+        triangle << QPointF(-mSizeX, +mSizeY)
+                 << QPointF(+mSizeX, +mSizeY)
+                 << QPointF(0, -mSizeY);
+        for (int i=0; i<n; i++) {
+          painter.save();
+          painter.translate(vertexx[i], vertexy[i]);
+          painter.drawPolygon(triangle);
+          painter.restore();
         }
-        _glEnd();
-        break;
-      case M_DIAMOND :
+        break; }
+      case M_DIAMOND : {
         mSizeX*= 1.2;
         mSizeY*= 1.2;
-        for (i=0; i<n; i++){
-          _glBegin(GL_POLYGON,4);
-          glVertex2f(vertexx[i]-mSizeX,vertexy[i]);
-          glVertex2f(vertexx[i],vertexy[i]+mSizeY);
-          glVertex2f(vertexx[i]+mSizeX,vertexy[i]);
-          glVertex2f(vertexx[i],vertexy[i]-mSizeY);
-          _glEnd();
+        QPolygonF diamond;
+        diamond << QPointF(-mSizeX, 0)
+                << QPointF(0, +mSizeY)
+                << QPointF(+mSizeX, 0)
+                << QPointF(0, -mSizeY);
+        for (int i=0; i<n; i++) {
+          painter.save();
+          painter.translate(vertexx[i], vertexy[i]);
+          painter.drawPolygon(diamond);
+          painter.restore();
         }
-        break;
-      case M_STAR :
-        _glBegin(GL_LINES,8*n);
-        for (i=0; i<n; i++){
-          glVertex2f(vertexx[i]-mSizeX,vertexy[i]);
-          glVertex2f(vertexx[i]+mSizeX,vertexy[i]);
-
-          glVertex2f(vertexx[i],vertexy[i]-mSizeY);
-          glVertex2f(vertexx[i],vertexy[i]+mSizeY);
-
-          glVertex2f(vertexx[i]-mSizeX*0.75,vertexy[i]-mSizeY*0.75);
-          glVertex2f(vertexx[i]+mSizeX*0.75,vertexy[i]+mSizeY*0.75);
-
-          glVertex2f(vertexx[i]-mSizeX*0.75,vertexy[i]+mSizeY*0.75);
-          glVertex2f(vertexx[i]+mSizeX*0.75,vertexy[i]-mSizeY*0.75);
+        break; }
+      case M_STAR : {
+        for (int i=0; i<n; i++) {
+          painter.save();
+          painter.translate(vertexx[i], vertexy[i]);
+          painter.drawLine(-mSizeX, 0, +mSizeX, 0);
+          painter.drawLine(0, -mSizeY, 0, +mSizeY);
+          painter.drawLine(-mSizeX*0.75, -mSizeY*0.75, +mSizeX*0.75, +mSizeY*0.75);
+          painter.drawLine(-mSizeX*0.75, +mSizeY*0.75, +mSizeX*0.75, -mSizeY*0.75);
+          painter.restore();
         }
-        _glEnd();
-        break;
+        break; }
       case M_CIRCLE :
-        for (i=0; i<n; i++){
-          ellipse(vertexx[i],vertexy[i],mSizeX,mSizeY);
+        for (int i=0; i<n; i++) {
+          painter.drawCircle(vertexx[i], vertexy[i], mSizeX);
         }
         break;
       default:
         break;
       }
     }
-    _updatePrinting();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glDisable(GL_POLYGON_STIPPLE);
 
     // draw an arrow at each point
-    if ( datadimension() > 1 && lineArrows ){
-      float pixf = pixWidth/pixHeight;
+    if (datadimension() > 1 && lineArrows) {
+      float pixf = painter.pixWidth() / painter.pixHeight();
       // arrow types
       float YLEN=arrowLength;
       float XLEN=YLEN;
@@ -570,23 +542,12 @@ void LineElement::plot()
       float SFAC= AFAC*0.5;
 
       int n=vertexi.size();
-      _setColor(arrowcolor);
-
       bool closed=false;
+      painter.setColor(arrowcolor);
+      painter.setFillStyle(arrowfill);
 
-      if (arrowfill != NONE) {
-        closed = true;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        if (arrowfill != SOLID){
-          glEnable(GL_POLYGON_STIPPLE);
-          glPolygonStipple(fillPattern(arrowfill));
-        }
-      } else
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-      float alpha;
-
-      for ( i=0; i<n; i++ ){
+      for (int i=0; i<n; i++) {
+        float alpha;
         if (!reverse)
           alpha = M_PI_2 - M_PI*dval(vertexi[i],1)/180;
         else // angle rotated 180 degrees
@@ -597,69 +558,56 @@ void LineElement::plot()
         float x0 = vertexx[i];
         float y0 = vertexy[i];
 
-        if ( colorbyvalue ) _setColor( colorfromvalue(dval(vertexi[i])) );
+        if (colorbyvalue)
+          painter.setColor(colorfromvalue(dval(vertexi[i])));
 
         // draw main arrow
-        _glBegin(GL_LINES,0);
-        glVertex2f(x0,y0);
-        glVertex2f(x0+uff*pixf,y0+vff);
-        _glEnd();
+        painter.drawLine(x0, y0, x0+uff*pixf, y0+vff);
 
         // draw arrowhead
-        if (arrow){
-          if ( closed ){
-            _glBegin(GL_TRIANGLES);
-            glVertex2f(x0+uff*pixf,y0+vff);
-            glVertex2f(x0+(uff+uff*AFAC+vff*SFAC)*pixf,
-                y0+vff+vff*AFAC-uff*SFAC);
-            glVertex2f(x0+(uff+uff*AFAC-vff*SFAC)*pixf,
-                y0+vff+vff*AFAC+uff*SFAC);
-            _glEnd();
+        if (arrow) {
+          if (closed) {
+            QPolygonF head;
+            head << QPointF(x0+uff*pixf,y0+vff)
+                 << QPointF(x0+(uff+uff*AFAC+vff*SFAC)*pixf, y0+vff+vff*AFAC-uff*SFAC)
+                 << QPointF(x0+(uff+uff*AFAC-vff*SFAC)*pixf, y0+vff+vff*AFAC+uff*SFAC);
+            painter.drawPolygon(head);
           } else {
-            _glBegin(GL_LINES);
-            glVertex2f(x0+uff*pixf,y0+vff);
-            glVertex2f(x0+(uff+uff*AFAC+vff*SFAC)*pixf,
-                y0+vff+vff*AFAC-uff*SFAC);
-            glVertex2f(x0+uff*pixf,y0+vff);
-            glVertex2f(x0+(uff+uff*AFAC-vff*SFAC)*pixf,
-                y0+vff+vff*AFAC+uff*SFAC);
-            _glEnd();
+            painter.drawLine(x0+uff*pixf, y0+vff, x0+(uff+uff*AFAC+vff*SFAC)*pixf, y0+vff+vff*AFAC-uff*SFAC);
+            painter.drawLine(x0+uff*pixf, y0+vff, x0+(uff+uff*AFAC-vff*SFAC)*pixf, y0+vff+vff*AFAC+uff*SFAC);
           }
         }
       }
     }
-    _updatePrinting();
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDisable(GL_POLYGON_STIPPLE);
 
     if (labelOnLine){
-      _prepFont();
-      _setColor(ptColor("WHITE"));
+      painter.setFontSize(fontSize);
       float bx1, bx2, by1, by2;
-      float th, tw;
-      _getStringSize(labelText, tw, th);
+
+      const QString qtext = QString::fromStdString(labelText);
+      const QSizeF bbx = painter.getTextSize(qtext);
+      const float th = bbx.height(), tw=bbx.width();
+
       float marg= th*0.15;
       bx1= labelx - marg;
       bx2= bx1 + 2*marg + tw;
       if (labelside==SV_BOTTOM)
-        labely-= (marg + 5 + th);
-      else labely += marg+5;
+        labely -= (marg + 5 + th);
+      else
+        labely += marg+5;
       by1= labely - marg;
       by2= by1 + th + 2*marg;
-      _glBegin(GL_POLYGON, 4);
-      glVertex2f(bx1,by1);
-      glVertex2f(bx2,by1);
-      glVertex2f(bx2,by2);
-      glVertex2f(bx1,by2);
-      _glEnd();
-      _updatePrinting();
-      _setColor(color);
-      _printString(labelText,labelx,labely);
-      _updatePrinting();
+      painter.setFill(ptColor("WHITE"));
+      painter.setLineStyle(NOLINE);
+      painter.drawRect(bx1, by1, bx2, by2);
+
+      painter.setColor(color);
+      painter.drawText(qtext, labelx, labely);
     }
 #ifdef DEBUG
-    cout << "LineElement::plot() finished" << endl;
+    cout << "LineElement::plot(ptPainter& painter) finished" << endl;
 #endif
   }
 }
+
+} // namespace pets2

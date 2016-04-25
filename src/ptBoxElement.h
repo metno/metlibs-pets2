@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,12 +25,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-#ifndef _boxelement_h
-#define _boxelement_h
+#ifndef PETS2_BOXELEMENT_H
+#define PETS2_BOXELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
+
+namespace pets2 {
 
 class BoxElement : public dataPlotElement
 {
@@ -52,8 +51,10 @@ public:
       const ptVertFieldf& field,
       const Layout& layout,
       XAxisInfo* xtime);
-  void plot();
+  void plot(ptPainter& painter);
   bool needsData() { return true; }
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_BOXELEMENT_H

@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -37,6 +35,7 @@
 
 using namespace std;
 
+namespace pets2 {
 
 ptFontSize Str2FontSize(const std::string& buf)
 {
@@ -75,3 +74,5 @@ std::string FontFace2Str(ptFontFace fac)
   else if (fac==F_ITALIC) return "F_ITALIC";
   else return "F_NORMAL";
 }
+
+} // namespace pets2

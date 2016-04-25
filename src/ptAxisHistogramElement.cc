@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -33,15 +31,21 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptAxisHistogramElement.h>
-#include <puTools/miTime.h>
-#include <iostream>
-#include <stdio.h>
+#include "ptAxisHistogramElement.h"
+
 #include "ptPatterns.h"
-#include <float.h>
+
+#include <puTools/miTime.h>
+#include <cfloat>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
+
+namespace pets2 {
 
 AxisHistogramElement::AxisHistogramElement(yAxisElement* ya,
     const DataSpec cds, const ptVertFieldf& field, const Layout& layout,
@@ -59,61 +63,41 @@ AxisHistogramElement::AxisHistogramElement(yAxisElement* ya,
   type = AXISHIST;
 }
 
-void AxisHistogramElement::plot()
+void AxisHistogramElement::plot(ptPainter& painter)
 {
   if (enabled && Yaxis && visible) {
 #ifdef DEBUG
-    cout << "AxisHistogramElement::plot()" <<endl;
+    cout << "AxisHistogramElement::plot(ptPainter& painter)" <<endl;
 #endif
-    float th, tw;
-    int i, j;
     _prePlot();
-    _prepFont();
-    _getCharSize('0', tw, th);
-    float y;
-    char text[16];
-    _setColor(color);
-    glLineWidth(lineWidth);
-    if (fstyle != SOLID) {
-      glEnable(GL_POLYGON_STIPPLE);
-      glPolygonStipple(fillPattern(fstyle));
-    }
+    painter.setFontSize(fontSize);
+    const float tw = painter.getCharWidth(QLatin1Char('0'));
+    painter.setColor(color);
+    painter.setLineWidth(lineWidth);
+    painter.setFillStyle(fstyle);
 
-    float oldx, newx;
-    j = datastart();
+    int j = datastart();
 
-    oldx = xtime->xcoord[startT];
-    for (i = startT; i <= stopT; i++)
+    float oldx = xtime->xcoord[startT];
+    for (int i = startT; i <= stopT; i++)
       if (valid(i)) {
-        newx = xtime->xcoord[i];
+        float newx = xtime->xcoord[i];
         if (dval(j) >= 0.05) { // don't draw if is ignorable
-          y = yval(j);
+          float y = yval(j);
           float del = (newx - oldx) / 10.0;
           float x1 = oldx + hstart * del;
           float x2 = oldx + hstop * del;
-          // enclosing box
-          _initPrinting(10);
-          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-          glBegin(GL_LINE_STRIP);
-          glVertex2f(x1, startY);
-          glVertex2f(x1, y);
-          glVertex2f(x2, y);
-          glVertex2f(x2, startY);
-          glEnd();
-          glRectf(x1, startY, x2, y);
-          _updatePrinting();
+          painter.drawRect(x1, startY, x2, y);
           if (drawlabel) {
-            glDisable(GL_POLYGON_STIPPLE);
-            snprintf(text, sizeof(text), "%2.1f", dval(j));
-            _printString(text, x1 + (x2 - x1) / 2 - tw, y + YSPACE);
-            _updatePrinting();
-            glEnable(GL_POLYGON_STIPPLE);
+            const QPointF pos(x1 + (x2 - x1) / 2 - tw, y + YSPACE);
+            const QString text = QString("%1").arg(dval(j), 2, 'f', 1);
+            painter.drawText(pos, text);
           }
         }
         oldx = newx;
         j++;
       }
-    glDisable(GL_POLYGON_STIPPLE);
   }
 }
 
+} // namespace pets2

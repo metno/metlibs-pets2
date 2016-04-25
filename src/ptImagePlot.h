@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -27,72 +25,36 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _ptImagePlot_h
-#define _ptImagePlot_h
+#ifndef PETS2_IMAGEPLOT_H
+#define PETS2_IMAGEPLOT_H
 
-#include "ptImage.h"
+#include <QImage>
+#include <string>
 
-#include <GL/gl.h>
+namespace pets2 {
 
-#include <glp/glpfile.h>
+class ptPainter;
 
 class ptImagePlot {
-private:
-  ptImage image;
 public:
-  ptImagePlot()
-  {
-  }
-  ptImagePlot(const std::string& fname)
-  {
-    image.setImage(fname, true);
-  }
-  ptImagePlot(const ptImage& im)
-  {
-    image = im;
-  }
-  ~ptImagePlot()
-  {
-  }
+  ptImagePlot();
 
-  void setimage(const std::string& fname)
-  {
-    image.setImage(fname, true);
-  }
-  void setimage(const ptImage& im)
-  {
-    image = im;
-  }
-  void plot(const float& x, const float& y, const float& scale,
-      const float pixw = 1, const float pixh = 1, GLPcontext* psoutput = 0,
-      const bool blend = false)
-  {
-    if (image.Size()) {
-      glPixelZoom(scale, scale);
-      glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-      glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-      // 	glPixelStorei(GL_UNPACK_ROW_LENGTH,image->Width());
-      glRasterPos2f(x, y);
-      glDrawPixels((GLint) image.Width(), (GLint) image.Height(),
-          (image.Alpha()) ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, image.Data());
-      if (psoutput) {
-        int w = image.Width();
-        int h = image.Height();
-        int size = image.Size();
-        psoutput->AddImage(image.Data(), size, w, h, x / pixw, y / pixh, scale,
-            scale, 0, 0, w - 1, h - 1, (image.Alpha() ? GL_RGBA : GL_RGB),
-            GL_UNSIGNED_BYTE, blend);
-      }
-    }
-  }
+  ptImagePlot(const std::string& fname);
+  ~ptImagePlot();
+
+  void setimage(const std::string& fname);
+  void plot(ptPainter& painter, const float& x, const float& y, const float& scale);
+
   int Width() const
-  {
-    return image.Width();
-  }
+    { return image.width(); }
+
   int Height() const
-  {
-    return image.Height();
-  }
+    { return image.height(); }
+
+private:
+  QImage image;
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_IMAGEPLOT_H

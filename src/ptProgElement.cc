@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,18 +32,19 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptProgElement.h>
+#include "ptProgElement.h"
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 ProgElement::ProgElement(std::vector<int>& data,
-			 const ptVertFieldf& field,
-			 const Layout& layout,
-			 XAxisInfo* xtime)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime),
     timeData(data), minSkipX(layout.minSkipX)
 {
@@ -56,12 +55,11 @@ ProgElement::ProgElement(std::vector<int>& data,
 }
 
 
-void ProgElement::plot()
+void ProgElement::plot(ptPainter& painter)
 {
   char text[6], tmp[4];
-  float th,tw;
-  _prepFont();
-  _getMaxCharSize(tw,th);
+  painter.setFontSize(fontSize);
+  const float tw = painter.getCharWidth('0');
 
   float numWidth  = tw/2.0;
   float numWidth2 = numWidth*2;
@@ -74,7 +72,7 @@ void ProgElement::plot()
 
   if(enabled && visible) {
 #ifdef DEBUG
-    cout << "ProgElement::plot()" <<endl;
+    cout << "ProgElement::plot(ptPainter& painter)" <<endl;
 #endif
     if (timeData[0]>=0) {
       strcpy(text,"+");
@@ -85,7 +83,7 @@ void ProgElement::plot()
       signw = 0;
     }
 
-    _setColor(color);
+    painter.setLine(color);
     //print first prog time
     snprintf(tmp,sizeof(tmp),"%d",timeData[0]);
     if (strlen(tmp)==1)
@@ -97,14 +95,13 @@ void ProgElement::plot()
     else if (strlen(tmp)==4)
       offset = signw + numWidth4;
     strcat(text,tmp);
-    _printString(text,xtime->xcoord[0]-offset,startY);
-    _updatePrinting();
+    painter.drawText(text, xtime->xcoord[0]-offset, startY);
 
     text[1] = '\0';
 
     for (int i=1; i<xtime->xcoord.size() && i<timeData.size(); i++) {
       // if step is too small, don't print value
-      if (accum+deltaT < minSkipX*pixWidth) {
+      if (accum+deltaT < minSkipX * painter.pixWidth()) {
 	accum += deltaT;
 	deltaT = xtime->xcoord[i+1]-xtime->xcoord[i];
 	continue;
@@ -128,15 +125,15 @@ void ProgElement::plot()
 	offset = signw + numWidth4;
 
       strcat(text,tmp);
-      _printString(text,xtime->xcoord[i]-offset,startY);
-      _updatePrinting();
+      painter.drawText(text, xtime->xcoord[i]-offset, startY);
 
       if (i == xtime->xcoord.size()-1)
 	break;
       deltaT = xtime->xcoord[i+1]-xtime->xcoord[i];
       accum = 0;
     }
-    _printString("prog",20,startY);
-    _updatePrinting();
+    painter.drawText("prog", 20, startY);
   }
 }
+
+} // namespace pets2

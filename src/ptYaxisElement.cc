@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,21 +32,22 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptYaxisElement.h>
-#include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#include "ptYaxisElement.h"
 
-using namespace miutil;
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
+
+namespace pets2 {
 
 yAxisElement::yAxisElement(const ptVertFieldf& field,
-			   const Layout& layout,
-			   XAxisInfo* xtime)
+    const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime)
   , numChild(0)
   , id(layout.yaid)
+  , charHeight(10)
+  , charWidth(10)
   , firstPlot(true)
   , axeStopY(field.y2)
   , tickLen(layout.tickLen)
@@ -96,7 +95,7 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
     userValueLabels = userLabels;
 }
 
-void yAxisElement::plotAxis()
+void yAxisElement::plotAxis(ptPainter& painter)
 {
   if (!numChild || !visible ) return;
 #ifdef DEBUG
@@ -106,183 +105,125 @@ void yAxisElement::plotAxis()
   const float SMALLSPACE = 5;
   char txt[20];
 
-  _prepFont();
+  painter.setFontSize(fontSize);
 
   txtX= tickX + sign*SMALLSPACE;
   tmpX= txtX;
 
   // plot y-axis
-  glDisable(GL_LINE_STIPPLE);
-  _setColor(color);
-  glLineWidth(axisLineWidth);
-  _glBegin(GL_LINES,2);
-  glVertex2f(zerox,startY); glVertex2f(zerox,startY+deltaY);
-  _glEnd();
-  _updatePrinting();
+  painter.setLine(color, axisLineWidth);
+  painter.drawLine(zerox, startY, zerox, startY+deltaY);
 
   // plot tickmarks for each interval step, and write value for each delta
-  glLineWidth(tickWidth);
+  painter.setLine(color, tickWidth);
   size_t i,n= minorticks.size();
   for (i=0; i<n; i++){
-    _glBegin(GL_LINES,2);
-    glVertex2f(tickX,minorticks[i]);
-    glVertex2f(zerox,minorticks[i]);  // minor tick mark
-    _glEnd();
+    painter.drawLine(tickX, minorticks[i], zerox, minorticks[i]);  // minor tick mark
   }
-  _updatePrinting();
   n= majorticks.size();
-  float swid, shei;
-  float val;
   for (i=0; i<n; i++){
-    _glBegin(GL_LINES,2);
-    glVertex2f(tickX,majorticks[i]);
-    glVertex2f(zerox,majorticks[i]);  // major tick mark
-    _glEnd();
-    _updatePrinting();
+    painter.drawLine(tickX, majorticks[i], zerox, majorticks[i]);  // major tick mark
     if (!userlabels){
       // print value
-      val= majorphys[i];
+      float val = majorphys[i];
       if ( delta >= 5 && fmodf(delta,1.0)==0)
-	snprintf(txt,sizeof(txt),"%1.0f",val);
+        snprintf(txt,sizeof(txt),"%1.0f",val);
       else if (delta >= 0.1 ){
-	snprintf(txt,sizeof(txt),"%1.1f",val);
+        snprintf(txt,sizeof(txt),"%1.1f",val);
       } else {
-	snprintf(txt,sizeof(txt),"%1.2f",val);
+        snprintf(txt,sizeof(txt),"%1.2f",val);
       }
-      _getStringSize(txt,swid,shei);
+      QString qtext(txt);
+      const QSizeF bbx = painter.getTextSize(qtext);
+      const float swid = bbx.width(), shei = bbx.height();
 
-      if (align==OVER) tmpY=majorticks[i];
-      else if (align==BELOW) tmpY=majorticks[i]-shei;
-      else tmpY= majorticks[i]-shei/2.0;
+      if (align==pets2::OVER)
+        tmpY=majorticks[i];
+      else if (align==pets2::BELOW)
+        tmpY=majorticks[i]-shei;
+      else
+        tmpY= majorticks[i]-shei/2.0;
 
-      if (sign==-1) tmpX= txtX-swid;
-      _printString(txt,tmpX,tmpY);
-      _updatePrinting();
+      if (sign==-1)
+        tmpX= txtX-swid;
+      painter.drawText(QPointF(tmpX,tmpY), qtext);
     } else{
       if (i<userLabels.size()){
-	_getStringSize(userLabels[i], swid, shei);
+        QString qtext = QString::fromStdString(userLabels[i]);
+        const QSizeF bbx = painter.getTextSize(qtext);
+        const float swid = bbx.width(), shei = bbx.height();
 
-	if (align==OVER) tmpY=majorticks[i];
-	else if (align==BELOW) tmpY=majorticks[i]-shei;
-	else tmpY= majorticks[i]-shei/2.0;
+        if (align==pets2::OVER)
+          tmpY=majorticks[i];
+        else if (align==pets2::BELOW)
+          tmpY=majorticks[i]-shei;
+        else
+          tmpY= majorticks[i]-shei/2.0;
 
-	if (sign==-1) tmpX= txtX-swid;
-	_printString(userLabels[i], tmpX, tmpY);
-	_updatePrinting();
+        if (sign==-1)
+          tmpX= txtX-swid;
+        painter.drawText(QPointF(tmpX, tmpY), qtext);
       }
     }
   }
-  plotLabels();
+  plotLabels(painter);
 }
 
 
-void yAxisElement::plotLabels()
+void yAxisElement::plotLabels(ptPainter& painter)
 {
   // write axis label
-  _printString(Labels[0],labelX[0],labelY[0]);
-  _updatePrinting();
+  painter.setLine(color);
+  painter.drawText(QPointF(labelX[0],labelY[0]), QString::fromStdString(Labels[0]));
 
-  if (!plotlegends) return;
-  glLineWidth(lineWidth);
-  glPointSize(lineWidth);
-  bool fakestipple=false;
-  if ((!useColour)||pInColour) {
-    if (!useFakeStipple)
-      glEnable(GL_LINE_STIPPLE);
-    else
-      fakestipple=true;
-  }
+  if (!plotlegends)
+    return;
   for (int j=1; j<numChild+1; j++) {
     if (child[j-1]->isEnabled()) {
-      _setColor(childCol[j-1]);
-      _printString(Labels[j],labelX[j],labelY[j]);
-      _updatePrinting();
-      if ((!useColour) || pInColour){
-	if (fakestipple) {
-	  _glBegin(GL_POINTS,1000);
-	  lineSegment(lineSt[j],
-		      labelY[j],
-		      lineSt[j]+lsign*linlen,
-		      labelY[j],
-		      LineStyle[childStyle[j-1]][0],
-		      LineStyle[childStyle[j-1]][1]);
-	  _glEnd();
-	} else {
-	  glLineStipple(LineStyle[childStyle[j-1]][0],
-			LineStyle[childStyle[j-1]][1]);
-	  _glBegin(GL_LINES,2);
-	  glVertex2f(lineSt[j],labelY[j]);
-	  glVertex2f(lineSt[j]+lsign*linlen,labelY[j]);
-	  _glEnd();
-	}
-	_updatePrinting();
-      }
+      painter.setLine(childCol[j-1], lineWidth, childStyle[j-1]);
+      painter.drawText(Labels[j], labelX[j], labelY[j]);
+      painter.drawLine(lineSt[j], labelY[j], lineSt[j]+lsign*linlen, labelY[j]);
     }
   }
-  glLineStipple(1,0xFFFF);
-  glDisable(GL_LINE_STIPPLE);
 }
 
-void yAxisElement::plotGrid()
+void yAxisElement::plotGrid(ptPainter& painter)
 {
-  if (!axisgrid) return;
+  if (!axisgrid)
+    return;
   int n= majorticks.size();
-  bool fakestipple = false;
-  if (!useFakeStipple) {
-    glEnable(GL_LINE_STIPPLE);
-    glLineStipple(LineStyle[gridstyle][0],LineStyle[gridstyle][1]);
-  } else fakestipple = true;
-
-  _setColor(gridcolor);
-  glLineWidth(gridwidth);
-  glPointSize(gridwidth/2.0);
-  float fy;
+  painter.setLine(gridcolor, gridwidth, gridstyle);
   for (int i=0; i<n; i++){
-    fy= majorticks[i];
-    if (fakestipple){
-      _glBegin(GL_POINTS,1000);
-      lineSegment(xtime->x1,fy,
-		  xtime->x2,fy,
-		  LineStyle[gridstyle][0],
-		  LineStyle[gridstyle][1],
-		  true);
-      _glEnd();
-    } else {
-      _glBegin(GL_LINES,2);
-      glVertex2f(xtime->x1,fy);
-      glVertex2f(xtime->x2,fy);
-      _glEnd();
-    }
+    float fy = majorticks[i];
+    painter.drawLine(xtime->x1, fy, xtime->x2, fy);
   }
-  glLineStipple(1,0xFFFF);
-  glDisable(GL_LINE_STIPPLE);
 }
 
-void yAxisElement::plot()
+void yAxisElement::plot(ptPainter& painter)
 {
   if(enabled && numChild) {
 #ifdef DEBUG
-    cout << "yAxisElement::plot()" << endl;
+    cout << "yAxisElement::plot(ptPainter& painter)" << endl;
 #endif
 //     if (firstPlot) calcPlotVal();
     calcPlotVal();
     firstPlot = false;
     if (recalcDims) {
       calcDims();
-      plotGrid();
+      plotGrid(painter);
     }
     recalcDims= true;
-    plotAxis();
+    plotAxis(painter);
   }
 }
 
 void yAxisElement::dataInfo(float &dY, float & minPY, float &pR)
 {
-  if (firstPlot) calcPlotVal();
+  if (firstPlot)
+    calcPlotVal();
   firstPlot = false;
   if (recalcDims) {
     calcDims();
-    plotGrid();
   }
 
   dY = deltaY;
@@ -297,13 +238,26 @@ void yAxisElement::calcPlotVal()
   float maxwid = 0, lx;
   int i;
 
-  _prepFont();
-  _getMaxCharSize(charWidth,charHeight);
-  charHeight_2 = charHeight/2.0;
-
-  for (i=0; i<numChild+1; i++) {
-    _getStringSize(Labels[i], labelW[i], labelH[i]);
-    if (labelW[i] > maxwid) maxwid = labelW[i];
+  if (canvas) {
+    std::cout << "++++++++++++++++++++> calcPlotVal with canvas" << std::endl;
+    canvas->setFontSize(fontSize);
+    const QSizeF bbx0 = canvas->getTextSize("M");
+    charWidth = bbx0.width();
+    charHeight = bbx0.height();
+    for (i=0; i<numChild+1; i++) {
+      const QSizeF bbx = canvas->getTextSize(QString::fromStdString(Labels[i]));
+      labelW[i] = bbx.width();
+      labelH[i] = bbx.height();
+      if (labelW[i] > maxwid)
+        maxwid = labelW[i];
+    }
+  } else {
+    std::cout << "--------------------> calcPlotVal without canvas" << std::endl;
+    charWidth = 10;
+    charHeight = 10;
+    for (i=0; i<numChild+1; i++)
+      labelW[i] = labelH[i] = 10;
+    maxwid = 10;
   }
   labelY[numChild] = axeStopY - labelH[numChild];
   for (i=numChild-1; i>=0; i--) {
@@ -312,12 +266,12 @@ void yAxisElement::calcPlotVal()
   deltaY = labelY[0]-charHeight-startY;
 
   switch(axis) {
-  case LEFTLEFT:
+  case pets2::LEFTLEFT:
     sign=-1;
     zerox = xtime->x1;
     tickX = zerox - tickLen;
     lx = (zerox > maxwid+SMALLSPACE) ?
-	(zerox-maxwid-SMALLSPACE) : SMALLSPACE;
+        (zerox-maxwid-SMALLSPACE) : SMALLSPACE;
     if (fittopage && zerox < (maxwid+linlen))
       lx = linlen;
     for (i=0; i<numChild+1; i++){
@@ -325,7 +279,7 @@ void yAxisElement::calcPlotVal()
       lineSt[i] = lx;// - SMALLSPACE;
     }
     break;
-  case RIGHTRIGHT:
+  case pets2::RIGHTRIGHT:
     sign=1;
     zerox = xtime->x2;
     tickX = zerox + tickLen;
@@ -337,7 +291,7 @@ void yAxisElement::calcPlotVal()
       lineSt[i] = lx + labelW[i];// + SMALLSPACE;
     }
     break;
-  case LEFTRIGHT:
+  case pets2::LEFTRIGHT:
     sign=1;
     zerox = xtime->x1;
     tickX = zerox + tickLen;
@@ -347,7 +301,7 @@ void yAxisElement::calcPlotVal()
       lineSt[i] = lx + labelW[i] + SMALLSPACE;
     }
     break;
-  case RIGHTLEFT:
+  case pets2::RIGHTLEFT:
     sign=-1;
     zerox = xtime->x2;
     tickX = zerox - tickLen;
@@ -361,9 +315,7 @@ void yAxisElement::calcPlotVal()
 
 }
 
-bool yAxisElement::callinn(AxisChildElement* pc,
-			   float& minlegal,
-			   float& maxlegal)
+bool yAxisElement::callinn(AxisChildElement* pc, float& minlegal, float& maxlegal)
 {
   if (numChild < MAX_YAXIS_CHILDREN) {
     child[numChild] = pc;
@@ -386,33 +338,33 @@ void yAxisElement::setTimeInterval(const int start, const int stop)
 
 void yAxisElement::calcDims()
 {
-  int j;
   // new : get min,max,delta each time
-  //const float eps = 0.0001;
-  float cMax,cMin,Max=-100000,Min=100000,Delta;
-  for (j=0; j<numChild; j++) {
+  float Max=-100000, Min=100000;
+  for (int j=0; j<numChild; j++) {
     if (child[j]->isEnabled()) {
-      child[j]->dataInfo(cMin,cMax);
-      if (cMax > Max) Max = cMax;
-      if (cMin < Min) Min = cMin;
+      float cMax, cMin;
+      child[j]->dataInfo(cMin, cMax);
+      if (cMax > Max)
+        Max = cMax;
+      if (cMin < Min)
+        Min = cMin;
     }
   }
-
-  if ( useMinMax ){
-    if ( Min < minValue ) Min = minValue;
-    if ( Max > maxValue ) Max = maxValue;
+  if (useMinMax) {
+    if (Min < minValue)
+      Min = minValue;
+    if (Max > maxValue)
+      Max = maxValue;
   }
+  float Delta = Max - Min, newDelta;
 
-  Delta = Max-Min;
-
-  float newDelta;
-
-  if (!minIsSet && !maxIsSet){
-    plotRange = (Delta < minRange) ? minRange + 2*minMargin
-      : Delta + 2*minMargin;
-    minPlotY = Min + (Delta-plotRange)/2;
-    if (minValue<minPlotY) {
-      plotRange += (minPlotY-minValue);
+  if (!minIsSet && !maxIsSet) {
+    plotRange = (Delta < minRange)
+        ? minRange + 2*minMargin
+        : Delta + 2*minMargin;
+    minPlotY = Min + (Delta - plotRange)/2;
+    if (minValue < minPlotY) {
+      plotRange += (minPlotY - minValue);
       minPlotY = minValue;
     }
     maxPlotY = minPlotY + plotRange;
@@ -427,8 +379,9 @@ void yAxisElement::calcDims()
   } else if (minIsSet) {
     minPlotY = minValue;
     newDelta = Max - minPlotY;
-    plotRange = (newDelta < minRange) ? minRange + minMargin
-      : newDelta + minMargin;
+    plotRange = (newDelta < minRange)
+        ? minRange + minMargin
+        : newDelta + minMargin;
     maxPlotY = minPlotY + plotRange;
     if (maxValue>maxPlotY) {
       plotRange += (maxValue-maxPlotY);
@@ -437,10 +390,11 @@ void yAxisElement::calcDims()
   } else { // maxIsSet
     maxPlotY = maxValue;
     newDelta = maxPlotY - Min;
-    plotRange = (newDelta < minRange) ? minRange + minMargin
-      : newDelta + minMargin;
+    plotRange = (newDelta < minRange)
+        ? minRange + minMargin
+        : newDelta + minMargin;
     minPlotY = maxPlotY - plotRange;
-    if (minValue<minPlotY) {
+    if (minValue < minPlotY) {
       plotRange += (minPlotY-minValue);
       minPlotY = minValue;
     }
@@ -449,22 +403,23 @@ void yAxisElement::calcDims()
   minorticks.erase(minorticks.begin(),minorticks.end());
   majorticks.erase(majorticks.begin(),majorticks.end());
   majorphys.erase(majorphys.begin(),majorphys.end());
-  float y;
   const float eps2 = 0.01;
 
   float interv= interval;
   float delt= delta;
   const int maxticks= 30;
-  while ((maxPlotY-minPlotY)/interv>maxticks){
+  while ((maxPlotY-minPlotY)/interv>maxticks) {
     interv *= 2;
     delt   *= 2;
   }
-  float starti = (minPlotY < 0) ? minPlotY-interv-fmod(minPlotY,interv)
-    : minPlotY+interv-fmod(minPlotY,interv);
-  if (starti < 0) starti+=interv;
+  float starti = (minPlotY < 0)
+      ? minPlotY-interv-fmod(minPlotY,interv)
+      : minPlotY+interv-fmod(minPlotY,interv);
+  if (starti < 0)
+    starti+=interv;
 
   for(float i = starti; i <= maxPlotY; i+=interv) {
-    y = startY + (deltaY*(i-minPlotY))/plotRange;
+    float y = startY + (deltaY*(i-minPlotY))/plotRange;
     if(fabs(fmod(i,delt)) < eps2 || delt-fabs(fmod(i,delt)) < eps2 ) {
       majorticks.push_back(y);
       majorphys.push_back(i);
@@ -473,22 +428,20 @@ void yAxisElement::calcDims()
     }
   }
 
-  recalcDims= false;
+  recalcDims = false;
 }
 
 std::string yAxisElement::userValueLabel(const float value)
 {
-  std::string s;
-
   int n = majorticks.size();
 
   for (int i=0; i<n; i++) {
     if (value <= majorphys[i] && i < userValueLabels.size()) {
-      s = userValueLabels[i];
-      break;
+      return userValueLabels[i];
     }
   }
 
-  return s;
+  return std::string();
 }
 
+} // namespace pets2

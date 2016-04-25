@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -36,6 +34,8 @@
 
 using namespace std;
 
+namespace pets2 {
+
 ptMarker Str2Marker(const std::string& buffer)
 {
   const std::string mar = miutil::trimmed(miutil::to_upper(buffer), true, true);
@@ -59,3 +59,5 @@ std::string Marker2Str(ptMarker mar)
   else if (mar==M_STAR)      return "M_STAR";
   else return "NO_MARKER";
 }
+
+} // namespace pets2

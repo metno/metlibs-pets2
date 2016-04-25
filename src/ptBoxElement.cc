@@ -1,7 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- Copyright (C) 2013 met.no
+ Copyright (C) 2013-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -31,13 +31,14 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptBoxElement.h>
-#include <iostream>
-#include <stdio.h>
+#include "ptBoxElement.h"
+
+#include <QPolygonF>
 
 using namespace miutil;
 using namespace std;
+
+namespace pets2 {
 
 BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
@@ -75,40 +76,37 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
     if (np > 0)
       f = patternlist[np - 1];
     else
-      f = SOLID;
+      f = pets2::SOLID;
     for (int i = np; i <= nc; i++)
       patternlist.push_back(f);
   }
 }
 
-void BoxElement::plot()
+void BoxElement::plot(ptPainter& painter)
 {
   if (enabled && visible) {
 #ifdef DEBUG
-    cout << "BoxElement::plot()" <<endl;
+    cout << "BoxElement::plot(ptPainter& painter)" <<endl;
 #endif
-    int i, j;
 
-    _prepFont();
+    painter.setFontSize(fontSize);
 
-    glLineWidth(linewidth);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glRectf(xtime->xcoord[startT], startY, xtime->xcoord[stopT], stopY);
+    painter.setLineWidth(linewidth);
+    painter.setFillStyle(pets2::NONE);
+    painter.drawRect(xtime->xcoord[startT], startY, xtime->xcoord[stopT], stopY);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glEnable(GL_POLYGON_STIPPLE);
-    j = datastart();
+    painter.setLineStyle(pets2::NOLINE);
 
+    int j = datastart();
     int ldat = -1, ndat = -1, lidx = 0, nidx = 0;
-    for (i = startT; i <= stopT; i++) {
+    for (int i = startT; i <= stopT; i++) {
       if (valid(i)) {
         nidx = i;
         ndat = static_cast<int> (dval(j));
         if (ndat != ldat || i == stopT) {
           if (ldat >= 0 && ldat < colorlist.size()) {
-            _setColor(colorlist[ldat]);
-            glPolygonStipple(fillPattern(patternlist[ldat]));
-            glRectf(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
+            painter.setFill(colorlist[ldat], patternlist[ldat]);
+            painter.drawRect(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
           }
           ldat = ndat;
           lidx = nidx;
@@ -117,46 +115,29 @@ void BoxElement::plot()
       }
       if (i == stopT && lidx != nidx) {
         if (ldat >= 0 && ldat < colorlist.size()) {
-          _setColor(colorlist[ldat]);
-          glPolygonStipple(fillPattern(patternlist[ldat]));
-          glRectf(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
+          painter.setFill(colorlist[ldat], patternlist[ldat]);
+          painter.drawRect(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
         }
       }
     }
-    glDisable(GL_POLYGON_STIPPLE);
-    _setColor(color);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glRectf(xtime->xcoord[startT], startY, xtime->xcoord[stopT], stopY);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    _printString(label, 20, startY);
+    painter.setColor(color);
+    painter.setFillStyle(pets2::NONE);
+    painter.drawRect(xtime->xcoord[startT], startY, xtime->xcoord[stopT], stopY);
+
+    painter.drawText(label, 20, startY);
 
     if (useTimes > 0) {
       // make time-grid
-      bool fakestipple = false;
-      if (!useFakeStipple) {
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(LineStyle[style][0], LineStyle[style][1]);
-      } else
-        fakestipple = true;
-
-      glPointSize(linewidth / 2.0);
-      for (i = startT + 1; i < stopT; i++) {
+      QPolygonF line;
+      for (int i = startT + 1; i < stopT; i++) {
         if ((timeLine[i].hour() % useTimes) == 0 && timeLine[i].min() == 0) {
-          if (fakestipple) {
-            _glBegin(GL_POINTS, 1000);
-            lineSegment(xtime->xcoord[i], startY, xtime->xcoord[i], stopY,
-                LineStyle[style][0], LineStyle[style][1], true);
-            _glEnd();
-          } else {
-            _glBegin(GL_LINES, 2);
-            glVertex2f(xtime->xcoord[i], startY);
-            glVertex2f(xtime->xcoord[i], stopY);
-            _glEnd();
-          }
+          line << QPointF(xtime->xcoord[i], startY);
         }
       }
+      painter.setLine(color, linewidth, style);
+      painter.drawPolyline(line);
     }
-
   }
-
 }
+
+} // namespace pets2

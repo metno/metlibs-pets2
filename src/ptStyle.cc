@@ -1,7 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -36,11 +36,17 @@
 #include <puTools/miStringFunctions.h>
 
 #include <fstream>
-#include <iostream>
 #include <map>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
 using namespace std;
+
+namespace pets2 {
 
 stMother Str2Mother(const std::string& buf)
 {
@@ -126,7 +132,6 @@ ptStyle::ptStyle(const ptStyle& rhs)
   pprimF = rhs.pprimF;
   pprim = rhs.pprim;
 }
-;
 
 ptStyle::~ptStyle()
 {
@@ -444,7 +449,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   stMother maxMother = AXES1;
   Primitive onePrim;
   int axesIndex = 0;
-  Layout oneLayout;
+  pets2::Layout oneLayout;
   int unspecLines[MAXUNSPECIFIED_LINES]; // index to inList for unspecified lines
   int nunspecLines = 0;
   int motherCount[6] =
@@ -596,7 +601,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
 
 
   // check if we lack any Y-axes in non-fileprimitives
-  //   Layout curl;
+  //   pets2::Layout curl;
   //   Primitive curp;
   //   bool found;
   //   curp.type = YAXIS;
@@ -790,14 +795,11 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   return true;
 }
 
-bool ptStyle::readStyle(const std::string filename, bool verbose)
+bool ptStyle::readStyle(const std::string& filename, bool verbose)
 {
   ParameterDefinition parDef;
   Primitive onep, curp;
-  Layout onel, curl;
-  ParId pid;
-  std::string buf, keyw, argu;
-  vector<std::string> parts;
+  pets2::Layout onel, curl;
   map<std::string, std::string> userkeys;
 
   if (verbose)
@@ -887,6 +889,7 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
   leftMargin_ = rightMargin_ = 170;
 
   while (sfile.good()) {
+    std::string buf;
     getline(sfile, buf);
     miutil::trim(buf);
     // discard empty lines and comments
@@ -926,20 +929,19 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
       continue;
     }
     // split into keyword and argument
-    parts = miutil::split(buf, "=", true);
+    const vector<std::string> parts = miutil::split(buf, "=", true);
     if (parts.size() < 2)
       continue;
-    keyw = miutil::to_lower(parts[0]);
+    const std::string keyw = miutil::to_lower(parts[0]);
 
-    int ieq = buf.find_first_of("=");
-    argu = buf.substr(ieq + 1, buf.length() - ieq - 1);
-    miutil::trim(argu);
-
+    const int ieq = buf.find_first_of("=");
+    std::string argu = miutil::trimmed(buf.substr(ieq + 1, buf.length() - ieq - 1));
     // substitute user-defined variables
     map<std::string, std::string>::iterator itr = userkeys.begin();
     for (; itr != userkeys.end(); itr++)
       if (miutil::contains(argu, itr->first))
         miutil::replace(argu, itr->first, itr->second);
+    const bool argu_true = (miutil::to_upper(argu) == "TRUE");
 
     // global values
     if (keyw == "bgcolor")
@@ -953,7 +955,7 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "rightmargin")
       rightMargin_ = atof(argu.c_str());
     else if (keyw == "localtime")
-      localTime = (miutil::to_upper(argu) == "TRUE");
+      localTime = argu_true;
     else if (keyw == "timezone")
       timeZone = atoi(argu.c_str());
     else if (keyw == "leftoffset")
@@ -966,9 +968,9 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "order")
       curp.order = atoi(argu.c_str());
     else if (keyw == "enabled")
-      curp.enabled = (miutil::to_upper(argu) == "TRUE");
+      curp.enabled = argu_true;
     else if (keyw == "mother")
-      curp.mother = Str2Mother(argu);
+      curp.mother = pets2::Str2Mother(argu);
     else if (keyw == "component")
       curp.component = atoi(argu.c_str());
     else if (keyw == "parameter")
@@ -984,12 +986,12 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "submodel")
       curp.id.submodel = argu;
     else if (keyw == "plotall")
-      curp.plotAll = (miutil::to_upper(argu) == "TRUE");
+      curp.plotAll = argu_true;
     // layout-attributes
     else if (keyw == "name")
       curl.name = argu;
     else if (keyw == "visible")
-      curl.visible = (miutil::to_upper(argu) == "TRUE");
+      curl.visible = argu_true;
     else if (keyw == "color")
       curl.color.fromStr(argu);
     else if (keyw == "color2")
@@ -1013,7 +1015,7 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "markerfill")
       curl.markerFill = Str2FillStyle(argu);
     else if (keyw == "rectangle")
-      curl.axisRectangle = (miutil::to_upper(argu) == "TRUE");
+      curl.axisRectangle = argu_true;
     else if (keyw == "linepattern")
       curl.linePattern = Str2LineStyle(argu);
     else if (keyw == "fillpattern")
@@ -1029,9 +1031,9 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "intspacing")
       curl.intSpacing = Str2Size(argu);
     else if (keyw == "label")
-      curl.label = (miutil::to_upper(argu) == "TRUE");
+      curl.label = argu_true;
     else if (keyw == "patternincolour")
-      curl.patternInColour = (miutil::to_upper(argu) == "TRUE");
+      curl.patternInColour = argu_true;
     else if (keyw == "linewidth")
       curl.lineWidth = atof(argu.c_str());
     else if (keyw == "axiswidth")
@@ -1049,25 +1051,25 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "minmargin")
       curl.minMargin = atof(argu.c_str());
     else if (keyw == "maxisset")
-      curl.maxIsSet = (miutil::to_upper(argu) == "TRUE");
+      curl.maxIsSet = argu_true;
     else if (keyw == "minisset")
-      curl.minIsSet = (miutil::to_upper(argu) == "TRUE");
+      curl.minIsSet = argu_true;
     else if (keyw == "minvalue")
       curl.minValue = atof(argu.c_str());
     else if (keyw == "maxvalue")
       curl.maxValue = atof(argu.c_str());
     else if (keyw == "useminmax")
-      curl.useMinMax = (miutil::to_upper(argu) == "TRUE");
+      curl.useMinMax = argu_true;
     else if (keyw == "yaid")
       curl.yaid = atoi(argu.c_str());
     else if (keyw == "reverse")
-      curl.reverse = (miutil::to_upper(argu) == "TRUE");
+      curl.reverse = argu_true;
     else if (keyw == "centervector")
-      curl.centerVector = (miutil::to_upper(argu) == "TRUE");
+      curl.centerVector = argu_true;
     else if (keyw == "vectorarrow")
-      curl.vectorArrow = (miutil::to_upper(argu) == "TRUE");
+      curl.vectorArrow = argu_true;
     else if (keyw == "linearrows")
-      curl.lineArrows = (miutil::to_upper(argu) == "TRUE");
+      curl.lineArrows = argu_true;
     else if (keyw == "arrowlength")
       curl.arrowLength = atof(argu.c_str());
     else if (keyw == "arrowsize")
@@ -1079,15 +1081,15 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "labelspace")
       curl.labelSpace = atof(argu.c_str());
     else if (keyw == "quantized")
-      curl.quantized = (miutil::to_upper(argu) == "TRUE");
+      curl.quantized = argu_true;
     else if (keyw == "quantum")
       curl.quantum = atof(argu.c_str());
     else if (keyw == "gridxonly")
-      curl.gridxonly = (miutil::to_upper(argu) == "TRUE");
+      curl.gridxonly = argu_true;
     else if (keyw == "plotdaypattern")
-      curl.plotDayPattern = (miutil::to_upper(argu) == "TRUE");
+      curl.plotDayPattern = argu_true;
     else if (keyw == "axisgrid")
-      curl.axisgrid = (miutil::to_upper(argu) == "TRUE");
+      curl.axisgrid = argu_true;
     else if (keyw == "gridwidth")
       curl.gridwidth = atof(argu.c_str());
     else if (keyw == "gridcolor")
@@ -1107,27 +1109,27 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "text2")
       curl.text2 = argu;
     else if (keyw == "unit")
-      curl.unit = (miutil::to_upper(argu) == "TRUE");
+      curl.unit = argu_true;
     else if (keyw == "pformat")
       curl.pformat = argu;
     else if (keyw == "vectorf")
-      curl.vectorF = (miutil::to_upper(argu) == "TRUE");
+      curl.vectorF = argu_true;
     else if (keyw == "linelabelpos")
       curl.lineLabelPos = atof(argu.c_str());
     else if (keyw == "labelonline")
-      curl.labelOnLine = (miutil::to_upper(argu) == "TRUE");
+      curl.labelOnLine = argu_true;
     else if (keyw == "keepinaxis")
-      curl.keepinaxis = (miutil::to_upper(argu) == "TRUE");
+      curl.keepinaxis = argu_true;
     else if (keyw == "shadow")
-      curl.shadow = (miutil::to_upper(argu) == "TRUE");
+      curl.shadow = argu_true;
     else if (keyw == "histogramstart")
       curl.histStart = atoi(argu.c_str());
     else if (keyw == "histogramstop")
       curl.histStop = atoi(argu.c_str());
     else if (keyw == "fittopage")
-      curl.fittopage = (miutil::to_upper(argu) == "TRUE");
+      curl.fittopage = argu_true;
     else if (keyw == "horlabels")
-      curl.horLabels = (miutil::to_upper(argu) == "TRUE");
+      curl.horLabels = argu_true;
     else if (keyw == "horlabeloffset")
       curl.horLabelOffset = atof(argu.c_str());
     else if (keyw == "cutoff")
@@ -1141,7 +1143,7 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "language")
       curl.language = miutil::to_upper(argu);
     else if (keyw == "drawbackground")
-      curl.drawbackground = (miutil::to_upper(argu) == "TRUE");
+      curl.drawbackground = argu_true;
     else if (keyw == "editstyle")
       curl.editstyle = Str2EditStyle(argu);
     else if (keyw == "textlabels")
@@ -1149,35 +1151,35 @@ bool ptStyle::readStyle(const std::string filename, bool verbose)
     else if (keyw == "valuetextlabels")
       curl.valuetextlabels = Str2TextLabels(argu);
     else if (keyw == "printvaluelock")
-      curl.printValueLock = (miutil::to_upper(argu) == "TRUE");
+      curl.printValueLock = argu_true;
     else if (keyw == "linebars")
-      curl.lineBar = (miutil::to_upper(argu) == "TRUE");
+      curl.lineBar = argu_true;
     else if (keyw == "linestep")
-      curl.lineStep = (miutil::to_upper(argu) == "TRUE");
+      curl.lineStep = argu_true;
     else if (keyw == "asnumber")
-      curl.asNumber = (miutil::to_upper(argu) == "TRUE");
+      curl.asNumber = argu_true;
     else if (keyw == "datestyle")
       curl.datestyle = Str2DateStyle(argu);
     else if (keyw == "legendlinesinside")
-      curl.legendlineinside = (miutil::to_upper(argu) == "TRUE");
+      curl.legendlineinside = argu_true;
     else if (keyw == "datalimits")
       curl.datalimits = Str2FloatList(argu);
     else if (keyw == "colorbyvalue")
-      curl.colorbyvalue = (miutil::to_upper(argu) == "TRUE");
+      curl.colorbyvalue = argu_true;
     else if (keyw == "linestylebyvalue")
-      curl.linestylebyvalue = (miutil::to_upper(argu) == "TRUE");
+      curl.linestylebyvalue = argu_true;
     else if (keyw == "fillbyvalue")
-      curl.fillbyvalue = (miutil::to_upper(argu) == "TRUE");
+      curl.fillbyvalue = argu_true;
     else if (keyw == "smoothing")
-      curl.smoothing = (miutil::to_upper(argu) == "TRUE");
+      curl.smoothing = argu_true;
     else if (keyw == "smoothdiv")
       curl.smoothdiv = atoi(argu.c_str());
     else if (keyw == "datainknots")
-      curl.datainknots = (miutil::to_upper(argu) == "TRUE");
+      curl.datainknots = argu_true;
     else if (keyw == "scalewidth")
-      curl.scalewidth = (miutil::to_upper(argu) == "TRUE");
+      curl.scalewidth = argu_true;
     else if (keyw == "wrapdegrees")
-      curl.wrapdegrees = (miutil::to_upper(argu) == "TRUE");
+      curl.wrapdegrees = argu_true;
     else if (keyw == "wraplimit")
       curl.wraplimit = atof(argu.c_str());
 
@@ -1213,3 +1215,4 @@ void ptStyle::clear()
   nAxes = 0;
 }
 
+} // namespace pets2

@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
-  
-  $Id$
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -11,7 +9,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,17 +19,19 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
-#ifndef _ptTimemarkerElement_h
-#define _ptTimemarkerElement_h
+#ifndef PETS2_TIMEMARKERELEMENT_H
+#define PETS2_TIMEMARKERELEMENT_H
 
 #include "ptPlotElement.h"
+
+namespace pets2 {
 
 class TimemarkerElement : public PlotElement {
   float axeStopY;
@@ -43,14 +43,14 @@ class TimemarkerElement : public PlotElement {
   std::vector<miutil::miTime> markTimes;
 
 public:
-  TimemarkerElement(const std::vector<miutil::miTime> tline,
-		    const ptVertFieldf& field, 
-		    const Layout& layout, 
-		    XAxisInfo* xtime);
-  void setTimes(const std::vector<miutil::miTime> mtimes)
-    {markTimes= mtimes; }
-  void plot();
+  TimemarkerElement(const std::vector<miutil::miTime>& tline,
+      const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
+  void setTimes(const std::vector<miutil::miTime>& mtimes)
+    { markTimes= mtimes; }
+  void plot(ptPainter& painter);
   bool needsData() { return false; }
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_TIMEMARKERELEMENT_H

@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -28,12 +26,14 @@
 */
 
 
-#ifndef _intervalelement_h
-#define _intervalelement_h
+#ifndef PETS2_INTERVALELEMENT_H
+#define PETS2_INTERVALELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
 #include <puTools/miTime.h>
+
+namespace pets2 {
 
 class IntervalElement : public PlotElement
 {
@@ -53,14 +53,16 @@ private:
   std::vector<miutil::miTime> timeLine;
   ptLineStyle style;
 public:
-  IntervalElement(const std::vector<miutil::miTime> tline,
+  IntervalElement(const std::vector<miutil::miTime>& tline,
       const ptVertFieldf& field,
       const Layout& layout,
       XAxisInfo* xtime);
 
-  void plot();
+  void plot(ptPainter& painter);
   void setTimes(const std::vector<tinterval>& t);
   bool needsData() { return false; }
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_INTERVALELEMENT_H

@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -33,19 +31,26 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptYaxisElement.h>
+#include "ptYaxisElement.h"
+
+#include <cmath>
+#include <cfloat>
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 staticYaxisElement::staticYaxisElement(const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime) :
-  yAxisElement(field, layout, xtime), numTickMajor(layout.numTickMajor),
-      numTickMinor(layout.numTickMinor), labelSpace(layout.labelSpace)
+  yAxisElement(field, layout, xtime)
+  , numTickMajor(layout.numTickMajor)
+  , numTickMinor(layout.numTickMinor)
+  , labelSpace(layout.labelSpace)
 {
 #ifdef DEBUG
   cout << "Inside staticYaxisElement's constructor" << endl;
@@ -64,17 +69,28 @@ void staticYaxisElement::calcPlotVal()
   int i;
   float totalwidth = 0, lstartx = 0;
 
-  _prepFont();
-  _getMaxCharSize(charWidth, charHeight);
-  charHeight_2 = charHeight / 2.0;
+  float charHeight_2 = 10;
+  if (canvas) {
+    canvas->setFontSize(fontSize);
+    charHeight_2 = canvas->getTextHeight()/2.0;
 
-  for (i = 0; i < numChild + 1; i++) {
-    _getStringSize(Labels[i], labelW[i], labelH[i]);
-    if (labelW[i] > maxwid)
-      maxwid = labelW[i];
-    // calculate total width for horizontal legends
-    if (i > 0)
-      totalwidth += labelW[i] + linlen + charWidth;
+    for (i = 0; i < numChild + 1; i++) {
+      const QSizeF bbx = canvas->getTextSize(QString::fromStdString(Labels[i]));
+      labelW[i] = bbx.width();
+      labelH[i] = bbx.height();
+      if (labelW[i] > maxwid)
+        maxwid = labelW[i];
+      // calculate total width for horizontal legends
+      if (i > 0)
+        totalwidth += labelW[i] + linlen + charWidth;
+    }
+  } else {
+    const float V = 10;
+    charHeight_2 = V/2;
+    for (i=0; i<numChild+1; i++)
+      labelW[i] = labelH[i] = V;
+    totalwidth = V + numChild*(V + linlen + charWidth);
+    maxwid = 10;
   }
   if (!horLabels) {// vertical printed legends
     labelY[numChild] = axeStopY - labelH[numChild];
@@ -91,7 +107,7 @@ void staticYaxisElement::calcPlotVal()
   deltaY = axeStopY - startY - labelSpace;
 
   switch (axis) {
-  case LEFTLEFT:
+  case pets2::LEFTLEFT:
     lsign = sign = -1;
     if (legendlineinside)
       lsign = 1;
@@ -117,7 +133,7 @@ void staticYaxisElement::calcPlotVal()
       }
     }
     break;
-  case RIGHTRIGHT:
+  case pets2::RIGHTRIGHT:
     lsign = sign = 1;
     if (legendlineinside)
       lsign = -1;
@@ -141,7 +157,7 @@ void staticYaxisElement::calcPlotVal()
       }
     }
     break;
-  case LEFTRIGHT:
+  case pets2::LEFTRIGHT:
     lsign = sign = 1;
     zerox = xtime->x1;
     tickX = zerox + tickLen;
@@ -161,7 +177,7 @@ void staticYaxisElement::calcPlotVal()
       }
     }
     break;
-  case RIGHTLEFT:
+  case pets2::RIGHTLEFT:
     lsign = sign = -1;
     zerox = xtime->x2;
     tickX = zerox - tickLen;
@@ -183,16 +199,15 @@ void staticYaxisElement::calcPlotVal()
     }
     break;
   }
-
 }
 
 void staticYaxisElement::calcDims()
 {
-  int i, j;
   // new : get min,max,delta each time
-  float cMax, cMin, Max = -100000, Min = 100000, Delta;
-  for (j = 0; j < numChild; j++) {
+  float Max=-100000, Min=100000;
+  for (int j=0; j<numChild; j++) {
     if (child[j]->isEnabled()) {
+      float cMax, cMin;
       child[j]->dataInfo(cMin, cMax);
       if (cMax > Max)
         Max = cMax;
@@ -200,17 +215,13 @@ void staticYaxisElement::calcDims()
         Min = cMin;
     }
   }
-
   if (useMinMax) {
     if (Min < minValue)
       Min = minValue;
     if (Max > maxValue)
       Max = maxValue;
   }
-
-  Delta = Max - Min;
-
-  float newDelta;
+  float Delta = Max - Min, newDelta;
 
   if (!minIsSet && !maxIsSet) {
     if (delta > 0.0001) {
@@ -233,8 +244,9 @@ void staticYaxisElement::calcDims()
       maxPlotY = Max;
       plotRange = Max - Min;
     } else {
-      plotRange = (Delta < minRange) ? minRange + 2 * minMargin : Delta + 2
-          * minMargin;
+      plotRange = (Delta < minRange)
+          ? minRange + 2 * minMargin
+          : Delta + 2 * minMargin;
 
       minPlotY = Min + (Delta - plotRange) / 2;
       if (minValue < minPlotY) {
@@ -275,8 +287,9 @@ void staticYaxisElement::calcDims()
     } else {
       minPlotY = minValue;
       newDelta = Max - minPlotY;
-      plotRange = (newDelta < minRange) ? minRange + minMargin : newDelta
-          + minMargin;
+      plotRange = (newDelta < minRange)
+          ? minRange + minMargin
+          : newDelta + minMargin;
       maxPlotY = minPlotY + plotRange;
       if (maxValue > maxPlotY) {
         plotRange += (maxValue - maxPlotY);
@@ -287,8 +300,9 @@ void staticYaxisElement::calcDims()
   } else { // maxIsSet
     maxPlotY = maxValue;
     newDelta = maxPlotY - Min;
-    plotRange = (newDelta < minRange) ? minRange + minMargin : newDelta
-        + minMargin;
+    plotRange = (newDelta < minRange)
+        ? minRange + minMargin
+        : newDelta + minMargin;
     minPlotY = maxPlotY - plotRange;
     if (minValue < minPlotY) {
       plotRange += (minPlotY - minValue);
@@ -302,16 +316,15 @@ void staticYaxisElement::calcDims()
 
   float matick = float(deltaY) / numTickMajor;
   float mitick = matick / numTickMinor;
-  float value, fy;
 
-  fy = startY - mitick;
-  for (i = 0; i <= numTickMajor; i++) {
+  float fy = startY - mitick;
+  for (int i = 0; i <= numTickMajor; i++) {
     fy += mitick;
     majorticks.push_back(int(fy));
-    value = minPlotY + (plotRange / float(deltaY)) * (fy - startY);
+    float value = minPlotY + (plotRange / float(deltaY)) * (fy - startY);
     majorphys.push_back(value);
     if (i < numTickMajor)
-      for (j = 0; j < numTickMinor - 1; j++) {
+      for (int j = 0; j < numTickMinor - 1; j++) {
         fy += mitick;
         minorticks.push_back(int(fy));
       }
@@ -325,3 +338,5 @@ void staticYaxisElement::setTimeInterval(const int start, const int stop)
 
   //cerr << "staticYaxisElement::setTimeInterval for axis:" << id << endl;
 }
+
+} // namespace pets2

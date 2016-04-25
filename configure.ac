@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT([pets2], [5.1.0], [diana@met.no])
+AC_INIT([pets2], [6.0.0], [diana@met.no])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -24,17 +24,16 @@ AC_LANG_POP([C++])
 
 METNO_ENABLE_CONDITIONAL([SHARED_LIBRARY], [shared])
 
-METNO_REQUIRE_PKG([PUTOOLS],[puTools])
-METNO_REQUIRE_PKG([GLP],[glp])
-METNO_REQUIRE_PKG([GLTEXT],[glText])
+METNO_REQUIRE_PKG([PUTOOLS],[puTools], [5.0.4])
 METNO_REQUIRE_PKG([TSDATA],[tsData], [5.2.0])
-METNO_REQUIRE_PKG([PNG], [libpng])
 
+METNO_REQUIRE_QT4([Gui Core])
 
 AC_CONFIG_FILES([
 	pets2.pc
 	Makefile
 	src/Makefile
+	test/Makefile
 ])
 
 AC_OUTPUT

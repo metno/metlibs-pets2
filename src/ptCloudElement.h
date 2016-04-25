@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -25,27 +25,29 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-#ifndef _cloudelement_h
-#define _cloudelement_h
+#ifndef PETS2_CLOUDELEMENT_H
+#define PETS2_CLOUDELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
 
+namespace pets2 {
 
 class CloudElement : public dataPlotElement
 {
   ptFillStyle style;
   float width;
-  float deltaX; // width of cloudbox
   std::string text;
+
 public:
   CloudElement(const DataSpec cds,
       const ptVertFieldf& field,
       const Layout& layout,
       XAxisInfo* xtime);
-  void plot();
+  void plot(ptPainter& painter);
   bool needsData() { return true; }
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_CLOUDELEMENT_H

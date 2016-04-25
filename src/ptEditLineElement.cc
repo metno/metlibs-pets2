@@ -1,7 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- Copyright (C) 2013 met.no
+ Copyright (C) 2013-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -31,18 +31,23 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptEditLineElement.h>
-#include <puCtools/puMath.h>
-#include <fstream>
-#include <iostream>
-#include <math.h>
+#include "ptEditLineElement.h"
 
-using namespace miutil;
-using namespace std;
+#include <puCtools/puMath.h>
+
+#include <QPolygonF>
+
+#include <cmath>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
+
+namespace pets2 {
 
 EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
-                                 const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
     : AxisChildElement(ya, cds, field, layout, xtime)
     , editMode(LE_SINGLE)
     , markerType(LE_RECT)
@@ -74,7 +79,7 @@ EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
     accuvalues.push_back(0.0);
   }
   // Init undo ringbuffer
-  undobuffer = new ring<vector<float> > (20);
+  undobuffer = new ring<std::vector<float> > (20);
   // check pformat
   if (!pformat.length())
     pformat = "%1.2f";
@@ -99,50 +104,27 @@ EditLineElement::~EditLineElement()
   delete undobuffer;
 }
 
-void EditLineElement::plot()
+void EditLineElement::plot(ptPainter& painter)
 {
-
   if (enabled && Yaxis && visible) {
 #ifdef DEBUG
-    cout << "EditLineElement::plot()" << endl;
+    cout << "EditLineElement::plot(ptPainter& painter)" << endl;
 #endif
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     _prePlot();
-    _setColor(color);
+    painter.setLine(color, lineWidth, style);
 
     // plot curve
-    float mSizeX = markerSize * pixWidth;
-    float mSizeY = markerSize * pixHeight;
-    vector<float> dataX, dataY;
+    float mSizeX = markerSize * painter.pixWidth();
+    float mSizeY = markerSize * painter.pixHeight();
+    std::vector<float> dataX, dataY;
 
-    bool fakestipple = false;
-    if ((!useColour) || pInColour) {
-      if (!useFakeStipple) {
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(LineStyle[style][0], LineStyle[style][1]);
-      } else
-        fakestipple = true;
-    }
-    glLineWidth(lineWidth);
-    glPointSize(lineWidth);
-
-    if (editstyle == ES_HISTOGRAM && fstyle != SOLID) {
-      glEnable(GL_POLYGON_STIPPLE);
-      glPolygonStipple(fillPattern(fstyle));
+    if (editstyle == ES_HISTOGRAM) {
+      painter.setFillStyle(fstyle);
     }
 
     float prevx = -2000, prevy;
     bool firstsegment = true;
-
-    if (editstyle == ES_LINE) {
-      if (fakestipple)
-        glBegin(GL_POINTS);
-      else
-        glBegin(GL_LINE_STRIP);
-    }
 
     int j = 0;
     int k = 0, i;
@@ -151,6 +133,7 @@ void EditLineElement::plot()
     float oldx = -1000, oldy, x1, x2;
     bool drawprevhisto = false, firstisstart;
 
+    QPolygonF esline;
     for (i = startT; i <= stopT; i++) {
       if (valid(i)) {
         dataX.push_back(xval(i));
@@ -164,16 +147,16 @@ void EditLineElement::plot()
             x2 = dataX[k];
 
             if ((dataY[k] - startY) > 0) {
-              _setColor(histocolor);
-              glRectf(x1, startY, x2, dataY[k]);
-              _setColor(color);
+              painter.setFill(histocolor, fstyle);
+              painter.drawRect(x1, startY, x2, dataY[k]);
               if (lineWidth > 0) {
-                glBegin(GL_LINE_STRIP);
-                glVertex2f(x1, startY);
-                glVertex2f(x1, dataY[k]);
-                glVertex2f(x2, dataY[k]);
-                glVertex2f(x2, startY);
-                glEnd();
+                painter.setLine(color, lineWidth, style);
+                QPolygonF line;
+                line << QPointF(x1, startY)
+                     << QPointF(x1, dataY[k])
+                     << QPointF(x2, dataY[k])
+                     << QPointF(x2, startY);
+                painter.drawPolyline(line);
               }
             }
 
@@ -186,16 +169,16 @@ void EditLineElement::plot()
                   x1 -= d2;
                 x2 = oldx + d2;
                 if ((oldy - startY) > 0) {
-                  _setColor(histocolor);
-                  glRectf(x1, startY, x2, oldy);
-                  _setColor(color);
+                  painter.setFill(histocolor, fstyle);
+                  painter.drawRect(x1, startY, x2, oldy);
                   if (lineWidth > 0) {
-                    glBegin(GL_LINE_STRIP);
-                    glVertex2f(x1, startY);
-                    glVertex2f(x1, oldy);
-                    glVertex2f(x2, oldy);
-                    glVertex2f(x2, startY);
-                    glEnd();
+                    painter.setLine(color, lineWidth, style);
+                    QPolygonF line;
+                    line << QPointF(x1, startY)
+                         << QPointF(x1, oldy)
+                         << QPointF(x2, oldy)
+                         << QPointF(x2, startY);
+                    painter.drawPolyline(line);
                   }
                 }
                 drawprevhisto = false;
@@ -211,16 +194,16 @@ void EditLineElement::plot()
                 x2 = dataX[k];
 
               if ((dataY[k] - startY) > 0) {
-                _setColor(histocolor);
-                glRectf(x1, startY, x2, dataY[k]);
-                _setColor(color);
+                painter.setFill(histocolor, fstyle);
+                painter.drawRect(x1, startY, x2, dataY[k]);
                 if (lineWidth > 0) {
-                  glBegin(GL_LINE_STRIP);
-                  glVertex2f(x1, startY);
-                  glVertex2f(x1, dataY[k]);
-                  glVertex2f(x2, dataY[k]);
-                  glVertex2f(x2, startY);
-                  glEnd();
+                  painter.setLine(color, lineWidth, style);
+                  QPolygonF line;
+                  line << QPointF(x1, startY)
+                       << QPointF(x1, dataY[k])
+                       << QPointF(x2, dataY[k])
+                       << QPointF(x2, startY);
+                  painter.drawPolyline(line);
                 }
               }
             } else {
@@ -240,42 +223,24 @@ void EditLineElement::plot()
               x2 = dataX[k] + 20;
             else
               x2 = dataX[k];
-            glBegin(GL_LINES);
-            glVertex2f(x1, dataY[k]);
-            glVertex2f(x2, dataY[k]);
-            glEnd();
+            painter.drawLine(x1, dataY[k], x2, dataY[k]);
           }
 
         } else if (editstyle == ES_LINE) { // LINE
-          if (fakestipple) {
-            if (prevx > -1000) {
-              lineSegment(prevx, prevy, dataX[k], dataY[k],
-                  LineStyle[style][0], LineStyle[style][1], firstsegment);
-              firstsegment = false;
-            }
-            prevx = dataX[k];
-            prevy = dataY[k];
-          } else {
-            if (wrapdegrees && k > 0 && fabsf(dval(k) - dval(k - 1))
-                >= wraplimit) {
-              glEnd();
-              glBegin(GL_LINE_STRIP);
-            }
-            glVertex2f(dataX[k], dataY[k]);
+          if (wrapdegrees && k > 0 && fabsf(dval(k) - dval(k - 1)) >= wraplimit) {
+            painter.drawPolyline(esline);
+            esline.clear();
           }
+          esline << QPointF(dataX[k], dataY[k]);
         } // editstyle if
         j++;
         k++;
         oldx = xval(i);
       }
     }
-    if (editstyle == ES_LINE) {
-      glEnd();
+    if (editstyle == ES_LINE && !esline.isEmpty()) {
+      painter.drawPolyline(esline);
     }
-    _updatePrinting();
-
-    glDisable(GL_POLYGON_STIPPLE);
-    glDisable(GL_LINE_STIPPLE);
 
     if (activenodes) {
       int act = activePoint - prepoints;
@@ -288,7 +253,7 @@ void EditLineElement::plot()
       float sw, sh;
       char svalue[80];
       if (printValue) {
-        _prepFont();
+        painter.setFontSize(fontSize);
       }
       for (i = 0; i < dataX.size(); i++) {
         ox = dataX[i];
@@ -298,8 +263,7 @@ void EditLineElement::plot()
           ox = (dataX[i - 1] + dataX[i]) / 2.0;
         }
         if (markedPoints[i + prepoints]) {
-          glRectf(ox - mSizeX, oy - mSizeY, ox + mSizeX, oy + mSizeY);
-          _updatePrinting();
+          painter.drawRect(ox - mSizeX, oy - mSizeY, ox + mSizeX, oy + mSizeY);
           if (printValue && activePoint == i + prepoints) {
             if (Yaxis->hasUserLabels()) {
               std::string label = Yaxis->userValueLabel(dval(prepoints + i));
@@ -308,27 +272,18 @@ void EditLineElement::plot()
             } else {
               snprintf(svalue, sizeof(svalue), pformat.c_str(), dval(prepoints + i));
             }
-            _getStringSize(svalue, sw, sh);
-            _setColor(backcolor);
-            glRectf(ox - 3, oy + mSizeY * 3 - 5, ox + sw + 3, oy + mSizeY * 3
-                + sh/*mSizeY*5*/);
-            _updatePrinting();
-            _setColor(color);
-            _printString(svalue, ox, oy + mSizeY * 3);
-            _updatePrinting();
+            const QString qtext(svalue);
+            const QSizeF sz = painter.getTextSize(qtext);
+            painter.setFill(backcolor);
+            painter.drawRect(ox - 3, oy + mSizeY * 3 - 5, ox + sw + 3, oy + mSizeY * 3 + sh/*mSizeY*5*/);
+            painter.setLine(color);
+            painter.drawText(qtext, ox, oy + mSizeY * 3);
           }
         } else {
-          _glBegin(GL_LINE_LOOP,5);
-          glVertex2f(ox - mSizeX, oy - mSizeY);
-          glVertex2f(ox + mSizeX, oy - mSizeY);
-          glVertex2f(ox + mSizeX, oy + mSizeY);
-          glVertex2f(ox - mSizeX, oy + mSizeY);
-          _glEnd();
-          _updatePrinting();
+          painter.drawRect(ox - mSizeX, oy - mSizeY, ox + mSizeX, oy + mSizeY);
         }
       }
     }
-    glDisable(GL_BLEND);
   }
 }
 
@@ -355,7 +310,7 @@ bool EditLineElement::grabPoint(float x, float y, bool mark, bool fillInterval)
 {
   if (!activenodes)
     return false;
-  float sensi = 7 * pixWidth; // sensibility in pixels
+  float sensi = 7 * canvas->pixWidth(); // sensibility in pixels
   float px, py;
   int i, j, k, l = -1;
   bool aHit = false; // return value
@@ -474,7 +429,6 @@ bool EditLineElement::grabPoint(int step, bool mark, bool fillInterval)
         } else {
           aHit = markedPoints[l]; // return true only if point marked.
         }
-        // 	cerr << "ACTIVEPOINT = " << activePoint << endl;
         break;
       }
       l++;
@@ -500,7 +454,7 @@ void EditLineElement::setValuePrinting(const bool flag)
 //
 void EditLineElement::saveundo()
 {
-  vector<float> v;
+  std::vector<float> v;
   if (undobuffer) {
     //v = data->data;
     for (int i = 0; i < datasize(); i++)
@@ -514,7 +468,7 @@ void EditLineElement::undo()
 {
   if (undobuffer->size()) {
     //cout << "Undobuffer.size:" << undobuffer->size() << endl;
-    vector<float> v = undobuffer->pop();
+    std::vector<float> v = undobuffer->pop();
     for (int i = 0; i < v.size(); i++)
       setdval(i, v[i]);
     calcDataProperties();
@@ -523,7 +477,7 @@ void EditLineElement::undo()
 
 // replace data for marked points with data from source
 void EditLineElement::replaceDataValues(const WeatherParameter & source){
-  vector<float> sd = source.copyDataVector();
+  std::vector<float> sd = source.copyDataVector();
   if (sd.size() != datasize())
     return;
   //saveundo();
@@ -873,3 +827,4 @@ void EditLineElement::releaseButton()
     releasePoints();
 }
 
+} // namespace pets2

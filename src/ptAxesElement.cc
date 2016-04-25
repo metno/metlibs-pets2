@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,16 +32,19 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptAxesElement.h>
+#include "ptAxesElement.h"
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 AxesElement::AxesElement(const ptVertFieldf& field,
-			 const Layout& layout,
-			 const bool& hor,
-			 XAxisInfo* xtime)
+    const Layout& layout, const bool& hor, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime)
   , y1(field.y1+layout.tickLen), y2(field.y2-layout.labelSpace)
   , axisWidth(layout.axisWidth), tickLineWidth(layout.tickWidth)
@@ -58,45 +59,33 @@ AxesElement::AxesElement(const ptVertFieldf& field,
 }
 
 
-void AxesElement::plot()
+void AxesElement::plot(ptPainter& painter)
 {
-  if(enabled) {
+  if (!enabled)
+    return;
 
 #ifdef DEBUG
-    cout << "AxesElement::plot()" <<endl;
+  cout << "AxesElement::plot(ptPainter& painter)" <<endl;
 #endif
-    if (horizontal){
-      x1 = xtime->x1;
-      x2 = xtime->x2;
-    }
-    _setColor(color);
-    glLineWidth(axisWidth);
+  if (horizontal) {
+    x1 = xtime->x1;
+    x2 = xtime->x2;
+  }
+  painter.setLine(color, axisWidth);
 
-    // draw a rectangle
-    if (rectangle) {
-      _glBegin(GL_LINE_STRIP,4);
-      glVertex2f(x1,y1); glVertex2f(x1,y2);
-      glVertex2f(x2,y2); glVertex2f(x2,y1);
-      _glEnd();
-    }
-    _updatePrinting();
+  if (rectangle) {
+    painter.drawRect(x1, y1, x2, y2);
+  }
 
-    if (horizontal) {
-      // draw the x-axis with tick marks
-      _glBegin(GL_LINES,2);
-      glVertex2f(x1,y1); glVertex2f(x2,y1);   // axis
-      _glEnd();
-      _updatePrinting();
+  if (horizontal) {
+    // draw the x-axis with tick marks
+    painter.drawLine(x1, y1, x2, y1);   // axis
 
-      glLineWidth(tickLineWidth);
-      _setColor(tickColor);
-      _glBegin(GL_LINES,2*(stopT-startT+1));
-      for(int i=startT; i<=stopT; i++) {            // tick marks
- 	glVertex2f(xtime->xcoord[i],startY);
-	glVertex2f(xtime->xcoord[i],y1);
-      }
-      _glEnd();
-      _updatePrinting();
+    painter.setLine(tickColor, tickLineWidth);
+    for(int i=startT; i<=stopT; i++) {            // tick marks
+      painter.drawLine(xtime->xcoord[i], startY, xtime->xcoord[i], y1);
     }
   }
 }
+
+} // namespace pets2

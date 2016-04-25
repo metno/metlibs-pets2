@@ -1,8 +1,8 @@
 // -*- c++ -*-
 /*
   libpets2 - presentation and editing of time series
-  
-  Copyright (C) 2013 met.no
+
+  Copyright (C) 2013-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -10,7 +10,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -20,19 +20,21 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
-#ifndef _lineelement_h
-#define _lineelement_h
+#ifndef PETS2_LINEELEMENT_H
+#define PETS2_LINEELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
 #include "ptYaxisElement.h"
+
+namespace pets2 {
 
 class LineElement : public AxisChildElement
 {
@@ -61,15 +63,13 @@ class LineElement : public AxisChildElement
   bool isMultiLine;
 
 public:
-  LineElement(yAxisElement* ya,
-	      const DataSpec cds,
-	      const ptVertFieldf& field, 
-	      const Layout& layout, 
-	      XAxisInfo* xtime,
-	      bool ismulti=false);
-  void plot();
+  LineElement(yAxisElement* ya, const DataSpec cds, const ptVertFieldf& field,
+      const Layout& layout, XAxisInfo* xtime, bool ismulti=false);
+  void plot(ptPainter& painter);
   bool needsData() { return true; }
   void dataInfo(float &min, float &max);
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_LINEELEMENT_H

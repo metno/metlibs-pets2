@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,21 +25,22 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptGlobals.h : global constants and declarations for PETS
 
-#ifndef _globals_h
-#define _globals_h
+#ifndef PETS2_GLOBALS_H
+#define PETS2_GLOBALS_H
 
-#include <GL/gl.h>
-#include <float.h>
-#include <limits.h>
+#include <cfloat>
+
+namespace pets2 {
 
 const float F_UNDEF = -32767.0;
 const int   I_UNDEF = -32767;
 
 const int MAXPRIMF = 200; //max number of file primitives
 const int MAXPRIM  = 200; //max number of addititional primitives
+
+} // namespace pets2
 
 struct ptPointf {
   float x,y;
@@ -77,14 +76,4 @@ struct ptHorFieldf {
   float x1, x2;
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-

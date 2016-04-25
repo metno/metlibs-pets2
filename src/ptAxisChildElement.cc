@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,19 +32,22 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptYaxisElement.h>
+#include "ptYaxisElement.h"
+
+#include <cmath>
+#include <cfloat>
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 AxisChildElement::AxisChildElement(yAxisElement* ya,
-				   const DataSpec cds,
-				   const ptVertFieldf& field,
-				   const Layout& layout, XAxisInfo* xtime)
+    const DataSpec cds, const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : dataPlotElement(cds, layout, field, xtime)
   , Yaxis(ya)
   , lineWidth(layout.lineWidth)
@@ -226,3 +227,4 @@ AxisChildElement::~AxisChildElement()
 {
 }
 
+} // namespace pets2

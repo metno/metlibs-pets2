@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -35,15 +33,19 @@
 #endif
 
 #include "ptIntervalElement.h"
-#include "ptPlotElement.h"
+
 #include <puTools/miStringFunctions.h>
-#include <fstream>
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <cstdio>
+#endif // DEBUG
 
 using namespace miutil;
 
-IntervalElement::IntervalElement(const std::vector<miTime> tline,
+namespace pets2 {
+
+IntervalElement::IntervalElement(const std::vector<miTime>& tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime)
   , label(layout.text)
@@ -77,23 +79,14 @@ void IntervalElement::setTimes(const std::vector<tinterval>& t)
 }
 
 
-void IntervalElement::plot()
+void IntervalElement::plot(ptPainter& painter)
 {
   if(enabled && visible) {
 #ifdef DEBUG
-    cout << "IntervalElement::plot()" <<endl;
+    cout << "IntervalElement::plot(ptPainter& painter)" <<endl;
 #endif
-    _prepFont();
-    _setColor(color);
-
-    bool fakestipple = false;
-    if ((!useColour) || pInColour){
-      if (!useFakeStipple) {
-	glEnable(GL_LINE_STIPPLE);
-	glLineStipple(LineStyle[style][0],LineStyle[style][1]);
-      } else fakestipple = true;
-    }
-    glLineWidth(lineWidth);
+    painter.setFontSize(fontSize);
+    painter.setLine(color, lineWidth, style);
 
     int i;
     float th,tw;
@@ -102,55 +95,40 @@ void IntervalElement::plot()
     for (size_t j=0; j<intervals.size(); j++){
       xstart= -1;
       for (i=startT; i<=stopT; i++){
-	if (timeLine[i]==intervals[j].start)
-	  xstart= xtime->xcoord[i];
-	if (timeLine[i]==intervals[j].stop &&
-	    xstart>=0){
-	  float t1;
-	  int numt= intervals[j].text.size();
-	  float maxw=0;
-	  if (numt>0){
-	    float dy= deltaY/(numt*2.0);
-	    float tY= stopY-dy;
-	    for (int k=0; k<numt; k++){
-	      _getStringSize(intervals[j].text[k].c_str(),tw,th);
-	      t1= (xstart + xtime->xcoord[i] - tw)/2;
-	      _printString(intervals[j].text[k].c_str(),t1,tY-th/2);
-	      if (tw > maxw) maxw= tw;
-	      tY-= dy*2;
-	    }
-	  }
-	  if (miTime::hourDiff(intervals[j].stop,intervals[j].start)<4)
-	    continue;
-	  t1= (xstart + xtime->xcoord[i] - maxw)/2;
-	  float a11,a12,a21,a22;
-	  a11= xstart; a12= t1 - 10;
-	  a21= t1 + maxw + 10; a22= xtime->xcoord[i];
-	  if (fakestipple){
-	    _glBegin(GL_POINTS,1000);
-	    lineSegment(a11,midY,a12,midY,
-			LineStyle[style][0],
-			LineStyle[style][1],
-			true);
-	    _glEnd();
-	    _glBegin(GL_POINTS,1000);
-	    lineSegment(a21,midY,a22,midY,
-			LineStyle[style][0],
-			LineStyle[style][1],
-			true);
-	    _glEnd();
-	  } else {
-	    _glBegin(GL_LINES,4);
-	    glVertex2f(a11,midY);
-	    glVertex2f(a12,midY);
-	    glVertex2f(a21,midY);
-	    glVertex2f(a22,midY);
-	    _glEnd();
-	  }
-	  break;
-	}
+        if (timeLine[i]==intervals[j].start)
+          xstart= xtime->xcoord[i];
+        if (timeLine[i]==intervals[j].stop &&
+            xstart>=0){
+          float t1;
+          int numt= intervals[j].text.size();
+          float maxw=0;
+          if (numt>0){
+            float dy= deltaY/(numt*2.0);
+            float tY= stopY-dy;
+            for (int k=0; k<numt; k++){
+              const QString qtext = QString::fromStdString(intervals[j].text[k]);
+              const QSizeF bbx = painter.getTextSize(qtext);
+
+              t1= (xstart + xtime->xcoord[i] - bbx.width())/2;
+              painter.drawText(QPointF(t1,tY-bbx.height()/2), qtext);
+              if (bbx.width() > maxw)
+                maxw = bbx.width();
+              tY-= dy*2;
+            }
+          }
+          if (miTime::hourDiff(intervals[j].stop,intervals[j].start)<4)
+            continue;
+          t1= (xstart + xtime->xcoord[i] - maxw)/2;
+          float a11,a12,a21,a22;
+          a11= xstart; a12= t1 - 10;
+          a21= t1 + maxw + 10; a22= xtime->xcoord[i];
+          painter.drawLine(a11, midY, a12, midY);
+          painter.drawLine(a21, midY, a22, midY);
+          break;
+        }
       }
     }
-    glDisable(GL_LINE_STIPPLE);
   }
 }
+
+} // namespace pets2

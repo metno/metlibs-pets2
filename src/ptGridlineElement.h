@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
-  
-  $Id$
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -11,7 +9,7 @@
   0313 OSLO
   NORWAY
   email: diana@met.no
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
@@ -21,19 +19,20 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
-#ifndef _gridlineelement_h
-#define _gridlineelement_h
+#ifndef PETS2_GRIDLINEELEMENT_H
+#define PETS2_GRIDLINEELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
 
+namespace pets2 {
 
 class GridlineElement : public PlotElement
 {
@@ -51,14 +50,12 @@ class GridlineElement : public PlotElement
   std::vector<miutil::miTime> timeLine;
   std::vector<int> daychanges;
 public:
-  GridlineElement(const std::vector<miutil::miTime> tline,
-		  const ptVertFieldf& field, 
-		  const Layout& layout, 
-		  XAxisInfo* xtime);
-  void plot();
+  GridlineElement(const std::vector<miutil::miTime>& tline,
+      const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
+  void plot(ptPainter& painter);
   bool needsData() { return false; }
 };
 
+} // namespace pets2
 
-
-#endif
+#endif // PETS2_GRIDLINEELEMENT_H

@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,22 +32,25 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptTableElement.h>
+#include "ptTableElement.h"
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 TableElement::TableElement(const DataSpec cds,
-			   const ptVertFieldf& field,
-			   const Layout& layout,
-			   XAxisInfo* xtime)
-  :dataPlotElement(cds, layout, field, xtime),
-   label(layout.text), pformat(layout.pformat),
-   skipX(layout.minSkipX), vectorF(layout.vectorF),
-   cutoff(layout.cutoff)
+    const ptVertFieldf& field, const Layout& layout,     XAxisInfo* xtime)
+  : dataPlotElement(cds, layout, field, xtime)
+  , label(layout.text)
+  , pformat(layout.pformat)
+  , skipX(layout.minSkipX)
+  , vectorF(layout.vectorF)
+  , cutoff(layout.cutoff)
 {
 #ifdef DEBUG
   cout << "Inside TableElement's constructor" << endl;
@@ -57,11 +58,11 @@ TableElement::TableElement(const DataSpec cds,
   type=TABLE;
 }
 
-void TableElement::plot()
+void TableElement::plot(ptPainter& painter)
 {
   if(enabled && visible) {
 #ifdef DEBUG
-    cout << "TableElement::plot()" <<endl;
+    cout << "TableElement::plot(ptPainter& painter)" <<endl;
 #endif
     float th,tw;
     int i;
@@ -74,48 +75,43 @@ void TableElement::plot()
     {"N","NE","E","SE","S","SW","W","NW"};
     char temp[20];
 
-    _prepFont();
-    _setColor(color);
+    painter.setFontSize(fontSize);
+    painter.setColor(color);
 
     j = datastart();
 
     for (i=startT; i<=stopT; i++)
       if (valid(i)) {
-	if (++skip >= skipX){
-	  skip=0;
-	  if (vectorF) {
-	    str = dval(j,0);
-	    if (str>cutoff) {
-	      dir = dval(j,1);
-	      idir = int((dir+22.5) / 45.0);
-	      snprintf(temp, sizeof(temp), pformat.c_str(), str);
-	      if (idir >= 8) idir = 7;
-	      if (idir>=0)
-		strcpy(text,direction[idir]);
-	      else strcpy(text,"");
-	      strcat(text,temp);
-	    } else
-	      strcpy(text,"-");
-	    _getStringSize(text,tw,th);
-	    _printString(text,xtime->xcoord[i] - tw/2, startY);
-	    _updatePrinting();
-
-	  } else {
-	    str = dval(j);
-	    if (str>cutoff)
-	      snprintf(text, sizeof(text), pformat.c_str(), str);
-	    else
-	      strcpy(text,"-");
-	    _getStringSize(text,tw,th);
-	    _printString(text,xtime->xcoord[i] - tw/2, startY);
-	    _updatePrinting();
-	  }
-	}
-	j++;
+        if (++skip >= skipX){
+          skip=0;
+          if (vectorF) {
+            str = dval(j,0);
+            if (str>cutoff) {
+              dir = dval(j,1);
+              idir = int((dir+22.5) / 45.0);
+              snprintf(temp, sizeof(temp), pformat.c_str(), str);
+              if (idir >= 8) idir = 7;
+              if (idir>=0)
+                strcpy(text,direction[idir]);
+              else strcpy(text,"");
+              strcat(text,temp);
+            } else
+              strcpy(text,"-");
+          } else {
+            str = dval(j);
+            if (str>cutoff)
+              snprintf(text, sizeof(text), pformat.c_str(), str);
+            else
+              strcpy(text,"-");
+          }
+          const QString qtext = QString::fromStdString(text);
+          const float tw = painter.getTextWidth(qtext);
+          painter.drawText(QPointF(xtime->xcoord[i] - tw/2, startY), qtext);
+        }
+        j++;
       }
-    _printString(label,20,startY);
-    _updatePrinting();
+    painter.drawText(QPointF(20,startY), QString::fromStdString(label));
   }
 }
 
-
+} // namespace pets2

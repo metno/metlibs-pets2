@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,7 +25,6 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptLayout.cc
 
 #ifdef HAVE_CONFIG_H
@@ -35,13 +32,15 @@
 #endif
 
 #include "ptLayout.h"
+
 #include <puTools/miStringFunctions.h>
-#include <iostream>
 
 static std::string trimmed_upper(const std::string& text)
 {
   return miutil::trimmed(miutil::to_upper(text));
 }
+
+namespace pets2 {
 
 ptAxis Str2Axis(const std::string& buf){
   const std::string axis = trimmed_upper(buf);
@@ -241,7 +240,7 @@ Layout::Layout() :
 {
 }
 
-void Layout::print() const
+void pets2::Layout::print() const
 {
     std::cout << "Printing of layout:\n" << "\theight: " << height << "\tspacing: "
         << spacing << "\tintSpacing: " << intSpacing << "\tcolor: " << color
@@ -254,3 +253,5 @@ void Layout::print() const
         << "\tdelta: " << delta << "\tminMargin: " << minMargin
         << "\tfromFile: " << fromFile << std::endl;
 }
+
+} // namespace pets2

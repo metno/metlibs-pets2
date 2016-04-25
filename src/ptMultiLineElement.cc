@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,20 +32,20 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptMultiLineElement.h>
-#include <iostream>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
+#include "ptMultiLineElement.h"
 
-using namespace miutil;
+#include <QPolygonF>
+
+#include <cmath>
+#include <cfloat>
+
+namespace pets2 {
 
 MultiLineElement::MultiLineElement(yAxisElement* ya,
     const DataSpec cds,
     const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime)
-:AxisChildElement(ya,cds,field,layout,xtime)
+  :AxisChildElement(ya,cds,field,layout,xtime)
 {
 #ifdef DEBUG
   cout << "Inside MultiLineElement's constructor" << endl;
@@ -70,25 +68,16 @@ void MultiLineElement::dataInfo(float &min, float &max)
   max= ma;
 }
 
-void MultiLineElement::plot()
+void MultiLineElement::plot(ptPainter& painter)
 {
   if(enabled && Yaxis && visible) {
 #ifdef DEBUG
-    cout << "MultiLineElement::plot()" << endl;
+    cout << "MultiLineElement::plot(ptPainter& painter)" << endl;
 #endif
     _prePlot();
-    _setColor(color);
+    painter.setLine(color, lineWidth, style);
 
     // plot curves
-    bool fakestipple=false;
-    if ((!useColour) || pInColour){
-      if (!useFakeStipple) {
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(LineStyle[style][0],LineStyle[style][1]);
-      } else fakestipple=true;
-    }
-    glLineWidth(lineWidth);
-    glPointSize(lineWidth);
 
     std::vector<float> Xval;
     std::vector<int>   Yidx;
@@ -102,40 +91,19 @@ void MultiLineElement::plot()
       }
     }
 
-    _setColor(color);
-
     // the lines..
     bool firstsegment;
-    int comp, ndim= datadimension();
-    for (comp=0; comp<ndim; comp++){
-      if (fakestipple)
-        _glBegin(GL_POINTS,1000);
-      else
-        _glBegin(GL_LINE_STRIP,Xval.size()+1);
-
-      firstsegment = true;
-      for (i=0; i<Xval.size();i++){
-        if (fakestipple){
-          if (i>0){
-            lineSegment(Xval[i-1],yval(Yidx[i-1],comp),
-                Xval[i],yval(Yidx[i],comp),
-                LineStyle[style][0],
-                LineStyle[style][1],
-                firstsegment);
-            firstsegment=false;
-          }
-        } else {
-          glVertex2f(Xval[i],yval(Yidx[i],comp));
-        }
-      }
-      _glEnd();
-      _updatePrinting();
+    int ndim= datadimension();
+    QPolygonF line;
+    for (int comp=0; comp<ndim; comp++){
+      line << QPointF(Xval[i],yval(Yidx[i],comp));
     }
-
-    glDisable(GL_LINE_STIPPLE);
+    painter.drawPolyline(line);
 
 #ifdef DEBUG
-    cout << "MultiLineElement::plot() finished" << endl;
+    cout << "MultiLineElement::plot(ptPainter& painter) finished" << endl;
 #endif
   }
 }
+
+} // namespace pets2

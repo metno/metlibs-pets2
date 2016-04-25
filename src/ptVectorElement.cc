@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -33,15 +33,19 @@
 #endif
 
 #include "ptVectorElement.h"
-#include "ptPlotElement.h"
 
 #include <puTools/miStringFunctions.h>
 
-#include <iostream>
-#include <cstdio>
+#include <QPolygonF>
+
 #include <cmath>
 
-using namespace miutil;
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
+
+namespace pets2 {
 
 VectorElement::VectorElement(const DataSpec cds,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
@@ -66,16 +70,16 @@ VectorElement::VectorElement(const DataSpec cds,
 }
 
 
-void VectorElement::plot()
+void VectorElement::plot(ptPainter& painter)
 {
   if(enabled && visible) {
 #ifdef DEBUG
-    cout << "VectorElement::plot()" <<endl;
+    cout << "VectorElement::plot(ptPainter& painter)" <<endl;
 #endif
-    _prepFont();
+    painter.setFontSize(fontSize);
 
     const float YLEN=0.7*deltaY/2;
-    const float XLEN=YLEN*pixWidth/pixHeight;
+    const float XLEN=YLEN * painter.pixWidth() / painter.pixHeight();
     const float AFAC= -0.5;
     const float SFAC= AFAC*0.5;
 
@@ -88,110 +92,97 @@ void VectorElement::plot()
     float alpha;
 
     //plot quadratic boxes
-    _setColor(boxColor);
-    glLineWidth(lineWidth);
+    painter.setLine(boxColor, lineWidth);
+    painter.setFillStyle(pets2::NONE);
     for (i=startT;i<=stopT;i++) {
       if (valid(i)) {
-	// maybe skip timepoints
-	if (useTimes && (((i-startT) % useTimes) != 0))
-	  continue;
-	left = xtime->xcoord[i]-BOXDELTA;
-	right = left+2*BOXDELTA;
-	glRectf(left,boxBottom,right,boxTop);
+        // maybe skip timepoints
+        if (useTimes && (((i-startT) % useTimes) != 0))
+          continue;
+        left = xtime->xcoord[i]-BOXDELTA;
+        right = left+2*BOXDELTA;
+        painter.drawRect(left, boxBottom, right, boxTop);
       }
     }
-    _updatePrinting();
 
-    _setColor(color);
+    painter.setColor(color);
     j = datastart();
 
     //plotting of vector
     if (datadimension() == 1)// use scalar value as an angle (degrees)
       for (i=startT;i<=stopT;i++) {
-	if (valid(i)) {
-	  if (!reverse)
-	    alpha = M_PI_2 - M_PI*dval(j++,0)/180;
-	  else // angle rotated 180 degrees
-	    alpha = 3*M_PI_2 - M_PI*dval(j++,0)/180;
-	  // maybe skip timepoints
-	  if (useTimes && (((i-startT) % useTimes) != 0))
-	    continue;
+        if (valid(i)) {
+          if (!reverse)
+            alpha = M_PI_2 - M_PI*dval(j++,0)/180;
+          else // angle rotated 180 degrees
+            alpha = 3*M_PI_2 - M_PI*dval(j++,0)/180;
+          // maybe skip timepoints
+          if (useTimes && (((i-startT) % useTimes) != 0))
+            continue;
 
-	  uff = XLEN*cos(alpha);  // translate to radians
-	  vff = YLEN*sin(alpha);
-	  x0 = xtime->xcoord[i];
-	  // draw main arrow
-	  _glBegin(GL_LINES,0);
-	  glVertex2f(x0,y0);
-	  glVertex2f(x0+uff,y0+vff);
-	  _glEnd();
-	  // draw arrowhead
-	  if (arrow){
-	    _glBegin(GL_TRIANGLES);
-	    glVertex2f(x0+uff,y0+vff);
-	    glVertex2f(x0+uff+uff*AFAC+vff*SFAC,
-		       y0+vff+vff*AFAC-uff*SFAC);
-	    glVertex2f(x0+uff+uff*AFAC-vff*SFAC,
-		       y0+vff+vff*AFAC+uff*SFAC);
-	    _glEnd();
-	  }
-	}
+          uff = XLEN*cos(alpha);  // translate to radians
+          vff = YLEN*sin(alpha);
+          x0 = xtime->xcoord[i];
+          // draw main arrow
+          painter.drawLine(x0,y0,x0+uff,y0+vff);
+          // draw arrowhead
+          if (arrow) {
+            painter.setFillStyle(pets2::SOLID);
+            QPolygonF head;
+            head << QPointF(x0+uff,y0+vff)
+                 << QPointF(x0+uff+uff*AFAC+vff*SFAC, y0+vff+vff*AFAC-uff*SFAC)
+                 << QPointF(x0+uff+uff*AFAC-vff*SFAC, y0+vff+vff*AFAC+uff*SFAC);
+            painter.drawPolygon(head);
+          }
+        }
       }
     else                    // use vector
       for (i=startT;i<=stopT;i++) {
-	if (valid(i)) {
+        if (valid(i)) {
 
-	  if (polar) {
-	    ff = dval(j,0);   // force
-	    dd = dval(j++,1); // direction
-	    uu = -cos(M_PI_2 - M_PI_2*dd/90.0)*ff;
-	    vv = -sin(M_PI_2 - M_PI_2*dd/90.0)*ff;
-	  } else {
-	    uu = dval(j,0);     // x-component of vector
-	    vv = dval(j++,1);   // y-component of vector
-	  }
+          if (polar) {
+            ff = dval(j,0);   // force
+            dd = dval(j++,1); // direction
+            uu = -cos(M_PI_2 - M_PI_2*dd/90.0)*ff;
+            vv = -sin(M_PI_2 - M_PI_2*dd/90.0)*ff;
+          } else {
+            uu = dval(j,0);     // x-component of vector
+            vv = dval(j++,1);   // y-component of vector
+          }
 
-	  if ((ff=sqrt(uu*uu+vv*vv)) < MINVAL) // absolute value of vector
-	    continue;          // don't plot if absolute value is to small
-	  // maybe skip timepoints
-	  if (useTimes && (((i-startT) % useTimes) != 0))
-	    continue;
+          if ((ff=sqrt(uu*uu+vv*vv)) < MINVAL) // absolute value of vector
+            continue;          // don't plot if absolute value is to small
+          // maybe skip timepoints
+          if (useTimes && (((i-startT) % useTimes) != 0))
+            continue;
 
-	  uff = XLEN*uu/ff;         //scaled x-component in screen coordinates
-	  vff = YLEN*vv/ff;         // scaled y-component in screen coordinates
+          uff = XLEN*uu/ff;         //scaled x-component in screen coordinates
+          vff = YLEN*vv/ff;         // scaled y-component in screen coordinates
 
-	  x0 = xtime->xcoord[i];
-	  // draw main arrow
-	  _glBegin(GL_LINES,0);
-	  glVertex2f(x0,y0);
-	  glVertex2f(x0+uff,y0+vff);
-	  _glEnd();
-	  // draw arrowhead
-	  if (arrow){
-	    _glBegin(GL_TRIANGLES);
-	    glVertex2f(x0+uff,y0+vff);
-	    glVertex2f(x0+uff*AFAC+vff*SFAC,
-		       y0+vff*AFAC-uff*SFAC);
-	    glVertex2f(x0+uff*AFAC-vff*SFAC,
-		       y0+vff*AFAC+uff*SFAC);
-	    _glEnd();
-	  }
-	}
+          x0 = xtime->xcoord[i];
+          // draw main arrow
+          painter.drawLine(x0,y0,x0+uff,y0+vff);
+          // draw arrowhead
+          if (arrow){
+            painter.setFillStyle(pets2::SOLID);
+            QPolygonF head;
+            head << QPointF(x0+uff,y0+vff)
+                 << QPointF(x0+uff*AFAC+vff*SFAC, y0+vff*AFAC-uff*SFAC)
+                 << QPointF(x0+uff*AFAC-vff*SFAC, y0+vff*AFAC+uff*SFAC);
+            painter.drawPolygon(head);
+          }
+        }
       }
-    _updatePrinting();
 
     // print label
     if (label) {
       int n= vtext.size();
-      float tw,th,tth;
-      _getCharSize('0',tw,th);
-      tth= th*n/2;
+      const float th = painter.getTextHeight(), tth = th*n/2;
       for (int i=0; i<n; i++){
-	_printString(vtext[i],20,y0+tth-(i+1)*th);
+        painter.drawText(vtext[i], 20, y0+tth-(i+1)*th);
       }
-      _updatePrinting();
     }
   }
 }
 
-
+} // namespace pets2

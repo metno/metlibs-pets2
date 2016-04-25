@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -32,21 +32,27 @@
 #endif
 
 #include "ptTextElement.h"
-#include "ptPlotElement.h"
+
 #include "ptPatterns.h"
+
 #include <puTools/miStringFunctions.h>
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <cstring>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 TextElement::TextElement(const std::string& pText,
     const std::map<std::string, std::string>& keymap,
-    const ptVertFieldf& field,
-    const Layout& layout,
-    XAxisInfo* xtime)
-  : PlotElement(layout, field, xtime), bcolor(layout.color2),
-    fillstyle(layout.fillstyle), drawbackground(layout.drawbackground)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+  : PlotElement(layout, field, xtime)
+  , bcolor(layout.color2)
+  , fillstyle(layout.fillstyle)
+  , drawbackground(layout.drawbackground)
 {
 #ifdef DEBUG
   cout << "Inside TextElement's constructor" << endl;
@@ -73,16 +79,16 @@ TextElement::TextElement(const std::string& pText,
 }
 
 
-void TextElement::plot()
+void TextElement::plot(ptPainter& painter)
 {
   if(enabled && text.length() && visible) {
 #ifdef DEBUG
-    cout << "TextElement::plot(): " << text << endl;
+    cout << "TextElement::plot(ptPainter& painter): " << text << endl;
 #endif
     std::vector<float> vth, vtw;
     float th, tw, allth=0;
     float x;
-    _prepFont();
+    painter.setFontSize(fontSize);
 
     std::vector<std::string> vs;
     if (miutil::contains(text, "\n")){
@@ -93,27 +99,23 @@ void TextElement::plot()
 
     int n= vs.size();
     for (int i=0; i<n; i++){
-      _getStringSize(vs[i],tw,th);
-      vtw.push_back(tw);
-      vth.push_back(th);
+      const QSizeF bbx = painter.getTextSize(QString::fromStdString(vs[i]));
+      vtw.push_back(bbx.width());
+      vth.push_back(bbx.height());
       allth+= th;
     }
 
     if (drawbackground){
       startX= globalWindow.x1;
       stopX = globalWindow.x2;
-      if (fillstyle != SOLID){
-        glEnable(GL_POLYGON_STIPPLE);
-        glPolygonStipple(fillPattern(fillstyle));
-      }
-      _setColor(bcolor);
-      glRectf(startX,startY,stopX,stopY);
-      _updatePrinting();
-      glDisable(GL_POLYGON_STIPPLE);
+      painter.setFill(bcolor, fillstyle);
+      painter.setLineStyle(NOLINE);
+      painter.drawRect(startX, startY, stopX, stopY);
     }
 
     float deltaY= (stopY - startY)/n;
 
+    painter.setColor(color);
     for (int i=0; i<n; i++){
       switch(align) {
       case LEFT :
@@ -126,10 +128,9 @@ void TextElement::plot()
         x = ((globalWindow.x2 - globalWindow.x1) - vtw[i])/2.0;
         break;
       }
-
-      _setColor(color);
-      _printString(vs[i],x,startY+deltaY*i+(deltaY-vth[i]*0.75)/2.0);
-      _updatePrinting();
+      painter.drawText(vs[i], x, startY+deltaY*i+(deltaY-vth[i]*0.75)/2.0);
     }
   }
 }
+
+} // namespace pets2

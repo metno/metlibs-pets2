@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -32,15 +30,20 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptHistogramElement.h>
-#include <puTools/miTime.h>
-#include <iostream>
-#include <stdio.h>
+#include "ptHistogramElement.h"
+
 #include "ptPatterns.h"
-#include <float.h>
+
+#include <puTools/miTime.h>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
+
+namespace pets2 {
 
 HistogramElement::HistogramElement(const DataSpec cds,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime,
@@ -100,68 +103,49 @@ HistogramElement::~HistogramElement()
 
 // Currently assuming only one histogramelement (should use numHists to control
 // plotting)
-void HistogramElement::plot()
+void HistogramElement::plot(ptPainter& painter)
 {
   if (enabled && visible) {
 #ifdef DEBUG
-    cout << "HistogramElement::plot()" <<endl;
+    cout << "HistogramElement::plot(ptPainter& painter)" <<endl;
 #endif
-    float th, tw;
-    int i, j;
-    float y, deltay;
-    _prepFont();
-    _getCharSize('0', tw, th);
-    deltay = deltaY - th;
+    painter.setFontSize(fontSize);
+    const QSizeF bbx0 = painter.getTextSize("0");
+    float deltay = deltaY - bbx0.height();
 
-    float DELTAX = tw;
-    char text[6];
+    float DELTAX = bbx0.width();
 
-    _setColor(color);
-    glLineWidth(lineWidth);
-    if (style != SOLID) {
-      glEnable(GL_POLYGON_STIPPLE);
-      glPolygonStipple(fillPattern(style));
-    }
+    painter.setLine(color, lineWidth);
+    painter.setFillStyle(style);
 
-    float oldx, newx;
-    j = datastart();
+    int j = datastart();
 
-    oldx = xtime->xcoord[startT];
-    for (i = startT; i <= stopT; i++)
+    float oldx = xtime->xcoord[startT];
+    for (int i = startT; i <= stopT; i++)
       if (valid(i)) {
-        newx = xtime->xcoord[i];
+        float newx = xtime->xcoord[i];
         if (dval(j) >= 0.05) { // don't draw if is ignorable
-          y = startY + deltay * dval(j) * 3 / (deltaT[i] * max);
+          float y = startY + deltay * dval(j) * 3 / (deltaT[i] * max);
 #ifdef DEBUG
           cout << "histogram value:" << dval(j) << " startY:"<<startY
-          <<" deltaY:"<<deltay<<" deltaT["<<i<<"]:"
-          <<deltaT[i]<<" max:"<<max
-          <<" verdi:"<<y<<endl;
+               <<" deltaY:"<<deltay<<" deltaT["<<i<<"]:"
+               <<deltaT[i]<<" max:"<<max
+               <<" verdi:"<<y<<endl;
 #endif
           float del = (newx - oldx) / 10.0;
           float x1 = oldx + hstart * del;
           float x2 = newx - (10 - hstop) * del;
-          // enclosing box
-          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-          glBegin(GL_LINE_STRIP);
-          glVertex2f(x1, startY);
-          glVertex2f(x1, y);
-          glVertex2f(x2, y);
-          glVertex2f(x2, startY);
-          glEnd();
-          glRectf(x1, startY, x2, y);
-          _updatePrinting();
+          painter.drawRect(x1, startY, x2, y);
           if (drawlabel) {
-            glDisable(GL_POLYGON_STIPPLE);
-            snprintf(text, sizeof(text), "%2.1f", dval(j));
-            _printString(text, x1 + (x2 - x1) / 2 - DELTAX, y + YSPACE);
-            _updatePrinting();
-            glEnable(GL_POLYGON_STIPPLE);
+            QPointF pos(x1 + (x2 - x1) / 2 - DELTAX, y + YSPACE);
+            QString text = QString("%1").arg(dval(j), 3, 'f', 1);
+            painter.drawText(pos, text);
           }
         }
         oldx = newx;
         j++;
       }
-    glDisable(GL_POLYGON_STIPPLE);
   }
 }
+
+} // namespace pets2

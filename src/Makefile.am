@@ -5,6 +5,7 @@ pkgname = pets2
 lib_LTLIBRARIES = libpets2.la
 
 cc_sources= \
+        ptPainter.cc ptQPainter.cc \
 	ptAxesElement.cc \
 	ptAxisHistogramElement.cc \
 	ptBoxElement.cc \
@@ -16,10 +17,9 @@ cc_sources= \
 	ptDoubleLineElement.cc \
 	ptEditLineElement.cc \
 	ptFontDefs.cc \
-	ptFontManager.cc \
 	ptGridlineElement.cc \
 	ptHistogramElement.cc \
-	ptImage.cc \
+	ptImagePlot.cc \
 	ptIntervalElement.cc \
 	ptLayout.cc \
 	ptLineElement.cc \
@@ -51,40 +51,33 @@ pkg_includedir = ${includedir}/pets2
 
 pkg_include_HEADERS =        \
 	$(cc_sources:.cc=.h) \
-	polyStipMasks.h      \
 	ptEditModes.h        \
 	ptGlobals.h          \
-	ptImagePlot.h        \
-	ptParameterRelation.h\
 	ptStyleOrder.h       \
-	ptXAxisInfo.h
+	ptXAxisInfo.h        \
+	pets2Version.h
 
+noinst_HEADERS = polyStipMasks.h
 
 
 libpets2_la_CPPFLAGS = \
-	${GLTEXT_CPPFLAGS} \
-	${OPENGL_CPPFLAGS} \
+	$(QT4_CPPFLAGS) \
 	${PUTOOLS_CPPFLAGS} \
-	${TSDATA_CPPFLAGS} \
-	${PNG_CPPFLAGS}
+	${TSDATA_CPPFLAGS}
 
 libpets2_la_LDFLAGS = ${VERSION_INFO}
 libpets2_la_LIBADD =
 
 if ENABLE_SHARED_LIBRARY
 libpets2_la_LDFLAGS += \
-	${GLTEXT_LDFLAGS} \
-	${OPENGL_LDFLAGS} \
+	$(QT4_LDFLAGS) \
 	${PUTOOLS_LDFLAGS} \
-	${TSDATA_LDFLAGS} \
-	${PNG_LDFLAGS}
+	${TSDATA_LDFLAGS}
 
 libpets2_la_LIBADD += \
-	${GLTEXT_LIBS} \
-	${OPENGL_LIBS} \
+	$(QT4_LIBS) \
 	${PUTOOLS_LIBS} \
-	${TSDATA_LIBS} \
-	${PNG_LIBS}
+	${TSDATA_LIBS}
 endif
 
 

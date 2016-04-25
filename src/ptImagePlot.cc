@@ -25,34 +25,34 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include "ptImagePlot.h"
 
-#ifndef PETS2_QBOXELEMENT_H
-#define PETS2_QBOXELEMENT_H
-
-#include "ptGlobals.h"
-#include "ptPlotElement.h"
-#include "ptYaxisElement.h"
+#include "ptPainter.h"
 
 namespace pets2 {
 
-class QBoxElement : public AxisChildElement
+ptImagePlot::ptImagePlot()
+{ }
+
+ptImagePlot::ptImagePlot(const std::string& fname)
 {
-  float       lineWidth;
-  float       hstart;
-  float       hstop;
-  float       tickLen;
-  ptLineStyle linestyle;
-  ptColor     linecolor;
-  ptColor     boxcolor;
-  ptFillStyle boxfill;
-public:
-  QBoxElement(yAxisElement* ya, const DataSpec cds,
-      const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
-  void plot(ptPainter& painter);
-  void dataInfo(float&, float&); // return min and max physical values
-  bool needsData() { return true; }
-};
+  setimage(fname);
+}
+
+ptImagePlot::~ptImagePlot()
+{
+}
+
+void ptImagePlot::setimage(const std::string& fname)
+{
+  image = QImage(fname.c_str());
+}
+
+void ptImagePlot::plot(ptPainter& painter, const float& x, const float& y, const float& scale)
+{
+  if (!image.isNull()) {
+    painter.drawImage(x, y, image, scale);
+  }
+}
 
 } // namespace pets2
-
-#endif // PETS2_QBOXELEMENT_H

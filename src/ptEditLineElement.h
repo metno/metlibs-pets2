@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -28,8 +26,8 @@
 */
 
 
-#ifndef _editlineelement_h
-#define _editlineelement_h
+#ifndef PETS2_EDITLINEELEMENT_H
+#define PETS2_EDITLINEELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
@@ -38,6 +36,8 @@
 #include <puTools/miRing.h>
 
 #include <vector>
+
+namespace pets2 {
 
 class EditLineElement : public AxisChildElement
 {
@@ -73,16 +73,13 @@ public:
       const Layout& layout,
       XAxisInfo* xtime);
   ~EditLineElement();
-  void plot();
+  void plot(ptPainter& painter);
   bool needsData() { return true; }
 
   bool pMarked; // true if any points are marked for edit
   bool grabPoint(float x, float y,// return true if x,y near any datapoint
-		 bool mark = false,
-		 bool fillInterval = false);
-  bool grabPoint(int  step,
-		 bool mark,
-		 bool fillInterval);
+      bool mark = false, bool fillInterval = false);
+  bool grabPoint(int  step, bool mark, bool fillInterval);
   void movePoints(float dy); // move marked points dy
   void movePointsQuant(int dy); // move marked points dy quants
   void replaceDataValues(const WeatherParameter & source);
@@ -102,4 +99,6 @@ public:
   int  Priority() const { return priority;}
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_EDITLINEELEMENT_H

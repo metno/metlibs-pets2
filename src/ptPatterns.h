@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -30,13 +28,13 @@
 
 // ptPatterns.h : Definitions of polygon and line patterns
 
-#ifndef _patterns_h
-#define _patterns_h
-
-#include <GL/gl.h>
+#ifndef PETS2_PATTERNS_H
+#define PETS2_PATTERNS_H
 
 #include <string>
 #include <vector>
+
+namespace pets2 {
 
 enum ptFillStyle {
   NONE,
@@ -56,18 +54,11 @@ enum ptLineStyle {
   DASHED,
   DASHDOTTED,
   DASHDASHDOTTED,
-  DOTTED
+  DOTTED,
+  NOLINE
 };
 
-const unsigned int LineStyle[][2] = {
-  {1,0xFFFF},
-  {1,0x00FF},
-  {1,0x0C0F},
-  {1,0x1C47},
-  {2,0xAAAA}
-};
-
-extern const GLubyte* fillPattern(ptFillStyle);
+extern const unsigned char* fillPattern(ptFillStyle);
 
 extern ptFillStyle Str2FillStyle(const std::string&);
 extern ptLineStyle Str2LineStyle(const std::string&);
@@ -79,4 +70,6 @@ extern std::string LineStyle2Str(ptLineStyle);
 extern std::string FillStyleList2Str(const std::vector<ptFillStyle>&);
 extern std::string LineStyleList2Str(const std::vector<ptLineStyle>&);
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_PATTERNS_H

@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -36,43 +34,38 @@
 
 #include "ptPlotElement.h"
 #include <puTools/miStringFunctions.h>
-#include <glp/svgdocument.h>
+
+#include <cmath>
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
-#include <math.h>
+#endif // DEBUG
 
 using namespace miutil;
 
-GLPcontext* PlotElement::psoutput=0;    // document factory module
+namespace pets2 {
 
-bool PlotElement::printing= false;      // postscript plotting
-bool PlotElement::useFakeStipple=false; // imitate linestippling
-bool PlotElement::useColour=true;       // colour or black/white
-
-PlotElement::PlotElement(const Layout& layout,
-    const ptVertFieldf& field,
-    XAxisInfo *pXtime,
-    const bool& en,
-    PlotElement* pNext)
-: type(DUM_PRIMITIVE)
-, name(layout.name)
-, enabled(en)
-, visible(layout.visible)
-, startY(field.y1)
-, stopY(field.y2)
-, color(layout.color)
-, xtime(pXtime)
-, fontSize(layout.font)
-, align(layout.align)
-, glwidth(1.0), glheight(1.0)
-, scwidth(1), scheight(1)
-, pixWidth(1.0), pixHeight(1.0)
-, startT(0), stopT(pXtime->xcoord.size()-1)
-, AllTimesAxisScale(true)
-, pInColour(layout.patternInColour)
-, circle_list(0)
-, datalimits(layout.datalimits)
-, colorlist(layout.colorlist)
-, next(pNext) // FIXME public
+PlotElement::PlotElement(const Layout& layout, const ptVertFieldf& field,
+    XAxisInfo *pXtime, const bool& en, PlotElement* pNext)
+  : type(DUM_PRIMITIVE)
+  , name(layout.name)
+  , enabled(en)
+  , visible(layout.visible)
+  , startY(field.y1)
+  , stopY(field.y2)
+  , color(layout.color)
+  , xtime(pXtime)
+  , fontSize(layout.font)
+  , align(layout.align)
+  , canvas(0)
+  , startT(0)
+  , stopT(pXtime->xcoord.size()-1)
+  , AllTimesAxisScale(true)
+  , pInColour(layout.patternInColour)
+  , datalimits(layout.datalimits)
+  , colorlist(layout.colorlist)
+  , next(pNext) // FIXME public
 {
 #ifdef DEBUG
   cout << "Inside PlotElement's constructor" << endl;
@@ -81,16 +74,11 @@ PlotElement::PlotElement(const Layout& layout,
 
 PlotElement::~PlotElement()
 {
-  if (circle_list) glDeleteLists(circle_list,1);
 }
 
-void PlotElement::setViewport(int sw, int sh, float gw, float gh){
-  scwidth = sw;
-  scheight = sh;
-  glwidth = gw;
-  glheight = gh;
-  pixWidth = glwidth / scwidth;
-  pixHeight = glheight / scheight;
+void PlotElement::setViewport(ptCanvas* c)
+{
+  canvas = c;
 }
 
 
@@ -100,143 +88,6 @@ void PlotElement::setTimeInterval(const int start, const int stop)
     startT = start;
   if (stop >= 0 && stop < xtime->xcoord.size())
     stopT = stop;
-}
-
-void PlotElement::lineSegment(const float &x1, const float &y1,
-    const float &x2, const float &y2,
-    const unsigned int &repeat,
-    const unsigned int &bitmask,
-    const bool &reset)
-{
-  const int stip = 16;
-  const unsigned int mask[16] = {   1,   2,    4,    8,
-      16,  32,   64,  128,
-      256, 512, 1024, 2048,
-      4096,8192,16384,32768};
-  static int bi=0; // static bit-index
-  static int ri=0; // static repeat-index
-  if (reset) {
-    bi = 0;
-    ri = 0;
-  }
-
-  float dx = x2-x1;
-  float dy = y2-y1;
-  double L = sqrt(float(dx*dx + dy*dy));
-  if (L<0.001) return;
-
-  double xl = dx*1.0/L;
-  double yl = dy*1.0/L;
-
-  int l = 0;
-
-  while (l<L) {
-    if (mask[bi] & bitmask) // bitmask decides..
-      glVertex2f(l*xl+x1, l*yl+y1);
-    l++;  // increment line length
-    ri++; // increment patternrepeat
-    if (ri>=repeat){
-      ri=0; // reset repeat
-      bi++; // increment bitmask pointer
-      if (bi==stip) bi=0; // reset bitmask pointer
-    }
-  }
-}
-
-
-// plot an ellipse centered in x and y with major axes: rx and ry
-void PlotElement::ellipse(const float& x, const float& y,
-    const float& rx, const float& ry)
-{
-  // NOTE: maybe this works ?!
-  if (circle_list==0){
-    circle_list= glGenLists(1);
-    if (circle_list != 0)
-      glNewList(circle_list,GL_COMPILE);
-
-    _glBegin(GL_POLYGON, 100);
-    for(int i=0;i<100;i++){
-      float a  = i*2*M_PI/100.0;
-      glVertex2f(cos(a),sin(a));
-    }
-    _glEnd();
-    if (circle_list != 0)
-      glEndList();
-  }
-  glPushMatrix();
-  glTranslatef(x,y,0.0);
-  glScalef(rx,ry,0.0);
-  if (circle_list != 0)
-    glCallList(circle_list);
-  glPopMatrix();
-}
-
-
-// for postscript output
-bool PlotElement::startPSoutput(const std::string& fname,
-    const bool incolour,
-    const bool inlandscape,
-    const bool doEPS)
-{
-  if (printing) return false;
-
-  int print_options = GLP_FIT_TO_PAGE | GLP_DRAW_BACKGROUND | GLP_AUTO_ORIENT;
-  int feedsize= 3000000;
-  if (!incolour)
-    print_options = print_options | GLP_GREYSCALE;
-  bool makeeps= doEPS;
-
-  if (miutil::contains(fname, ".svg")){
-    psoutput = new SvgDocument(const_cast<char*>(fname.c_str()),
-        print_options, feedsize,0);
-  } else {
-    psoutput = new GLPfile(const_cast<char*>(fname.c_str()),
-        print_options, feedsize,0,makeeps);
-  }
-
-  // set line and point scale
-  psoutput->setScales(0.5, 0.5);
-  psoutput->StartPage();
-  printing= true;
-
-  // inform fontpacks
-  FM.startHardcopy(psoutput);
-  return true;
-}
-
-bool PlotElement::startPSnewpage()
-{
-  if (!printing || !psoutput) return false;
-  glFlush();
-  if (psoutput->EndPage() != 0) {
-    std::cerr << "startPSnewpage: EndPage BAD!!!" << std::endl;
-    return false;
-  }
-  psoutput->StartPage();
-  return true;
-}
-
-
-bool PlotElement::endPSoutput(){
-  if (!printing || !psoutput) return false;
-  glFlush();
-  if (psoutput->EndPage() == 0) {
-    delete psoutput;
-    psoutput = 0;
-  }
-  printing= false;
-
-  // inform fontpacks
-  FM.endHardcopy();
-  return true;
-}
-
-void PlotElement::psAddImage(const GLvoid* data,GLint size,GLint nx,GLint ny,
-    GLfloat x,GLfloat y,GLfloat sx,GLfloat sy,
-    GLint x1,GLint y1,GLint x2,GLint y2,
-    GLenum format,GLenum type){
-  if (!psoutput || !printing) return;
-  psoutput->AddImage(data,size,nx,ny,x,y,sx,sy,x1,y1,x2,y2,format,type);
 }
 
 void PlotElement::getRectangle(float& x1,float& y1,
@@ -457,3 +308,4 @@ int dataPlotElement::dataend()// find number of points before stopT
   return j;
 }
 
+} // namespace pets2

@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2013 met.no
+  Copyright (C) 2013-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -33,16 +33,21 @@
 #endif
 
 #include "ptDayElement.h"
-#include "ptPlotElement.h"
 #include <puTools/miStringFunctions.h>
-#include <iostream>
+
 #include <list>
-#include <cstdio>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
 using namespace std;
 
-DayElement::DayElement(const vector<miTime> tline,
+namespace pets2 {
+
+DayElement::DayElement(const vector<miTime>& tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime),
     timeLine(tline),
@@ -65,18 +70,18 @@ std::string DayElement::dataAsString(const miDate& date)
 }
 
 
-void DayElement::plot()
+void DayElement::plot(ptPainter& painter)
 {
   miDate curDate = timeLine[startT].date();
   std::string curDay;
   float offset,th;
   float prevf;       // end of previous text
 #ifdef DEBUG
-  cout << "DayElement::plot()" << endl;
+  cout << "DayElement::plot(ptPainter& painter)" << endl;
 #endif
   if (enabled && visible) {
-    _prepFont();
-    _setColor(color);
+    painter.setFontSize(fontSize);
+    painter.setLine(color);
     prevf= 0;
 
     // print date for each new day
@@ -112,16 +117,18 @@ void DayElement::plot()
         }
         // print if room
         if (sx >= prevf){
-          _printString(curDay,sx,startY);
-          _updatePrinting();
+          painter.drawText(curDay, sx, startY);
           prevf= sx+2*offset;
         }
       }
       curDate = timeLine[i].date();
       curDay = dataAsString(curDate);
-      _getStringSize(curDay,offset,th);
+
+      const QString qtext = QString::fromStdString(curDay);
+      const float tw = painter.getTextWidth(qtext);
+
       startx= xtime->xcoord[i];
-      offset = offset/2;
+      offset = tw/2;
       active=true;
     }
 
@@ -130,19 +137,19 @@ void DayElement::plot()
       // print previous day
       float sx;
       if (li12.size() > 0){
-	int i12= *(li12.begin());
-	sx= xtime->xcoord[i12] - offset;
+        int i12= *(li12.begin());
+        sx= xtime->xcoord[i12] - offset;
       } else {
-	stopx= xtime->xcoord[stopT];
-	sx= (stopx+startx)/2.0 - offset;
+        stopx= xtime->xcoord[stopT];
+        sx= (stopx+startx)/2.0 - offset;
       }
       // print if room
       if (sx >= prevf){
-	_printString(curDay,sx,startY);
-	_updatePrinting();
+        painter.drawText(curDay, sx, startY);
       }
     }
 
   }
 }
 
+} // namespace pets2

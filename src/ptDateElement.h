@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -26,11 +26,13 @@
 */
 
 
-#ifndef _dateelement_h
-#define _dateelement_h
+#ifndef PETS2_DATEELEMENT_H
+#define PETS2_DATEELEMENT_H
 
 #include "ptGlobals.h"
 #include "ptPlotElement.h"
+
+namespace pets2 {
 
 class DateElement : public PlotElement
 {
@@ -46,11 +48,11 @@ class DateElement : public PlotElement
   std::string dataAsString(const miutil::miDate& date);
 
 public:
-  DateElement(const std::vector<miutil::miTime> tline,
-      const ptVertFieldf& field,
-      const Layout& layout,
-      XAxisInfo* xtime);
-  void plot();
+  DateElement(const std::vector<miutil::miTime>& tline,
+      const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
+  void plot(ptPainter& painter);
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_DATEELEMENT_H

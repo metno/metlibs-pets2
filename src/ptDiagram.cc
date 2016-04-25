@@ -1,9 +1,7 @@
 /*
  libpets2 - presentation and editing of time series
 
- $Id$
-
- Copyright (C) 2006 met.no
+ Copyright (C) 2006-2016 met.no
 
  Contact information:
  Norwegian Meteorological Institute
@@ -33,50 +31,52 @@
 #include "config.h"
 #endif
 
-#include <ptDiagram.h>
+#include "ptDiagram.h"
 
-#include <ptAxesElement.h>
-#include <ptCloudElement.h>
-#include <ptDateElement.h>
-#include <ptDayElement.h>
-#include <ptEditLineElement.h>
-#include <ptGridlineElement.h>
-#include <ptHistogramElement.h>
-#include <ptLineElement.h>
-#include <ptProgElement.h>
-#include <ptTableElement.h>
-#include <ptTextElement.h>
-#include <ptUTCElement.h>
-#include <ptVectorElement.h>
-#include <ptWindVectorElement.h>
-#include <ptYaxisElement.h>
-#include <ptDoubleLineElement.h>
-#include <ptSymbolElement.h>
-#include <ptTimemarkerElement.h>
-#include <ptMultiLineElement.h>
-#include <ptAxisHistogramElement.h>
-#include <ptLogoElement.h>
-#include <ptBoxElement.h>
-#include <ptIntervalElement.h>
-#include <ptQBoxElement.h>
+#include "ptAxesElement.h"
+#include "ptCloudElement.h"
+#include "ptDateElement.h"
+#include "ptDayElement.h"
+#include "ptEditLineElement.h"
+#include "ptGridlineElement.h"
+#include "ptHistogramElement.h"
+#include "ptLineElement.h"
+#include "ptProgElement.h"
+#include "ptTableElement.h"
+#include "ptTextElement.h"
+#include "ptUTCElement.h"
+#include "ptVectorElement.h"
+#include "ptWindVectorElement.h"
+#include "ptYaxisElement.h"
+#include "ptDoubleLineElement.h"
+#include "ptSymbolElement.h"
+#include "ptTimemarkerElement.h"
+#include "ptMultiLineElement.h"
+#include "ptAxisHistogramElement.h"
+#include "ptLogoElement.h"
+#include "ptBoxElement.h"
+#include "ptIntervalElement.h"
+#include "ptQBoxElement.h"
 
 #include <puTools/miStringFunctions.h>
-#include <fstream>
-#include <iostream>
 
 using namespace miutil;
 using namespace std;
 
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
+
 // should consider additional constructor for equally spaced time points????
+
+namespace pets2 {
 
 ptDiagram::ptDiagram(ptStyle *style, bool showGlines)
     : nPlotElements(0)
     , first(0), last(0)
     , DD(0)
     , Style(style)
-    , glwidth(1.0), glheight(1.0)
-    , scwidth(1), scheight(1)
-    , pixWidth(1.0), pixHeight(1.0)
     , startidx(0), stopidx(0)
     , colourFlag(true)
     , localTime(false)
@@ -188,8 +188,7 @@ void ptDiagram::makeXtime()
   for (i = stopidx + 1; i < nTimePoints; i++)
     xtime.xcoord[i] = 0.0;
   for (i = startidx; i <= stopidx; i++) {
-    xtime.xcoord[i] = startX + miTime::minDiff(timeLine[i], timeLine[startidx])
-        * space;
+    xtime.xcoord[i] = startX + miTime::minDiff(timeLine[i], timeLine[startidx]) * space;
   }
 }
 
@@ -198,71 +197,15 @@ void ptDiagram::makeXtime()
 // Purpose      : sets the current viewport both in screen pixels and in GL coordinates
 // Last modified:
 //---------------------------------------------------
-void ptDiagram::setViewport(int sw, int sh, float gw, float gh){
-  scwidth = sw;
-  scheight = sh;
-  glwidth = gw;
-  glheight = gh;
-  pixWidth = glwidth / scwidth;
-  pixHeight = glheight / scheight;
-
+void ptDiagram::setViewport(ptCanvas* canvas)
+{
   if (first) {
     for (PlotElement* elm = first; elm; elm = elm->next)
-      elm->setViewport(sw, sh, gw, gh);
+      elm->setViewport(canvas);
   }
 }
 
 
-
-//---------------------------------------------------
-// Name         : toggleColour
-// Purpose      : toggles the use of colours in diagram
-// Last modified:
-//---------------------------------------------------
-void ptDiagram::toggleColour(bool use)
-{
-  colourFlag = use;
-  PlotElement::setColour(colourFlag);
-}
-
-//---------------------------------------------------
-// Name         : setPrinting
-// Purpose      : set printing mode on/off
-// Last modified:
-//---------------------------------------------------
-// void ptDiagram::setPrinting(bool print)
-// {
-//   if (first) {
-//     for (PlotElement* elm=first; elm; elm=elm->next)
-//       elm->setPrinting(print);
-//   }
-// }
-
-//---------------------------------------------------
-// Name         : setFakeStipple
-// Purpose      : set the use of imitated stipple patterns
-// Last modified:
-//---------------------------------------------------
-void ptDiagram::setFakeStipple(bool use)
-{
-  PlotElement::setFakeStipple(use);
-}
-
-bool ptDiagram::startPSoutput(const string& fname, const bool incolour,
-    const bool inlandscape, const bool doEPS)
-{
-  return PlotElement::startPSoutput(fname, incolour, inlandscape, doEPS);
-}
-
-bool ptDiagram::startPSnewpage()
-{
-  return PlotElement::startPSnewpage();
-}
-
-bool ptDiagram::endPSoutput()
-{
-  return PlotElement::endPSoutput();
-}
 
 //---------------------------------------------------
 // Name         : makeDefaultPlotElements
@@ -270,7 +213,7 @@ bool ptDiagram::endPSoutput()
 //                weatherparameters and style
 // Last modified:
 //---------------------------------------------------
-bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
+bool ptDiagram::makeDefaultPlotElements()
 {
   if (!Style)
     return false;
@@ -280,9 +223,6 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   StyleOrder primOrderList[MAXPRIMF + MAXPRIM], primList[MAXPRIMF + MAXPRIM];
   int nPrimOut;
   int nPlotPrim;
-
-  //get the background color
-  *bgColor = Style->backgroundColor();
 
   int i, j = 0;
   for (i = 0; i < DD->size(); i++, j++) { // data primitives from file
@@ -331,7 +271,7 @@ bool ptDiagram::makeDefaultPlotElements(ptColor *bgColor)
   PlotElement *elm;
   DataSpec ds;
   ptVertFieldf field;
-  Layout *layout;
+  pets2::Layout *layout;
   const int maxYaxis = 40;
   vector<yAxisElement*> yAxisElm(maxYaxis, (yAxisElement*) (0)); // OBS OBS
 
@@ -747,18 +687,20 @@ void ptDiagram::addElement(PlotElement* elm)
 }
 
 // plot diagram
-void ptDiagram::plot()
+void ptDiagram::plot(ptPainter& painter)
 {
 #ifdef DEBUG
-  cout << "--Starting Diagram.plot()" << endl;
+  cout << "--Starting Diagram.plot(ptPainter& painter)" << endl;
 #endif
   if (!first)
     return;
 
+  if (Style)
+    painter.clear(Style->backgroundColor());
   for (PlotElement* elm = first; elm; elm = elm->next)
-    elm->plot();
+    elm->plot(painter);
 #ifdef DEBUG
-  cout << "--Ending Diagram.plot()" << endl;
+  cout << "--Ending Diagram.plot(ptPainter& painter)" << endl;
 #endif
 }
 
@@ -769,3 +711,5 @@ void ptDiagram::tst_print()
   //   for (PlotElement* elm=first; elm; elm=elm->next)
   //     elm->tst_print();
 }
+
+} // namespace pets2

@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2013 met.no
+  Copyright (C) 2013-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -32,22 +32,25 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptTimemarkerElement.h>
+#include "ptTimemarkerElement.h"
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
 
-TimemarkerElement::TimemarkerElement(const std::vector<miTime> tline,
-				     const ptVertFieldf& field,
-				     const Layout& layout,
-				     XAxisInfo* xtime)
-    : PlotElement(layout,field,xtime)
-    , axeStopY(field.y2)
-    , labelSpace(layout.labelSpace)
-    , lineWidth(layout.lineWidth)
-    , style(layout.linePattern)
-    , timeLine(tline)
+namespace pets2 {
+
+TimemarkerElement::TimemarkerElement(const std::vector<miTime>& tline,
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
+  : PlotElement(layout,field,xtime)
+  , axeStopY(field.y2)
+  , labelSpace(layout.labelSpace)
+  , lineWidth(layout.lineWidth)
+  , style(layout.linePattern)
+  , timeLine(tline)
 {
 #ifdef DEBUG
   cout << "Inside TimemarkerElement's constructor" << endl;
@@ -57,65 +60,42 @@ TimemarkerElement::TimemarkerElement(const std::vector<miTime> tline,
 }
 
 
-void TimemarkerElement::plot()
+void TimemarkerElement::plot(ptPainter& painter)
 {
   if(enabled && markTimes.size() && visible) {
 #ifdef DEBUG
-    cout << "TimemarkerElement::plot()" <<endl;
+    cout << "TimemarkerElement::plot(ptPainter& painter)" <<endl;
 #endif
-    _setColor(color);
-
-    bool fakestipple = false;
-    if ((!useColour) || pInColour){
-      if (!useFakeStipple) {
-	glEnable(GL_LINE_STIPPLE);
-	glLineStipple(LineStyle[style][0],LineStyle[style][1]);
-      } else fakestipple = true;
-    }
-    glLineWidth(lineWidth);
+    painter.setLine(color, lineWidth, style);
 
     int i,j,n=markTimes.size();
     float xc;
     for (j=0; j<n; j++){
       for (i=startT; i<=stopT; i++){
 
-	if (timeLine[i]==markTimes[j]){
-	  // exact match
-	  xc= xtime->xcoord[i];
-	} else if (i<stopT && timeLine[i] < markTimes[j] &&
-		   timeLine[i+1] > markTimes[j]){
-	  // between two timepoints
-	  int a= abs(miTime::minDiff(timeLine[i],timeLine[i+1]));
-	  int b= abs(miTime::minDiff(markTimes[j],timeLine[i]));
-	  float c= xtime->xcoord[i+1] - xtime->xcoord[i];
-	  xc = xtime->xcoord[i] + c * (float(b)/float(a));
-	} else if (timeLine[i] > markTimes[j]){
-	  // outside region - skip this one
-	  break;
-	} else {
-	  // try next timestep
-	  continue;
-	}
+        if (timeLine[i]==markTimes[j]){
+          // exact match
+          xc= xtime->xcoord[i];
+        } else if (i<stopT && timeLine[i] < markTimes[j] &&
+            timeLine[i+1] > markTimes[j]){
+          // between two timepoints
+          int a= abs(miTime::minDiff(timeLine[i],timeLine[i+1]));
+          int b= abs(miTime::minDiff(markTimes[j],timeLine[i]));
+          float c= xtime->xcoord[i+1] - xtime->xcoord[i];
+          xc = xtime->xcoord[i] + c * (float(b)/float(a));
+        } else if (timeLine[i] > markTimes[j]){
+          // outside region - skip this one
+          break;
+        } else {
+          // try next timestep
+          continue;
+        }
 
-	if (fakestipple){
-	  _glBegin(GL_POINTS,1000);
-	  lineSegment(xc,startY,
-		      xc,startY+deltaY,
-		      LineStyle[style][0],
-		      LineStyle[style][1],
-		      true);
-	  _glEnd();
-	} else {
-	  _glBegin(GL_LINES,2);
-	  glVertex2f(xc,startY);
-	  glVertex2f(xc,startY+deltaY);
-	  _glEnd();
-	}
-	break;
+        painter.drawLine(xc,startY, xc,startY+deltaY);
+        break;
       }
     }
-    _updatePrinting();
-
-    glDisable(GL_LINE_STIPPLE);
   }
 }
+
+} // namespace pets2

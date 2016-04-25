@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -26,10 +26,12 @@
 */
 
 
-#ifndef _ptMarker_h
-#define _ptMarker_h
+#ifndef PETS2_MARKER_H
+#define PETS2_MARKER_H
 
 #include <string>
+
+namespace pets2 {
 
 enum ptMarker {
   NO_MARKER,
@@ -43,4 +45,6 @@ enum ptMarker {
 extern ptMarker Str2Marker(const std::string&);
 extern std::string Marker2Str(ptMarker);
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_MARKER_H

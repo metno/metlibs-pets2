@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -30,12 +30,14 @@
 #endif
 
 #include "ptPatterns.h"
+#include "polyStipMasks.h"
 #include <puTools/miStringFunctions.h>
-#include <polyStipMasks.h>
 
 using namespace std;
 
-const GLubyte* fillPattern(ptFillStyle fill)
+namespace pets2 {
+
+const unsigned char* fillPattern(ptFillStyle fill)
 {
   if (fill==NONE)             return empty;
   else if (fill==DIAGRIGHT)   return diagright;
@@ -153,3 +155,4 @@ std::string LineStyleList2Str(const vector<ptLineStyle>& vf)
   return s;
 }
 
+} // namespace pets2

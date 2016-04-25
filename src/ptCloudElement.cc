@@ -1,9 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  $Id$
-
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -34,16 +32,19 @@
 #include "config.h"
 #endif
 
-#include <ptPlotElement.h>
-#include <ptCloudElement.h>
+#include "ptCloudElement.h"
+
+// #define DEBUG
+#ifdef DEBUG
 #include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
 
+namespace pets2 {
+
 CloudElement::CloudElement(const DataSpec cds,
-			   const ptVertFieldf& field,
-			   const Layout& layout,
-			   XAxisInfo* xtime)
+    const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : dataPlotElement(cds, layout, field, xtime),
     style(layout.fillstyle), width(layout.lineWidth),
     text(layout.text)
@@ -55,61 +56,53 @@ CloudElement::CloudElement(const DataSpec cds,
 }
 
 // Plotting of cloud boxes could probably be made more effective
-void CloudElement::plot()
+void CloudElement::plot(ptPainter& painter)
 {
   if(enabled && visible) {
 #ifdef DEBUG
-    cout << "CloudElement::plot()" <<endl;
+    cout << "CloudElement::plot(ptPainter& painter)" <<endl;
 #endif
-    float th=0,tw=0;
-    _prepFont();
-    if (text.length() > 0)
-      _getStringSize(text,tw,th);
 
-    float x, left, right;
-    glLineWidth(width);
-    _setColor(color);
-    //glPolygonStipple(.....style.....)
+    painter.setLine(color, width);
 
     // find minimum delta T for calculation of cloud box width
-    int i,j=-1,k= startT;
-    float testx, minx=10000;
-    for (i=startT+1;i<=stopT;i++) {
+    int k = startT;
+    float minx = 10000;
+    for (int i = startT+1; i <= stopT; i++) {
       if (valid(i)) {
-	testx = xtime->xcoord[i]-xtime->xcoord[k];
-	if (testx < minx) minx = testx;
-	k=i;
+        float testx = xtime->xcoord[i]-xtime->xcoord[k];
+        if (testx < minx)
+          minx = testx;
+        k = i;
       }
     }
-    deltaX = minx/3.0;
-
+    float deltaX = minx/3.0;
     float mostleft= 10000;
 
-    j = datastart();
-
-    for (i=startT;i<=stopT;i++) {
+    int j = datastart();
+    for (int i=startT; i<=stopT; i++) {
       if (valid(i)) {
-	x     = xtime->xcoord[i];
-	left  = x - deltaX;
-	right = x + deltaX;
-	// draw rectangular box
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(right,startY); glVertex2f(left,startY);
-	glVertex2f(left,stopY); glVertex2f(right,stopY);
-	glEnd();
-	// draw each cloud box
-  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-	glRectf(left,startY,left+(2.0*deltaX*dval(j)/100.0),stopY);
-	j++;
-	if (left < mostleft) mostleft= left;
+        float x = xtime->xcoord[i];
+        float left  = x - deltaX;
+        float right = x + deltaX;
+        // draw rectangular box
+        painter.setFillStyle(pets2::NONE);
+        painter.drawRect(right, startY, left, stopY);
+        // draw each cloud box
+        painter.setFillStyle(style);
+        painter.drawRect(left, startY, left+(2.0*deltaX*dval(j)/100.0), stopY);
+        j++;
+        if (left < mostleft)
+          mostleft= left;
       }
     }
-    _updatePrinting();
     // print text
-    if (tw > 0){
-      //glRasterPos2i(OFFSET,startY);
-      _printString(text,mostleft-tw-2,startY);
+    if (!text.empty()){
+      const QString qtext = QString::fromStdString(text);
+      const float tw = painter.getTextWidth(qtext);
+      painter.drawText(QPointF(mostleft - tw -2, startY), qtext);
     }
-    _updatePrinting();
   }
 }
+
+} // namespace pets2

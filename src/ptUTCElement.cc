@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2013 met.no
+  Copyright (C) 2013-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -32,21 +32,27 @@
 #include "config.h"
 #endif
 
-#include "ptPlotElement.h"
 #include "ptUTCElement.h"
 
-#include <cstdio>
 #include <iomanip>
-#include <iostream>
 #include <sstream>
+
+// #define DEBUG
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
 
 using namespace miutil;
 
-UTCElement::UTCElement(const std::vector<miTime> tline,
+namespace pets2 {
+
+UTCElement::UTCElement(const std::vector<miTime>& tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
-  : PlotElement(layout, field, xtime),
-   minSkipX(layout.minSkipX), label(layout.label), text(layout.text),
-   modhours(layout.modhours)
+  : PlotElement(layout, field, xtime)
+  , minSkipX(layout.minSkipX)
+  , label(layout.label)
+  , text(layout.text)
+  , modhours(layout.modhours)
 {
 #ifdef DEBUG
   cout << "Inside UTCElement's constructor" << endl;
@@ -55,7 +61,7 @@ UTCElement::UTCElement(const std::vector<miTime> tline,
   timeLine = tline;
   if (label && text.empty())
     text= "UTC";
-  if (modhours.size()==0) {
+  if (modhours.empty()) {
     modhours.push_back(12);
     modhours.push_back(6);
     modhours.push_back(3);
@@ -64,8 +70,7 @@ UTCElement::UTCElement(const std::vector<miTime> tline,
 }
 
 
-float UTCElement::plottime(const miTime& t, const int i,
-    bool minute, const float cwid)
+float UTCElement::plottime(ptPainter& painter, const miTime& t, int i, bool minute, float cwid)
 {
   std::ostringstream ost;
   float offset;
@@ -76,29 +81,28 @@ float UTCElement::plottime(const miTime& t, const int i,
     ost << std::setw(2) << std::setfill('0') << t.hour();
     offset= cwid;
   }
-  _printString(ost.str().c_str(),xtime->xcoord[i]-offset,startY);
+  painter.drawText(QPointF(xtime->xcoord[i]-offset,startY), QString::fromStdString(ost.str()));
   return (xtime->xcoord[i]+offset);
 }
 
-void UTCElement::plot()
+void UTCElement::plot(ptPainter& painter)
 {
   if (enabled && visible) {
-    float th,tw;
-    _prepFont();
-    _getCharSize('0',tw,th);
+    painter.setFontSize(fontSize);
+    const float tw = painter.getCharWidth('0');
 
     int interv= miTime::minDiff(timeLine[stopT],timeLine[startT]);
     bool plotmin= (interv < 3*60);
     bool plotallmin= (interv < 3*60 && (stopT-startT) < 20);
     float prev;
-    float minw= pixWidth;//minSkipX*pixWidth;
+    float minw= painter.pixWidth();//minSkipX*pixWidth;
     float guess= tw*(plotmin ? 2.5 : 1.0);
 
-    _setColor(color);
+    painter.setLine(color);
     bool *taken= new bool[stopT+2];
     for (int i=0; i<stopT+2; i++) taken[i]= false;
 
-    for ( int k=0; k<modhours.size(); k++){
+    for (int k=0; k<modhours.size(); k++) {
       prev= -1000;
       for (int i=startT; i<=stopT; i++) {
         if (!taken[i]){
@@ -122,7 +126,7 @@ void UTCElement::plot()
                 if (((xtime->xcoord[nextt]-guess)-(xtime->xcoord[i]+guess)) < minw)
                   continue;
             }
-            prev= plottime(t,i,plotmin,tw);
+            prev= plottime(painter, t,i,plotmin,tw);
             taken[i]= true;
           }
         } else
@@ -131,7 +135,8 @@ void UTCElement::plot()
     }
 
     delete[] taken;
-    _printString(text,20,startY);
-    _updatePrinting();
+    painter.drawText(QPointF(20,startY), QString::fromStdString(text));
   }
 }
+
+} // namespace pets2

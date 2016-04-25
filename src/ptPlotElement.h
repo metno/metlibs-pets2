@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -28,26 +28,25 @@
 
 //ptPlotElement.h class declaration for PETS PlotElement class
 
-#ifndef _plotelement_h
-#define _plotelement_h
+#ifndef PETS2_PLOTELEMENT_H
+#define PETS2_PLOTELEMENT_H
 
 #include "ptGlobals.h"
-#include <tsData/ptParameterDefinition.h>
-#include <tsData/ptDiagramData.h>
-#include <tsData/ptWeatherParameter.h>
 #include "ptXAxisInfo.h"
 #include "ptLayout.h"
 #include "ptColor.h"
-#include "ptFontManager.h"
+#include "ptPainter.h"
+
+#include <tsData/ptParameterDefinition.h>
+#include <tsData/ptDiagramData.h>
+#include <tsData/ptWeatherParameter.h>
 
 #include <puTools/miTime.h>
 
-#include <glp/glpfile.h>
-
-#include <GL/gl.h>
-
 #include <string>
 #include <vector>
+
+namespace pets2 {
 
 struct DataSpec {
   ptDiagramData *dData;// diagramData
@@ -69,177 +68,76 @@ protected:
   ptFontSize fontSize;        // Font size
   int fontidx;                // font index
   ptAlign align;              // Alignment
-  float glwidth, glheight;    // current GL width and height
-  int scwidth, scheight;      // current screen width and height (in pixels)
-  float pixWidth;             // current screenpixel width
-  float pixHeight;            // current screenpixel height
+  ptCanvas* canvas; // current screen device
   int startT;                 // start of timeinterval to plot
   int stopT;                  // end of timeinterval to plot
   bool AllTimesAxisScale;     // Axis scale calculated from all time points
   bool pInColour;             // use patterns in colour
-  GLuint circle_list;         // display-list for circle
   std::vector<float> datalimits;
   std::vector<ptColor> colorlist;
 
 
-  static bool useFakeStipple; // imitate linestippling
-  static bool useColour; // colour or black/white
-  static bool printing; // postscript plotting
-  static GLPcontext* psoutput; // document factory module
-
-  void _printString(const std::string& text, const float x, const float y)
-  {
-    FM.printStr(text.c_str(), x, y);
-  }
-  void _setColor(const ptColor& col)
-  {
-    if (useColour)
-      glColor4fv(col.colTable);
-    else
-      glColor4f(0.0, 0.0, 0.0, 1.0);
-  }
-  void _getCharSize(const char& c, float& w, float& h)
-  {
-    FM.getCharSize(c, w, h);
-  }
-  void _getMaxCharSize(float& w, float& h)
-  {
-    FM.getMaxCharSize(w, h);
-  }
-  void _getStringSize(const std::string& c, float& w, float& h)
-  {
-    FM.getStringSize(c.c_str(), w, h);
-  }
-  void _prepFont()
-  {
-    FM.setGlSize(glwidth, glheight);
-    FM.setVpSize(scwidth, scheight);
-    FM.setFontSize(fontSize);
-  }
-  void _initPrinting(int /*size*/ = 500)
-  {
-  }
-  void _updatePrinting()
-  {
-    if (printing && psoutput){
-      psoutput->UpdatePage(true);
-    }
-  }
-  void _endPrinting()
-  {
-    if (printing && psoutput){
-      psoutput->UpdatePage(true);
-    }
-  }
-  void _glBegin(const GLenum mode, int /*size*/ = 0)
-  {
-    glBegin(mode);
-  }
-  void _glEnd()
-  {
-    glEnd();
-  }
-  void lineSegment(const float &x1, const float &y1, const float &x2,
-      const float &y2, const unsigned int &repeat, const unsigned int &bitmask,
-      const bool &reset = true);
-  void
-      ellipse(const float& x, const float& y, const float& rx, const float& ry);
   float& xval(const int& i) // return xvalue (time)
-  {
-    return xtime->xcoord[i];
-  }
+    { return xtime->xcoord[i]; }
 
-  void psAddImage(const GLvoid* data, GLint size, GLint nx, GLint ny,
-      GLfloat x, GLfloat y, GLfloat sx, GLfloat sy, GLint x1, GLint y1,
-      GLint x2, GLint y2, GLenum format, GLenum type);
   int dataLimitIndex(const float v);
+
   float dataLimit(const int i)
-  {
-    if (i < 0 || i >= (int)datalimits.size())
-      return 0;
-    return datalimits[i];
-  }
+    { if (i < 0 || i >= (int)datalimits.size()) return 0; return datalimits[i]; }
+
   ptColor colorfromvalue(const float v);
   ptColor colorfromindex(const int i);
   int smoothline(int npos, float x[], float y[], int nfirst, int nlast,
       int ismooth, float xsmooth[], float ysmooth[]); // B-spline smooth
+
 public:
   PlotElement *next; // next is made public, to let Diagram access it...
   PlotElement(const Layout& layout, const ptVertFieldf& field,
       XAxisInfo *pXtime = 0, const bool& en = true, PlotElement *pNext = 0);
   virtual ~PlotElement();
 
-  void setViewport(int sw, int sh, float gw, float gh);
+  virtual void setViewport(ptCanvas* canvas);
 
   const std::string& Name() const
-  {
-    return name;
-  }
-  ptPrimitiveType getType() const
-  {
-    return type;
-  }
-  virtual ParId getParId() const
-  {
-    ParId id = ID_UNDEF;
-    return id;
-  }
-  ptColor Color() const
-  {
-    return color;
-  }
-  void setEnabled(const bool b)
-  {
-    enabled = b;
-  }
-  void enable()
-  {
-    enabled = true;
-  }
-  void disable()
-  {
-    enabled = false;
-  }
-  bool isEnabled() const
-  {
-    return enabled;
-  }
-  virtual void plot()=0;
-  virtual bool needsData()
-  {
-    return false;
-  }
-  virtual void switchData(void*)
-  {
-  }
-  virtual void setTimeInterval(const int start, const int stop);
-  void setAllTimesAxisScale(bool b)
-  {
-    AllTimesAxisScale = b;
-  }
-  // for static use
-  static void setColour(bool use)
-  {
-    useColour = use;
-  }
-  static void setPrinting(bool print)
-  {
-    printing = print;
-  }
-  static void setFakeStipple(bool use)
-  {
-    useFakeStipple = use;
-  }
+    { return name; }
 
-  static bool startPSoutput(const std::string& fname, const bool incolour,
-      const bool inlandscape, const bool doEPS = false);
-  static bool startPSnewpage();
-  static bool endPSoutput();
+  ptPrimitiveType getType() const
+    { return type; }
+
+  virtual ParId getParId() const
+    { ParId id = ID_UNDEF; return id; }
+
+  const ptColor& Color() const
+    { return color; }
+
+  void setEnabled(const bool b)
+    { enabled = b; }
+
+  void enable()
+    { enabled = true; }
+
+  void disable()
+    { enabled = false; }
+
+  bool isEnabled() const
+    { return enabled; }
+
+  virtual void plot(ptPainter& painter)=0;
+
+  virtual bool needsData()
+    { return false; }
+
+  virtual void switchData(void*)
+    { }
+
+  virtual void setTimeInterval(const int start, const int stop);
+
+  void setAllTimesAxisScale(bool b)
+    { AllTimesAxisScale = b; }
 
   void getRectangle(float& x1, float& y1, float& x2, float& y2);
   void getTimeRectangle(float& x1, float& y1, float& x2, float& y2);
   void setVisible(const bool b){visible= b; }
-
 };
 
 
@@ -276,11 +174,11 @@ protected:
   bool  datapolar() const {return fdata->Polar();}
 public:
   dataPlotElement(const DataSpec cds,
-		  const Layout& layout,
-		  const ptVertFieldf& field,
-		  XAxisInfo *pXtime=0,
-		  const bool& en=true,
-		  PlotElement *pNext=0)
+      const Layout& layout,
+      const ptVertFieldf& field,
+      XAxisInfo *pXtime=0,
+      const bool& en=true,
+      PlotElement *pNext=0)
     : PlotElement(layout,field,pXtime,en,pNext),
       paramId((*cds.dData)[cds.index].Id()),
       fdata(&((*cds.dData)[cds.index])), ds(cds)
@@ -288,13 +186,9 @@ public:
   virtual ~dataPlotElement(){}
   virtual void setTimeInterval(const int start, const int stop);
   ParId getParId() const {return paramId;}
-  virtual void plot()=0;
-  virtual bool needsData()=0;
   DataSpec getDataSpec() const {return ds;}
 };
 
+} // namespace pets2
 
-#endif
-
-
-
+#endif // PETS2_PLOTELEMENT_H

@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -41,6 +41,8 @@ using namespace std;
 
 namespace petsColorTools
 {
+
+using pets2::ptColor;
 
 map<std::string,ptColor> colorlist;
 
@@ -125,8 +127,10 @@ ptColor getColorFromList(const std::string& col)
   ptColor dummy;
   return dummy;
 }
-}
 
+} // namespace petsColorTools
+
+namespace pets2 {
 
 ptColor::ptColor()
 {
@@ -243,3 +247,4 @@ std::string ptColor::Colorlist2Str(const vector<ptColor>& list)
   return buf;
 }
 
+} // namespace pets2

@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -27,13 +27,16 @@
 
 
 // ptStyle.h: declarations for ptStyle class
-#ifndef _ptstyle_h
-#define _ptstyle_h
+#ifndef PETS2_STYLE_H
+#define PETS2_STYLE_H
 
 #include "ptGlobals.h"
 #include "ptStyleOrder.h"
-#include <tsData/ptPrimitiveType.h>
 #include "ptLayout.h"
+
+#include <tsData/ptPrimitiveType.h>
+
+namespace pets2 {
 
 const int MAXAXES = 5;     // max allowed axes in one diagram
 const int MAXYAXIS = 4;    // max allowed y-axes in one axes
@@ -134,7 +137,7 @@ public:
   void disablePrimitive(const bool, const int);
   void disableAllPrimitives(const bool);
   void print() const;
-  bool readStyle(const std::string filename, bool verbose= false);
+  bool readStyle(const std::string& filename, bool verbose= false);
 
   bool addPrimitive(const Primitive& p);
 
@@ -147,4 +150,6 @@ public:
 extern stMother Str2Mother(const std::string&);
 extern std::string Mother2Str(stMother);
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_STYLE_H

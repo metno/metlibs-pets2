@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
   
-  Copyright (C) 2006-2013 met.no
+  Copyright (C) 2006-2016 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -25,10 +25,12 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _ptEditModes_h
-#define _ptEditModes_h
+#ifndef PETS2_EDITMODES_H
+#define PETS2_EDITMODES_H
 
 #include <string>
+
+namespace pets2 {
 
 const int ptNumLineEditModes = 4;
 enum ptLineEditMode {
@@ -44,4 +46,6 @@ enum ptLineEditMarker {
   LE_RECT, LE_CIRC, LE_DIAMOND
 };
 
-#endif
+} // namespace pets2
+
+#endif // PETS2_EDITMODES_H
