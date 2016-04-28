@@ -1,4 +1,4 @@
-metlibs-tseries-pets2 (6.1.0-1) unstable; urgency=low
+metlibs-tseries-pets2 (6.0.0-1) unstable; urgency=low
 
   * use Qt / QPainter instead of OpenGL and glp
 
