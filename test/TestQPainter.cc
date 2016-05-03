@@ -28,8 +28,9 @@
 #include "ptQPainter.h"
 #include "ptColor.h"
 
-#include <QImage>
 #include <QApplication>
+#include <QImage>
+#include <QPrinter>
 
 #include <iostream>
 
@@ -42,16 +43,13 @@ static void drawImageWithBounds(pets2::ptPainter& painter, float x, float y,
   painter.drawImage(x, y, image, scale);
 }
 
-int main(int argc, char* argv[])
+static void paint(QPaintDevice* device)
 {
-  QApplication app(argc, argv);
-
-  QImage img(750, 500, QImage::Format_ARGB32_Premultiplied);
-  pets2::ptQCanvas pcanvas(&img);
+  pets2::ptQCanvas pcanvas(device);
   pets2::ptQPainter ppainter(&pcanvas);
 
   const float GLW=1500, GLH=1000, D=10;
-
+#if 0
   ppainter.setLine(pets2::ptColor("RED"), 2, pets2::DASHED);
   ppainter.drawLine(D, D, GLW-D, GLH-D);
 
@@ -69,7 +67,7 @@ int main(int argc, char* argv[])
     ppainter.setLine(pets2::ptColor("BLACK"), 2, pets2::DASHDASHDOTTED);
     drawImageWithBounds(ppainter, x, y, weather01, s);
   }
-
+#endif
   {
     const float dy = 10;
     ppainter.setFill(pets2::ptColor("WHITE"));
@@ -86,7 +84,7 @@ int main(int argc, char* argv[])
       "BLUE", "RED", "CYAN", "MAGENTA"
     };
     float y = GLH-D;
-    for (int i=0; i<4; ++i) {
+    for (int i=3; i<4; ++i) {
       ppainter.setColor(pets2::ptColor(col[i]));
       ppainter.setLineStyle(ls[i]);
       const float x0 = D, x1 = x0+200;
@@ -99,8 +97,28 @@ int main(int argc, char* argv[])
       y -= 2*dy;
     }
   }
+}
 
-  img.save("TestQPainter1.png", "PNG");
+int main(int argc, char* argv[])
+{
+  QApplication app(argc, argv);
+
+  {
+    QImage img(750, 500, QImage::Format_ARGB32_Premultiplied);
+    paint(&img);
+    img.save("TestQPainter1.png", "PNG");
+  }
+
+  {
+    QPrinter* printer = new QPrinter(QPrinter::ScreenResolution);
+    printer->setOutputFormat(QPrinter::PostScriptFormat);
+    printer->setOutputFileName("TestQPainter1.ps");
+    printer->setFullPage(true);
+    printer->setPaperSize(QSizeF(750, 500), QPrinter::DevicePixel);
+
+    paint(printer);
+    delete printer;
+  }
 
   return 0;
 }

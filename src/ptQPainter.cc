@@ -38,12 +38,13 @@ QColor qColor(const pets2::ptColor& c)
   return QColor::fromRgbF(c.colTable[0], c.colTable[1], c.colTable[2], c.colTable[3]);
 }
 
+#if 1
 const unsigned int LineStyle[][2] = {
   {1,0xFFFF}, // FULL
   {1,0x00FF}, // DASHED
   {1,0x060F}, // DASHDOTTED
   {1,0x1C47}, // DASHDASHDOTTED
-  {2,0xAAAA}, // DOTTED
+  {1,0x3333}, // DOTTED
   {0,0}
 };
 
@@ -89,7 +90,7 @@ void setDashes(QPen& qpen, pets2::ptLineStyle style)
      that it appears at the start of the pattern. (This is because
      QPainter's dash pattern rendering assumes that the first element
      is a line. */
-  if ((pattern & 1) == 0) {
+  if (!state0) {
     const qreal total = std::accumulate(dashes.begin(), dashes.end(), 0);
     dashes << dashes.first();
     dashes.pop_front();
@@ -98,6 +99,25 @@ void setDashes(QPen& qpen, pets2::ptLineStyle style)
   qpen.setDashPattern(dashes);
   qpen.setDashOffset(dashOffset);
 }
+#else
+void setDashes(QPen& qpen, pets2::ptLineStyle style)
+{
+  if (style == pets2::FULL)
+    qpen.setStyle(Qt::SolidLine);
+  else if (style == pets2::DASHED)
+    qpen.setStyle(Qt::DashLine);
+  else if (style == pets2::DASHDOTTED)
+    qpen.setStyle(Qt::DashDotLine);
+  else if (style == pets2::DASHDASHDOTTED)
+    qpen.setStyle(Qt::DashDotDotLine);
+  else if (style == pets2::DOTTED)
+    qpen.setStyle(Qt::DotLine);
+  else if (style == pets2::DASHED)
+    qpen.setStyle(Qt::DashLine);
+  else
+    qpen.setStyle(Qt::NoPen);
+}
+#endif
 
 static const float gl_width = 1500, gl_height = 1000;
 
