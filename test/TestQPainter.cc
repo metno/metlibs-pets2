@@ -49,7 +49,6 @@ static void paint(QPaintDevice* device)
   pets2::ptQPainter ppainter(&pcanvas);
 
   const float GLW=1500, GLH=1000, D=10;
-#if 0
   ppainter.setLine(pets2::ptColor("RED"), 2, pets2::DASHED);
   ppainter.drawLine(D, D, GLW-D, GLH-D);
 
@@ -67,7 +66,6 @@ static void paint(QPaintDevice* device)
     ppainter.setLine(pets2::ptColor("BLACK"), 2, pets2::DASHDASHDOTTED);
     drawImageWithBounds(ppainter, x, y, weather01, s);
   }
-#endif
   {
     const float dy = 10;
     ppainter.setFill(pets2::ptColor("WHITE"));
@@ -84,7 +82,7 @@ static void paint(QPaintDevice* device)
       "BLUE", "RED", "CYAN", "MAGENTA"
     };
     float y = GLH-D;
-    for (int i=3; i<4; ++i) {
+    for (int i=0; i<4; ++i) {
       ppainter.setColor(pets2::ptColor(col[i]));
       ppainter.setLineStyle(ls[i]);
       const float x0 = D, x1 = x0+200;
