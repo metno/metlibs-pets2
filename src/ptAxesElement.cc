@@ -72,6 +72,7 @@ void AxesElement::plot(ptPainter& painter)
     x2 = xtime->x2;
   }
   painter.setLine(color, axisWidth);
+  painter.setFillStyle(pets2::NONE);
 
   if (rectangle) {
     painter.drawRect(x1, y1, x2, y2);
