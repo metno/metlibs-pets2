@@ -205,15 +205,14 @@ void yAxisElement::plot(ptPainter& painter)
 #ifdef DEBUG
     cout << "yAxisElement::plot(ptPainter& painter)" << endl;
 #endif
-//     if (firstPlot) calcPlotVal();
     calcPlotVal();
     firstPlot = false;
     if (recalcDims) {
       calcDims();
-      plotGrid(painter);
     }
-    recalcDims= true;
+    plotGrid(painter);
     plotAxis(painter);
+    recalcDims= true;
   }
 }
 

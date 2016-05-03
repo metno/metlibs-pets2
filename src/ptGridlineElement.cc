@@ -84,7 +84,7 @@ void GridlineElement::plot(ptPainter& painter)
     cout << "GridlineElement::plot(ptPainter& painter)" <<endl;
 #endif
     painter.setLine(color, lineWidth, style);
-    painter.setFillStyle(pets2::NONE);
+    painter.setFillStyle(pets2::SOLID);
 
     bool plotday= true;
     std::vector<int> daych;
@@ -140,7 +140,8 @@ void GridlineElement::plot(ptPainter& painter)
       painter.drawRect(xtime->xcoord[d1], startY+2, xtime->xcoord[d2], startY+deltaY-2);
     }
 
-    painter.setLine(color);
+    painter.setFillStyle(pets2::NONE);
+    painter.setLine(color, lineWidth, style);
     for (i=i1; i<=i2; i++) {
       // plot lines on hours modulo useTimes
       if (useTimes >= 0)
