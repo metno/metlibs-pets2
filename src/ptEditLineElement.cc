@@ -255,6 +255,7 @@ void EditLineElement::plot(ptPainter& painter)
       if (printValue) {
         painter.setFontSize(fontSize);
       }
+      painter.setLineStyle(pets2::FULL);
       for (i = 0; i < dataX.size(); i++) {
         ox = dataX[i];
         oy = dataY[i];
@@ -263,6 +264,8 @@ void EditLineElement::plot(ptPainter& painter)
           ox = (dataX[i - 1] + dataX[i]) / 2.0;
         }
         if (markedPoints[i + prepoints]) {
+	  painter.setFill(color, pets2::SOLID);
+	  painter.setLine(color, lineWidth, pets2::FULL);
           painter.drawRect(ox - mSizeX, oy - mSizeY, ox + mSizeX, oy + mSizeY);
           if (printValue && activePoint == i + prepoints) {
             if (Yaxis->hasUserLabels()) {
@@ -280,6 +283,8 @@ void EditLineElement::plot(ptPainter& painter)
             painter.drawText(qtext, ox, oy + mSizeY * 3);
           }
         } else {
+	  painter.setFill(color, pets2::NONE);
+	  painter.setLine(color, lineWidth, pets2::FULL);
           painter.drawRect(ox - mSizeX, oy - mSizeY, ox + mSizeX, oy + mSizeY);
         }
       }
