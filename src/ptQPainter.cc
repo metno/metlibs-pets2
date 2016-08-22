@@ -41,8 +41,8 @@ QColor qColor(const pets2::ptColor& c)
 #if 1
 const unsigned int LineStyle[][2] = {
   {1,0xFFFF}, // FULL
-  {1,0x00FF}, // DASHED
-  {1,0x060F}, // DASHDOTTED
+  {1,0x1F1F}, // DASHED
+  {1,0x0C3F}, // DASHDOTTED
   {1,0x1C47}, // DASHDASHDOTTED
   {1,0x3333}, // DOTTED
   {0,0}
