@@ -1,3 +1,9 @@
+metlibs-tseries-pets2 (6.0.5-1) unstable; urgency=low
+
+  * replace metlibs-tsdata-dev with metlibs-tsdata-core-dev
+
+ -- Alexander Bürger <alexander.buerger@met.no>  Mon, 20 Feb 2017 08:00:00 +0100
+
 metlibs-tseries-pets2 (6.0.4-1) unstable; urgency=low
 
   * updated DASHED and DASHDOTTED patterns
