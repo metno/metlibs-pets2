@@ -38,6 +38,7 @@
 #include <QPolygonF>
 
 #include <cmath>
+#include <cstdio>
 
 // #define DEBUG
 #ifdef DEBUG

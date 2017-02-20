@@ -34,6 +34,8 @@
 
 #include "ptYaxisElement.h"
 
+#include <cstdio>
+
 // #define DEBUG
 #ifdef DEBUG
 #include <iostream>

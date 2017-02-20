@@ -54,15 +54,15 @@ AC_DEFUN_ONCE([METNO_PROG_PKG_CONFIG], [
 AC_DEFUN([METNO_CHECK_PKG], [
     AC_REQUIRE([METNO_PROG_PKG_CONFIG])
     AC_MSG_CHECKING([m4_if([$3], [], [for $2], [for $2 >= $3])])
-    metno_$2_pkg_version="m4_if([$3], [], [--exists], [--atleast-version $3])"
-    metno_$2_pkg_static="m4_if([$4], [static], [--static], [])"
-    metno_$2_pkg_cmd="${PKG_CONFIG} ${metno_$2_pkg_static}"
-    AS_IF([${metno_$2_pkg_cmd} ${metno_$2_pkg_version} $2], [
-	AC_SUBST([$1_VERSION], [`${metno_$2_pkg_cmd} --modversion $2`])
+    metno_2_pkg_version="m4_if([$3], [], [--exists], [--atleast-version $3])"
+    metno_2_pkg_static="m4_if([$4], [static], [--static], [])"
+    metno_2_pkg_cmd="${PKG_CONFIG} ${metno_2_pkg_static}"
+    AS_IF([${metno_2_pkg_cmd} ${metno_2_pkg_version} $2], [
+	AC_SUBST([$1_VERSION], [`${metno_2_pkg_cmd} --modversion $2`])
 	AC_MSG_RESULT([${$1_VERSION}])
-	AC_SUBST([$1_CPPFLAGS], [`${metno_$2_pkg_cmd} --cflags $2`])
-	AC_SUBST([$1_LDFLAGS], [`${metno_$2_pkg_cmd} --libs-only-L $2`])
-	AC_SUBST([$1_LIBS], [`${metno_$2_pkg_cmd} --libs-only-l $2`])
+	AC_SUBST([$1_CPPFLAGS], [`${metno_2_pkg_cmd} --cflags $2`])
+	AC_SUBST([$1_LDFLAGS], [`${metno_2_pkg_cmd} --libs-only-L $2`])
+	AC_SUBST([$1_LIBS], [`${metno_2_pkg_cmd} --libs-only-l $2`])
         if test -n "$METNO_PKG_REQUIRED"; then
             METNO_PKG_REQUIRED="${METNO_PKG_REQUIRED}, "
         fi
