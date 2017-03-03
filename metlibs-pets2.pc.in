@@ -1,0 +1,10 @@
+prefix=@pc_prefix@
+libdir=@pc_libdir@
+includedir=@pc_includedir@
+
+Name: @lib_name@
+Description: MET Norway pets2 library
+Version: @PETS2_PVERSION_FULL@
+Requires: @pc_deps@
+Libs: -L${libdir} -l@lib_name@
+Cflags: -I${includedir}/metlibs

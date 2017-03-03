@@ -1,11 +1,4 @@
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-libdir=@libdir@
-includedir=@includedir@
-
 Name: pets2
-Description: The pets2 Library
-Version: @VERSION@
-Requires: puTools >= 5.0.4, metlibs-tsdata-core >= 5.5.0, QtCore, QtGui
-Libs: -L${libdir} -lpets2
-Cflags: -I${includedir}
+Description: MET Norway pets2 library
+Version: @PETS2_PVERSION_FULL@
+Requires: metlibs-petx2@METNO_QT_SUFFIX@ = @PETS2_PVERSION_FULL@

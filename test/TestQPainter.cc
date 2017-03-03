@@ -30,7 +30,9 @@
 
 #include <QApplication>
 #include <QImage>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QPrinter>
+#endif
 
 #include <iostream>
 
@@ -107,6 +109,7 @@ int main(int argc, char* argv[])
     img.save("TestQPainter1.png", "PNG");
   }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
   {
     QPrinter* printer = new QPrinter(QPrinter::ScreenResolution);
     printer->setOutputFormat(QPrinter::PostScriptFormat);
@@ -117,6 +120,7 @@ int main(int argc, char* argv[])
     paint(printer);
     delete printer;
   }
+#endif // Qt4
 
   return 0;
 }
