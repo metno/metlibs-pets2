@@ -66,11 +66,9 @@ void TableElement::plot(ptPainter& painter)
 #ifdef DEBUG
     cout << "TableElement::plot(ptPainter& painter)" <<endl;
 #endif
-    float th,tw;
     int i;
     int j=-1, skip=0;
     char text[6];
-    int numPoints = datasize();
     float dir, str; // direction and strength
     int idir;       // integer direction
     const char direction[8][3] =

@@ -86,8 +86,7 @@ void TextElement::plot(ptPainter& painter)
     cout << "TextElement::plot(ptPainter& painter): " << text << endl;
 #endif
     std::vector<float> vth, vtw;
-    float th, tw, allth=0;
-    float x;
+    float allth=0;
     painter.setFontSize(fontSize);
 
     std::vector<std::string> vs;

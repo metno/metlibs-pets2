@@ -92,7 +92,6 @@ void MultiLineElement::plot(ptPainter& painter)
     }
 
     // the lines..
-    bool firstsegment;
     int ndim= datadimension();
     QPolygonF line;
     for (int comp=0; comp<ndim; comp++){

@@ -44,7 +44,6 @@ class LineElement : public AxisChildElement
   ptFillStyle markerfill;
   float markersize;
   float barsize;
-  bool shadow;
   bool lineBar;
   bool lineStep;
   bool lineArrows;

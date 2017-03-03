@@ -36,8 +36,6 @@ namespace pets2 {
 
 class LogoElement : public PlotElement
 {
-  float pheight;
-  float pxposition;
 public:
   LogoElement(const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
 

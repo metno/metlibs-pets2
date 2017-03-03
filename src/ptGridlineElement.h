@@ -37,7 +37,6 @@ namespace pets2 {
 class GridlineElement : public PlotElement
 {
   int numTickMajor;
-  int numTickMinor;
   float axeStopY;
   float labelSpace;
   float deltaY;
@@ -49,6 +48,7 @@ class GridlineElement : public PlotElement
   ptColor daycolor;
   std::vector<miutil::miTime> timeLine;
   std::vector<int> daychanges;
+
 public:
   GridlineElement(const std::vector<miutil::miTime>& tline,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);

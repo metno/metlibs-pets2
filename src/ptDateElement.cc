@@ -58,7 +58,6 @@ DateElement::DateElement(const std::vector<miTime>& tline,
   , asNumber(layout.asNumber)
   , datestyle(layout.datestyle)
   , plotlabel(layout.label)
-  , minSkipX(layout.minSkipX)
 {
 #ifdef DEBUG
   cout << "Inside DateElement's constructor" << endl;
@@ -107,7 +106,7 @@ void DateElement::plot(ptPainter& painter)
 {
   std::string txt;
   miDate curDate = timeLine[startT].date();
-  float offset,th;
+  float offset;
   float prevf; // end of previous text
 
   if (enabled && visible) {

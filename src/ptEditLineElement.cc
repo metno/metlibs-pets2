@@ -124,9 +124,6 @@ void EditLineElement::plot(ptPainter& painter)
       painter.setFillStyle(fstyle);
     }
 
-    float prevx = -2000, prevy;
-    bool firstsegment = true;
-
     int j = 0;
     int k = 0, i;
     j = datastart();
@@ -251,7 +248,6 @@ void EditLineElement::plot(ptPainter& painter)
       }
       // Mark each point..
       float ox, oy;
-      float sw, sh;
       char svalue[80];
       if (printValue) {
         painter.setFontSize(fontSize);
@@ -279,7 +275,7 @@ void EditLineElement::plot(ptPainter& painter)
             const QString qtext(svalue);
             const QSizeF sz = painter.getTextSize(qtext);
             painter.setFill(backcolor);
-            painter.drawRect(ox - 3, oy + mSizeY * 3 - 5, ox + sw + 3, oy + mSizeY * 3 + sh/*mSizeY*5*/);
+            painter.drawRect(ox - 3, oy + mSizeY * 3 - 5, ox + sz.width() + 3, oy + mSizeY * 3 + sz.height()/*mSizeY*5*/);
             painter.setLine(color);
             painter.drawText(qtext, ox, oy + mSizeY * 3);
           }

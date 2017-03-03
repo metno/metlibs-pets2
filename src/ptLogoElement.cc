@@ -46,8 +46,7 @@ namespace pets2 {
 LogoElement::LogoElement(const ptVertFieldf& field,
     const Layout& layout, XAxisInfo* xtime)
 
-  : PlotElement(layout, field, xtime),
-    pheight(layout.trueheight), pxposition(layout.position)
+  : PlotElement(layout, field, xtime)
 {
 #ifdef DEBUG
   cout << "Inside LogoElement's constructor" << endl;

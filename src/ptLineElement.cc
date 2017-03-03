@@ -59,7 +59,6 @@ LineElement::LineElement(yAxisElement* ya,
   , markerfill(layout.markerFill)
   , markersize(layout.size)
   , barsize(layout.delta)
-  , shadow(layout.shadow)
   , lineBar(layout.lineBar)
   , lineStep(layout.lineStep)
   , lineArrows(layout.lineArrows)
@@ -147,7 +146,6 @@ void LineElement::plot(ptPainter& painter)
     int numOfLines=1;
     if(isMultiLine)
       numOfLines=datadimension();
-    int numOfPoints = (stopT-startT);
 
     for(int n=0;n<numOfLines;n++) {
       previ1=-2000;
@@ -432,8 +430,6 @@ void LineElement::plot(ptPainter& painter)
       delete[] x_s;
       delete[] y_s;
     }
-
-    int currentPoint=0;
 
     // plot line segments
     for (int i=0; i<npos; i+=2) {

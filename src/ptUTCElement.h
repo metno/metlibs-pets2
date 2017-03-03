@@ -37,7 +37,6 @@ namespace pets2 {
 class UTCElement : public PlotElement
 {
   std::vector<miutil::miTime> timeLine;
-  int minSkipX;
   bool label;
   std::string text;
   std::vector<int> modhours;

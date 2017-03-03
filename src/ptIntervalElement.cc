@@ -50,7 +50,6 @@ IntervalElement::IntervalElement(const std::vector<miTime>& tline,
   : PlotElement(layout, field, xtime)
   , label(layout.text)
   , timetext(layout.text2)
-  , arrows(layout.horsides)
   , lineWidth(layout.lineWidth)
   , timeLine(tline)
 {
@@ -89,7 +88,6 @@ void IntervalElement::plot(ptPainter& painter)
     painter.setLine(color, lineWidth, style);
 
     int i;
-    float th,tw;
     float xstart, midY= (startY+stopY)/2;
     float deltaY= stopY-startY;
     for (size_t j=0; j<intervals.size(); j++){

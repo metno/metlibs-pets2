@@ -47,7 +47,6 @@ GridlineElement::GridlineElement(const std::vector<miTime>& tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout,field,xtime)
   , numTickMajor(layout.numTickMajor)
-  , numTickMinor(layout.numTickMinor)
   , axeStopY(field.y2)
   , labelSpace(layout.labelSpace)
   , lineWidth(layout.lineWidth)

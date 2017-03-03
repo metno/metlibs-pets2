@@ -74,7 +74,7 @@ void DayElement::plot(ptPainter& painter)
 {
   miDate curDate = timeLine[startT].date();
   std::string curDay;
-  float offset,th;
+  float offset;
   float prevf;       // end of previous text
 #ifdef DEBUG
   cout << "DayElement::plot(ptPainter& painter)" << endl;

@@ -49,7 +49,6 @@ namespace pets2 {
 UTCElement::UTCElement(const std::vector<miTime>& tline,
     const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime)
   : PlotElement(layout, field, xtime)
-  , minSkipX(layout.minSkipX)
   , label(layout.label)
   , text(layout.text)
   , modhours(layout.modhours)

@@ -46,12 +46,12 @@ public:
 private:
   std::string label;
   std::string timetext;
-  ptHorSides arrows;
   std::vector<std::string> vt; // timetext split by ';'
   std::vector<tinterval> intervals;
   float lineWidth;
   std::vector<miutil::miTime> timeLine;
   ptLineStyle style;
+
 public:
   IntervalElement(const std::vector<miutil::miTime>& tline,
       const ptVertFieldf& field,

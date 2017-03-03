@@ -43,7 +43,6 @@ class DateElement : public PlotElement
   bool asNumber;
   ptDateStyle datestyle;
   bool plotlabel;
-  int minSkipX;
 
   std::string dataAsString(const miutil::miDate& date);
 
