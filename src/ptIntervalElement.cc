@@ -66,13 +66,11 @@ IntervalElement::IntervalElement(const std::vector<miTime>& tline,
 void IntervalElement::setTimes(const std::vector<tinterval>& t)
 {
   intervals= t;
-  if(vt.size()){
-    int n= intervals.size();
-    int m= vt.size();
-    for (int i=0; i<n; i++){
-      if (i<m){
-        intervals[i].text = miutil::split(vt[i], "|");
-      }
+  const size_t m= vt.size();
+  if (m > 0) {
+    const size_t n= intervals.size();
+    for (size_t i=0; i<n && i<m; i++) {
+      intervals[i].text = miutil::split(vt[i], "|");
     }
   }
 }

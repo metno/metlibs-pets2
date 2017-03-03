@@ -75,7 +75,7 @@ float UTCElement::plottime(ptPainter& painter, const miTime& t, int i, bool minu
   float offset;
   if (minute){
     ost << std::setw(2) << std::setfill('0') << t.hour() << ":" << std::setw(2) << t.min();
-    offset= cwid*2.5;
+    offset= cwid*2.5f;
   } else {
     ost << std::setw(2) << std::setfill('0') << t.hour();
     offset= cwid;
@@ -101,7 +101,7 @@ void UTCElement::plot(ptPainter& painter)
     bool *taken= new bool[stopT+2];
     for (int i=0; i<stopT+2; i++) taken[i]= false;
 
-    for (int k=0; k<modhours.size(); k++) {
+    for (size_t k=0; k<modhours.size(); k++) {
       prev= -1000;
       for (int i=startT; i<=stopT; i++) {
         if (!taken[i]){

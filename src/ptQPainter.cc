@@ -119,9 +119,9 @@ void setDashes(QPen& qpen, pets2::ptLineStyle style)
 }
 #endif
 
-static const float gl_width = 1500, gl_height = 1000;
+const float gl_width = 1500, gl_height = 1000;
 
-float mapFontSize(pets2::ptFontSize size)
+qreal mapFontSize(pets2::ptFontSize size)
 {
   if (size == pets2::HEADER1)
     return 20;
@@ -331,7 +331,7 @@ void ptQPainter::drawCircle(float centerx, float centery, float radius)
   qpainter.setPen(qpen);
   qpainter.setBrush(qbrush);
 
-  const float r = radius / qcanvas()->pixWidth();
+  const double r = double(radius / qcanvas()->pixWidth());
   qpainter.drawEllipse(map(centerx, centery), r, r);
 }
 

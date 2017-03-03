@@ -105,7 +105,7 @@ public:
     { return type; }
 
   virtual ParId getParId() const
-    { ParId id = ID_UNDEF; return id; }
+    { return ID_UNDEF; }
 
   const ptColor& Color() const
     { return color; }
@@ -167,11 +167,12 @@ protected:
   void calcAllDataProperties()
     { fdata->calcAllProperties();}
   int datadimension() const { return fdata->Ndim(); }
-  float datamin(int& comp) const {return fdata->Cmin(comp);}
+  float datamin(int comp) const {return fdata->Cmin(comp);}
   float datamin() const {return fdata->Cmin(ds.comp);}
-  float datamax(int& comp) const {return fdata->Cmax(comp);}
+  float datamax(int comp) const {return fdata->Cmax(comp);}
   float datamax() const {return fdata->Cmax(ds.comp);}
   bool  datapolar() const {return fdata->Polar();}
+
 public:
   dataPlotElement(const DataSpec cds,
       const Layout& layout,

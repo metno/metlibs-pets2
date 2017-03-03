@@ -90,16 +90,22 @@ void LineElement::dataInfo(float &min, float &max)
     return;
   }
 
-  float mi= FLT_MAX, ma= -FLT_MAX;
-  int comp, ndim= datadimension();
-  for (comp=0; comp<ndim; comp++){
-    min = datamin(comp);
-    max = datamax(comp);
-    if (min<mi) mi= min;
-    if (max>ma) ma= max;
+  const int ndim = datadimension();
+  if (ndim == 0) {
+    min = FLT_MAX;
+    max = -FLT_MAX;
+  } else {
+    min = datamin(0);
+    max = datamax(0);
+    for (int comp=1; comp<ndim; comp++) {
+      float mi = datamin(comp);
+      float ma = datamax(comp);
+      if (mi<min)
+        min = mi;
+      if (ma>max)
+        max = ma;
+    }
   }
-  min= mi;
-  max= ma;
 }
 
 

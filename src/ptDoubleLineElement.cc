@@ -83,9 +83,8 @@ void DoubleLineElement::plot(ptPainter& painter)
       labelx=lineLabelPos*float((stopT-startT)/100.0);
 
     vector<float> Xval, Y1val, Y2val;
-    int j,i;
-    j = datastart();
-    for (i=startT; i<=stopT; i++) {
+    int j = datastart();
+    for (int i=startT; i<=stopT; i++) {
       if (valid(i)) {
         // find correct position for line-label
         if (labelOnLine)
@@ -105,7 +104,7 @@ void DoubleLineElement::plot(ptPainter& painter)
     // fill the area between the two lines
     painter.setFill(fillColor);
     QPolygonF between, line1, line2;
-    for (i=0; i<Xval.size();i++) {
+    for (size_t i=0; i<Xval.size();i++) {
       QPointF p1(Xval[i], Y1val[i]);
       between << p1;
       line1 << p1;

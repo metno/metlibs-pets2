@@ -55,7 +55,7 @@ LogoElement::LogoElement(const ptVertFieldf& field,
 }
 
 
-void LogoElement::plot(ptPainter& painter)
+void LogoElement::plot(ptPainter& /*painter*/)
 {
 }
 

@@ -54,7 +54,7 @@ void SymbolElement::setImages(const int min, const std::vector<std::string>& fil
   minidx = min;
   maxidx = min + files.size() - 1;
   maxwidth = maxheight = 0;
-  for (int i = 0; i < files.size() && i < MAXIMAGES; i++) {
+  for (size_t i = 0; i < files.size() && i < MAXIMAGES; i++) {
     images[i].setimage(files[i]);
     if (images[i].Width() > maxwidth)
       maxwidth = images[i].Width();

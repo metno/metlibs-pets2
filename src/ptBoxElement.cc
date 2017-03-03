@@ -56,8 +56,8 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
 #endif
   type = TIMEBOX;
 
-  int nc = colorlist.size();
-  int np = patternlist.size();
+  size_t nc = colorlist.size();
+  size_t np = patternlist.size();
   // make sure colorlist and patternlist have equal sizes
   if (nc < np) {
     ptColor c;
@@ -65,7 +65,7 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
       c = colorlist[nc - 1];
     else
       c = ptColor("BLACK");
-    for (int i = nc; i <= np; i++)
+    for (size_t i = nc; i <= np; i++)
       colorlist.push_back(c);
 
   } else if (nc > np) {
@@ -74,7 +74,7 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
       f = patternlist[np - 1];
     else
       f = pets2::SOLID;
-    for (int i = np; i <= nc; i++)
+    for (size_t i = np; i <= nc; i++)
       patternlist.push_back(f);
   }
 }

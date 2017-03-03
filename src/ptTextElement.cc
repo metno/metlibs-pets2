@@ -61,7 +61,7 @@ TextElement::TextElement(const std::string& pText,
 #endif
   type=TEXT;
 
-  int n= xtime->xcoord.size();
+  size_t n= xtime->xcoord.size();
   startX= stopX= 0;
   if (n>0){
     startX= xtime->xcoord[startT];
@@ -96,12 +96,13 @@ void TextElement::plot(ptPainter& painter)
     } else
       vs.push_back(text);
 
-    int n= vs.size();
-    for (int i=0; i<n; i++){
+    const size_t n= vs.size();
+    for (size_t i=0; i<n; i++){
       const QSizeF bbx = painter.getTextSize(QString::fromStdString(vs[i]));
+      float bbh = bbx.height();
       vtw.push_back(bbx.width());
-      vth.push_back(bbx.height());
-      allth+= th;
+      vth.push_back(bbh);
+      allth+= bbh;
     }
 
     if (drawbackground){
@@ -115,7 +116,8 @@ void TextElement::plot(ptPainter& painter)
     float deltaY= (stopY - startY)/n;
 
     painter.setColor(color);
-    for (int i=0; i<n; i++){
+    for (size_t i=0; i<n; i++){
+      float x = 0;
       switch(align) {
       case LEFT :
         x= 20;

@@ -69,7 +69,7 @@ void ProgElement::plot(ptPainter& painter)
   float numWidth4 = numWidth*4;
   float signWidth = numWidth*0.8;
 
-  float offset, accum=0, signw;
+  float offset=0, accum=0, signw;
   float deltaT=(xtime->xcoord.size() ? xtime->xcoord[1]-xtime->xcoord[0] : 1);
 
   if(enabled && visible) {
