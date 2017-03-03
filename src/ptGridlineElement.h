@@ -52,8 +52,9 @@ class GridlineElement : public PlotElement
 public:
   GridlineElement(const std::vector<miutil::miTime>& tline,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
-  void plot(ptPainter& painter);
-  bool needsData() { return false; }
+  void plot(ptPainter& painter) override;
+  bool needsData() override
+    { return false; }
 };
 
 } // namespace pets2

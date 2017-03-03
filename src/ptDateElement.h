@@ -50,7 +50,7 @@ class DateElement : public PlotElement
 public:
   DateElement(const std::vector<miutil::miTime>& tline,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
-  void plot(ptPainter& painter);
+  void plot(ptPainter& painter) override;
 };
 
 } // namespace pets2

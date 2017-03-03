@@ -183,9 +183,9 @@ public:
       paramId((*cds.dData)[cds.index].Id()),
       fdata(&((*cds.dData)[cds.index])), ds(cds)
   {}
-  virtual ~dataPlotElement(){}
-  virtual void setTimeInterval(const int start, const int stop);
-  ParId getParId() const {return paramId;}
+  void setTimeInterval(const int start, const int stop) override;
+  ParId getParId() const override
+    { return paramId; }
   DataSpec getDataSpec() const {return ds;}
 };
 

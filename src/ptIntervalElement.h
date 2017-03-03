@@ -58,9 +58,10 @@ public:
       const Layout& layout,
       XAxisInfo* xtime);
 
-  void plot(ptPainter& painter);
+  void plot(ptPainter& painter) override;
   void setTimes(const std::vector<tinterval>& t);
-  bool needsData() { return false; }
+  bool needsData() override
+    { return false; }
 };
 
 } // namespace pets2

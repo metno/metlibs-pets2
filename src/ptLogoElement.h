@@ -41,7 +41,7 @@ class LogoElement : public PlotElement
 public:
   LogoElement(const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
 
-  void plot(ptPainter& painter);
+  void plot(ptPainter& painter) override;
 };
 
 } // namespace pets2

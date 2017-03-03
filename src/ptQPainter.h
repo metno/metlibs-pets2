@@ -44,7 +44,7 @@ class ptQCanvas : public ptCanvas {
 public:
   ptQCanvas(QPaintDevice* device);
 
-  int width();
+  int width() Q_DECL_OVERRIDE;
   int height() Q_DECL_OVERRIDE;
 
   void setFontSize(ptFontSize fs) Q_DECL_OVERRIDE;

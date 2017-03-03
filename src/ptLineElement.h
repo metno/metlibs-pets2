@@ -65,9 +65,10 @@ class LineElement : public AxisChildElement
 public:
   LineElement(yAxisElement* ya, const DataSpec cds, const ptVertFieldf& field,
       const Layout& layout, XAxisInfo* xtime, bool ismulti=false);
-  void plot(ptPainter& painter);
-  bool needsData() { return true; }
-  void dataInfo(float &min, float &max);
+  void plot(ptPainter& painter) override;
+  bool needsData() override
+    { return true; }
+  void dataInfo(float &min, float &max) override;
 };
 
 } // namespace pets2

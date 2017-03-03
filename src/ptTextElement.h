@@ -50,8 +50,9 @@ public:
       const ptVertFieldf& field,
       const Layout& layout,
       XAxisInfo* xtime);
-  void plot(ptPainter& painter);
-  bool needsData() { return true; }
+  void plot(ptPainter& painter) override;
+  bool needsData() override
+    { return true; }
 };
 
 } // namespace pets2

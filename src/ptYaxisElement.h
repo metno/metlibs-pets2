@@ -100,9 +100,11 @@ protected:
 public:
   yAxisElement(const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
 
-  virtual void plot(ptPainter& painter);
-  virtual bool needsData() { return true; }
-  virtual void setTimeInterval(const int start, const int stop);
+  void plot(ptPainter& painter) override;
+  bool needsData() override
+    { return true; }
+  void setTimeInterval(const int start, const int stop) override;
+
   // called from yaxis childelements to report their presence..
   // return legal range
   bool callinn(AxisChildElement*, float&, float&);
@@ -125,14 +127,15 @@ private:
   int numTickMinor;
   float labelSpace; // vertical space for labels
 protected:
-  void calcPlotVal() /*override*/;
-  void calcDims() /*override*/;
+  void calcPlotVal() override;
+  void calcDims() override;
+
 public:
   staticYaxisElement(const ptVertFieldf& field,
       const Layout& layout, XAxisInfo* xtime);
   ~staticYaxisElement();
 
-  void setTimeInterval(const int start, const int stop) /*override*/;
+  void setTimeInterval(const int start, const int stop) override;
 };
 
 
@@ -179,9 +182,9 @@ public:
   AxisChildElement(yAxisElement* ya, const DataSpec cds,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
   ~AxisChildElement();
-  bool needsData() /*override*/
+  bool needsData() override
     { return true; }
-  void dataInfo(float &min, float &max) /*override*/
+  virtual void dataInfo(float &min, float &max)
     { min = datamin(); max = datamax(); }
 
   void plotInterval(float& pmin, float& pmax) const

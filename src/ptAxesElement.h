@@ -46,7 +46,7 @@ public:
       const Layout& layout,
       const bool& hor=true,
       XAxisInfo* xtime=0);
-  void plot(ptPainter& painter);
+  void plot(ptPainter& painter) override;
 };
 
 } // namespace pets2

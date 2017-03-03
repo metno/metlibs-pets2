@@ -41,7 +41,7 @@ public:
   MultiLineElement(yAxisElement* ya, const DataSpec cds,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
 
-  void dataInfo(float&, float&); // return min and max physical values
+  void dataInfo(float&, float&) override; // return min and max physical values
   void plot(ptPainter& painter);
   bool needsData() { return true; }
 };

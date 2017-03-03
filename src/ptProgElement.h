@@ -42,7 +42,7 @@ class ProgElement : public PlotElement
 public:
   ProgElement(std::vector<int>& data,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime=0);
-  void plot(ptPainter& painter);
+  void plot(ptPainter& painter) override;
 };
 
 } // namespace pets2

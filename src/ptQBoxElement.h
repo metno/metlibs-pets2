@@ -48,9 +48,10 @@ class QBoxElement : public AxisChildElement
 public:
   QBoxElement(yAxisElement* ya, const DataSpec cds,
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
-  void plot(ptPainter& painter);
-  void dataInfo(float&, float&); // return min and max physical values
-  bool needsData() { return true; }
+  void plot(ptPainter& painter) override;
+  void dataInfo(float&, float&) override; // return min and max physical values
+  bool needsData() override
+    { return true; }
 };
 
 } // namespace pets2

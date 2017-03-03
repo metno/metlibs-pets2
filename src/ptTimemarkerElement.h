@@ -47,8 +47,9 @@ public:
       const ptVertFieldf& field, const Layout& layout, XAxisInfo* xtime);
   void setTimes(const std::vector<miutil::miTime>& mtimes)
     { markTimes= mtimes; }
-  void plot(ptPainter& painter);
-  bool needsData() { return false; }
+  void plot(ptPainter& painter) override;
+  bool needsData() override
+    { return false; }
 };
 
 } // namespace pets2
