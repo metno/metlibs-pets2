@@ -1,3 +1,11 @@
+metlibs-tseries-pets2 (7.0.0-1) unstable; urgency=low
+
+  * CMake build
+  * shared library
+  * using Qt5
+
+ -- Alexander Bürger <alexander.buerger@met.no>  Fri, 03 Mar 2017 08:00:08 +0100
+
 metlibs-tseries-pets2 (6.0.5-1) unstable; urgency=low
 
   * replace metlibs-tsdata-dev with metlibs-tsdata-core-dev

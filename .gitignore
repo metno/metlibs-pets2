@@ -1,4 +1,11 @@
-/debian/metlibs-pets2-dev.debhelper.log
-/debian/metlibs-pets2-dev.substvars
-/debian/metlibs-pets2-dev
+/debian/debhelper-build-stamp
+/debian/tmp/
+/debian/*.substvars
+/debian/.debhelper/
+/debian/*.debhelper.log
+/debian/metlibs-pets2-qt5-dev
+/debian/libmetlibs-pets2-qt5-*/
 /debian/files
+/obj-x86_64-linux-gnu/
+/debian/debhelper-build-stamp
+/debian/tmp/

@@ -2,21 +2,45 @@ Source: metlibs-tseries-pets2
 Priority: optional
 Maintainer: Alexander Bürger <alexander.buerger@met.no>
 Build-Depends:  debhelper (>= 9),
- autoconf (>=2.61), automake (>= 1.11), libtool (>= 1.5),
- metlibs-putools-dev (>= 5.0.4),
- metlibs-tsdata-core-dev (>= 5.5.0-3),
- libqt4-dev,
+ cmake,
+ metlibs-putools-dev (>= 6.0.0),
+ metlibs-tsdata-core-dev (>= 6.0.0),
+ libboost-dev,
+ qtbase5-dev, qtbase5-dev-tools, qttools5-dev-tools,
  pkg-config
 Standards-Version: 3.9.2
 Section: libs
 
-Package: metlibs-pets2-dev
+Package: metlibs-pets2-qt5-dev
 Section: libdevel
 Architecture: any
-Depends: metlibs-putools-dev (>= 5.0.4),
- metlibs-tsdata-core-dev (>= 5.5.0-3),
- libqt4-dev,
- ${shlibs:Depends},
+Depends: libmetlibs-pets2-qt5-7 (= ${binary:Version}),
+ metlibs-putools-dev (>= 6.0.0),
+ metlibs-tsdata-core-dev (>= 6.0.0),
+ qtbase5-dev,
  ${misc:Depends}
 Description: MET Norway time series plotting
- metlibs pets2 -- MET Norway time series plotting library
+ MET Norway time series plotting library.
+ .
+ This package provides the development files.
+
+Package: libmetlibs-pets2-qt5-7
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends},
+ ${misc:Depends}
+Description: MET Norway time series plotting
+ MET Norway time series plotting library.
+ .
+ This package provides the shared library.
+
+Package: libmetlibs-pets2-qt5-7-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: libm${shlibs:Depends},
+ ${misc:Depends}
+Description: MET Norway time series plotting
+ MET Norway time series plotting library.
+ .
+ This package provides the shared library.
