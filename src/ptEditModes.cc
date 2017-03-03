@@ -1,7 +1,7 @@
 /*
   libpets2 - presentation and editing of time series
 
-  Copyright (C) 2006-2016 met.no
+  Copyright (C) 2017 met.no
 
   Contact information:
   Norwegian Meteorological Institute
@@ -32,17 +32,12 @@
 
 namespace pets2 {
 
-extern const int ptNumLineEditModes;
-enum ptLineEditMode {
-  LE_SINGLE, LE_MULTI, LE_ROTATE, LE_LINEAR
-};
+const int ptNumLineEditModes = 4;
 
-extern const std::string ptLineEditModeName[];
-extern const std::string ptLineEditModeMnemonic[];
-
-enum ptLineEditMarker {
-  LE_RECT, LE_CIRC, LE_DIAMOND
-};
+const std::string ptLineEditModeName[ptNumLineEditModes] =
+  {"Enkel","Linje","Rotér","Lineær"};
+const std::string ptLineEditModeMnemonic[ptNumLineEditModes] =
+  {"E","L","R","I"};
 
 } // namespace pets2
 

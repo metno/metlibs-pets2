@@ -21,6 +21,7 @@ SET(pets2_SOURCES
   ptDiagram.cc
   ptDoubleLineElement.cc
   ptEditLineElement.cc
+  ptEditModes.cc
   ptFontDefs.cc
   ptGridlineElement.cc
   ptHistogramElement.cc
@@ -53,7 +54,6 @@ LIST(APPEND pets2_SOURCES
 )
 
 LIST(APPEND pets2_HEADERS
-  ptEditModes.h
   ptGlobals.h
   ptStyleOrder.h
   ptXAxisInfo.h

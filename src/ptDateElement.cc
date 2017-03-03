@@ -72,11 +72,11 @@ DateElement::DateElement(const std::vector<miTime>& tline,
     else if (datestyle == DS_WEEK)
       labeltext= (lang==miDate::English ? "Week" : "Uke");
     else if (datestyle == DS_MONTH)
-      labeltext= (lang==miDate::English ? "Month" : "Måned");
+      labeltext= (lang==miDate::English ? "Month" : "MÃ¥ned");
     else if (datestyle == DS_DAY)
       labeltext= (lang==miDate::English ? "Day" : "Dag");
     else if (datestyle == DS_YEAR)
-      labeltext= (lang==miDate::English ? "Year" : "År");
+      labeltext= (lang==miDate::English ? "Year" : "Ã…r");
   }
 }
 
