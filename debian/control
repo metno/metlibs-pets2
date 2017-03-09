@@ -19,6 +19,9 @@ Depends: libmetlibs-pets2-qt5-7 (= ${binary:Version}),
  metlibs-tsdata-core-dev (>= 6.0.0),
  qtbase5-dev,
  ${misc:Depends}
+Breaks: metlibs-pets2-dev (<< 7.0.0)
+Replaces: metlibs-pets2-dev (<< 7.0.0)
+Conflicts: metlibs-pets2-dev
 Description: MET Norway time series plotting
  MET Norway time series plotting library.
  .
