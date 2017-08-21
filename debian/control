@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: Alexander Bürger <alexander.buerger@met.no>
 Build-Depends:  debhelper (>= 9),
  cmake,
- metlibs-putools-dev (>= 7.0.0),
+ metlibs-putools-dev (>= 7.1.0),
  metlibs-tsdata-core-dev (>= 6.0.1),
  libboost-dev,
  qtbase5-dev, qtbase5-dev-tools, qttools5-dev-tools,

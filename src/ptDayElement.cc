@@ -45,6 +45,14 @@
 using namespace miutil;
 using namespace std;
 
+namespace {
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+const bool use_utf8 = true;
+#else
+const bool use_utf8 = false;
+#endif
+}
+
 namespace pets2 {
 
 DayElement::DayElement(const vector<miTime>& tline,
@@ -66,7 +74,7 @@ std::string DayElement::dataAsString(const miDate& date)
   if (asNumber)
     return miutil::from_number(date.dayOfYear());
   else
-    return date.shortweekday(lang);
+    return date.shortweekday(miDate::languagestring(lang), use_utf8);
 }
 
 

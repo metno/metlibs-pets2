@@ -46,6 +46,14 @@
 using namespace std;
 using namespace miutil;
 
+namespace {
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+const bool use_utf8 = true;
+#else
+const bool use_utf8 = false;
+#endif
+}
+
 namespace pets2 {
 
 DateElement::DateElement(const std::vector<miTime>& tline,
@@ -90,12 +98,12 @@ std::string DateElement::dataAsString(const miDate& date)
     if (asNumber)
       txt= miutil::from_number(date.month());
     else
-      txt= date.shortmonthname(lang);
+      txt= date.shortmonthname(miDate::languagestring(lang), use_utf8);
   } else if (datestyle == DS_DAY){
     if (asNumber)
       txt= miutil::from_number(date.dayOfYear());
     else
-      txt= date.shortweekday(lang);
+      txt= date.shortweekday(miDate::languagestring(lang), use_utf8);
   } else if (datestyle == DS_YEAR){
     txt= miutil::from_number(date.year());
   }
