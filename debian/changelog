@@ -1,3 +1,9 @@
+metlibs-tseries-pets2 (8.0.1-1) unstable; urgency=low
+
+  * do not require Qt5 linguist tools
+
+ -- Alexander Bürger <alexander.buerger@met.no>  Thu, 01 Nov 2018 08:00:08 +0100
+
 metlibs-tseries-pets2 (8.0.0-1) unstable; urgency=low
 
   * updated libmetlibs-putools
