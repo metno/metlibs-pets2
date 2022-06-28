@@ -35,13 +35,12 @@
 
 #include <puTools/miStringFunctions.h>
 
+#include <iostream>
 #include <fstream>
 #include <map>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.Style"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 using namespace std;
@@ -306,9 +305,7 @@ ptAxis ptStyle::_findFirstFreeAxis(bool usedAxes[][MAXYAXIS],
   for (j = 0; j < MAXYAXIS; j++)
     if (!usedAxes[mother][j]) {
       usedAxes[mother][j] = true;
-#ifdef DEBUG
-      cout << "aFound free axis - Mother: " << mother << " axis: " << j << endl;
-#endif
+      METLIBS_LOG_DEBUG("aFound free axis - Mother: " << mother << " axis: " << j);
       return (ptAxis) j;
     }
   // try the previous mothers
@@ -316,9 +313,7 @@ ptAxis ptStyle::_findFirstFreeAxis(bool usedAxes[][MAXYAXIS],
     for (j = 0; j < MAXYAXIS; j++)
       if (!usedAxes[i][j]) {
         usedAxes[i][j] = true;
-#ifdef DEBUG
-        cout << "bFound free axis - Mother: " << i << " axis: " << j << endl;
-#endif
+        METLIBS_LOG_DEBUG("bFound free axis - Mother: " << i << " axis: " << j);
         return (ptAxis) j;
       }
   // try the next mothers
@@ -326,14 +321,10 @@ ptAxis ptStyle::_findFirstFreeAxis(bool usedAxes[][MAXYAXIS],
     for (j = 0; j < MAXYAXIS; j++)
       if (!usedAxes[i][j]) {
         usedAxes[i][j] = true;
-#ifdef DEBUG
-        cout << "cFound free axis - Mother: " << i << " axis: " << j << endl;
-#endif
+        METLIBS_LOG_DEBUG("cFound free axis - Mother: " << i << " axis: " << j);
         return (ptAxis) j;
       }
-#ifdef DEBUG
-  cout << "No free axis" << endl;
-#endif
+  METLIBS_LOG_DEBUG("No free axis");
   return NO_AXIS; // no free axis exists
 }
 
@@ -443,6 +434,7 @@ void ptStyle::print() const
 bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
     int nin)
 {
+  METLIBS_LOG_SCOPE();
   int iprim, iprimtype, iline, nFound;
   int nout = 0;
   bool usedAxes[MAXAXES][MAXYAXIS];
@@ -458,10 +450,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   Out **outList[MAXPRIMF + MAXPRIM];
   Out *pAxes[MAXAXES];
 
-#ifdef DEBUG
-  cout << "Inside ptStyle::organize" << endl;
-  cout << "Number of primitives in:" << nin << endl;
-#endif
+  METLIBS_LOG_DEBUG("Number of primitives in:" << nin);
   //initialize usedAxes
   for (i = 0; i < MAXAXES; i++)
     for (j = 0; j < MAXYAXIS; j++)
@@ -473,24 +462,17 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   // loop through all elements of inList and set layout
   nin--; // OBS OBS OBS
   for (i = 0; i < nin; i++) {
-#ifdef DEBUG
-    cout << "Inside for all input elements loop no " << i << endl;
-    cout << "ParId: " << inList[i].id << " Type: " << inList[i].type << endl;
-#endif
+    METLIBS_LOG_DEBUG("Inside for all input elements loop no " << i);
+    METLIBS_LOG_DEBUG("ParId: " << inList[i].id << " Type: " << inList[i].type);
     // find all primitives with this ParId
     nFound = 0;
     for (iprim = 0; iprim < nprimF; iprim++) {
       if (pprimF[iprim].id == inList[i].id && pprimF[iprim].enabled) {
         // found primitive
-#ifdef DEBUG
-        cout << "Found primitive. ParId:" << pprimF[iprim].id <<
-        " Type:" << pprimF[iprim].type << endl;
-#endif
+        METLIBS_LOG_DEBUG("Found primitive. ParId:" << pprimF[iprim].id << " Type:" << pprimF[iprim].type);
         nFound++;
 
-#ifdef DEBUG
-        cout << "Adding to outList (SPECIFIC)" << endl;
-#endif
+        METLIBS_LOG_DEBUG("Adding to outList (SPECIFIC)");
         //  	if (pprimF[iprim].type == LINE ||
         // 	    pprimF[iprim].type == EDITLINE) {
         // 	  usedAxes[pprimF[iprim].mother][pprimF[iprim].layout.axis] = true;
@@ -518,29 +500,19 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
       } // primitive with correct parid found
     } // for all file primitives
     if (!nFound) { // no primitives for this ParId
-#ifdef DEBUG
-      cout << "No primitives found for current ParId" << endl;
-#endif
+      METLIBS_LOG_DEBUG("No primitives found for current ParId");
       // is this type mentioned in style?
       if ((iprimtype = _findPrimF(inList[i].type)) != -1) {
         // yes, it is
-#ifdef DEBUG
-        cout << "..but we found another primitive with same type" << endl;
-#endif
+        METLIBS_LOG_DEBUG("..but we found another primitive with same type");
         if (pprimF[iprimtype].plotAll) {
           // style says: plot all data with this type
-#ifdef DEBUG
-          cout << "..and it says PlotAll" << endl;
-#endif
+          METLIBS_LOG_DEBUG("..and it says PlotAll");
           if (inList[i].type == LINE) {
-#ifdef DEBUG
-            cout << "It is a line..do nothing yet" << endl;
-#endif
+            METLIBS_LOG_DEBUG("It is a line..do nothing yet");
             unspecLines[nunspecLines++] = i;
           } else {
-#ifdef DEBUG
-            cout << "Adding to outList (GENERIC)" << endl;
-#endif
+            METLIBS_LOG_DEBUG("Adding to outList (GENERIC)");
             outList[nout] = new Out*;
             (*outList[nout]) = new Out;
             //use default lout:
@@ -566,9 +538,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   if (iline != -1) {
     oneLayout = pprimF[iline].layout;
     for (i = 0; i < nunspecLines; i++) {
-#ifdef DEBUG
-      cout << "Inside loop for unspecified line primitives" << endl;
-#endif
+      METLIBS_LOG_DEBUG("Inside loop for unspecified line primitives");
       if ((oneLayout.axis = _findFirstFreeAxis(usedAxes, maxMother)) != NO_AXIS) {
         outList[nout] = new Out*;
         (*outList[nout]) = new Out;
@@ -582,19 +552,15 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
         (*outList[nout++])->prim.id = inList[unspecLines[i]].id;
       } else
         break; // no free axis, break out of loop
-#ifdef DEBUG
-      for (int k=0;k<MAXAXES;k++) {
-        for (int l=0;l<MAXYAXIS;l++)
-        cout << "\t" << usedAxes[k][l];
-        cout << "\n";
+      if (METLIBS_LOG_DEBUG_ENABLED()) {
+        for (int k=0;k<MAXAXES;k++) {
+          for (int l=0;l<MAXYAXIS;l++)
+            METLIBS_LOG_DEBUG("usedAxes[" << k << "][" << l << "] = " << usedAxes[k][l]);
+        }
       }
-#endif
     }
 
-#ifdef DEBUG
-    cout << "Finished for unspecified line primitives. nout is " << nout
-    << endl;
-#endif
+    METLIBS_LOG_DEBUG("Finished for unspecified line primitives. nout is " << nout);
   }
 
   // OBS dette skal flyttes inn i uspesifiserte linjeprimitiver
@@ -630,9 +596,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   // go through the list of non-file-primitives and put primitives on list
   for (i = 0; i < nprim; i++) {
     if (pprim[i].enabled) {
-#ifdef DEBUG
-      cout << "Inside for all non-file-primitives loop no " << i << endl;
-#endif
+      METLIBS_LOG_DEBUG("Inside for all non-file-primitives loop no " << i);
       outList[nout] = new Out*;
       (*outList[nout]) = new Out;
       (*outList[nout])->prim.layout = pprim[i].layout;
@@ -652,39 +616,30 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
 
   // sort the list on output primitives with respect to mother and order
   // first comes the DIAGRAM-mother-elements, then AXES1, AXES2 etc..
-#ifdef DEBUG
-  cout << "outList before sorting:\n";
-  for (i=0; i<nout;i++)
-  cout << "type: " << (*outList[i])->prim.type << " mother: "
-  << (*outList[i])->mother << " order: " << (*outList[i])->order
-  << " zorder: " << (*outList[i])->zorder
-  << " height: " << (*outList[i])->prim.layout.height << "\n";
-  cout << "MotherCount: DIAGRAM: " << motherCount[DIAGRAM]
-  << " AXES1: " << motherCount[AXES1] << " AXES2: "
-  << motherCount[AXES2] << " AXES3: " << motherCount[AXES3]
-  << " AXES4: " << motherCount[AXES4] << " NO_MOTHER: "
-  << motherCount[NO_MOTHER] << endl;
-  cout << "maxMother : " << maxMother << endl;
-#endif
+  if (METLIBS_LOG_DEBUG_ENABLED()) {
+    METLIBS_LOG_DEBUG("outList before sorting:");
+    for (i = 0; i < nout; i++)
+      METLIBS_LOG_DEBUG("type: " << (*outList[i])->prim.type << " mother: " << (*outList[i])->mother << " order: " << (*outList[i])->order
+                                 << " zorder: " << (*outList[i])->zorder << " height: " << (*outList[i])->prim.layout.height);
+    METLIBS_LOG_DEBUG("MotherCount: DIAGRAM: " << motherCount[DIAGRAM] << " AXES1: " << motherCount[AXES1] << " AXES2: " << motherCount[AXES2] << " AXES3: "
+                                               << motherCount[AXES3] << " AXES4: " << motherCount[AXES4] << " NO_MOTHER: " << motherCount[NO_MOTHER]);
+    METLIBS_LOG_DEBUG("maxMother : " << maxMother);
+  }
   _sortArray(outList, nout, maxMother, motherCount);
-#ifdef DEBUG
-  cout << "outList after sorting:\n";
-  for (i=0; i<nout;i++)
-  cout << "type: " << (*outList[i])->prim.type << " mother: "
-  << (*outList[i])->mother << " order: " << (*outList[i])->order
-  << " zorder: " << (*outList[i])->zorder
-  << " height: " << (*outList[i])->prim.layout.height << endl;
-#endif
+  if (METLIBS_LOG_DEBUG_ENABLED()) {
+    METLIBS_LOG_DEBUG("outList after sorting:");
+    for (i = 0; i < nout; i++)
+      METLIBS_LOG_DEBUG("type: " << (*outList[i])->prim.type << " mother: " << (*outList[i])->mother << " order: " << (*outList[i])->order
+                                 << " zorder: " << (*outList[i])->zorder << " height: " << (*outList[i])->prim.layout.height);
+  }
 
-#ifdef DEBUG
-  cout << "pAxes:\n";
-  for (i=0;i<axesIndex;i++)
-  cout << "type: " << pAxes[i]->prim.type << " height: "
-  << pAxes[i]->prim.layout.height << endl;
-#endif
+  if (METLIBS_LOG_DEBUG_ENABLED()) {
+    METLIBS_LOG_DEBUG("pAxes:");
+    for (i=0;i<axesIndex;i++)
+      METLIBS_LOG_DEBUG("type: " << pAxes[i]->prim.type << " height: " << pAxes[i]->prim.layout.height);
+  }
   if (axesIndex < maxMother + 1) {
-    cerr << "ptStyle ERROR. too few XAXIS defined:" << axesIndex
-        << " asked for at least:" << maxMother + 1 << endl;
+    METLIBS_LOG_ERROR("too few XAXIS defined:" << axesIndex << " asked for at least:" << maxMother + 1);
     return false;
   }
 
@@ -695,9 +650,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   float cury2 = globalWindow.y2 - topMargin_;
   int index = 0, index2 = motherCount[DIAGRAM] - 1;
   while (index < nout && (*outList[index])->mother == DIAGRAM) {
-#ifdef DEBUG
-    cout << "Inside loop for vertical positions " << index << endl;
-#endif
+    METLIBS_LOG_DEBUG("Inside loop for vertical positions " << index);
     if (index > 0) {
       cury
           += ((*outList[index])->prim.type == (*outList[index - 1])->prim.type) ? (*outList[index
@@ -709,8 +662,8 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
       cury += (*outList[index])->prim.layout.height;
       (*outList[index++])->prim.field.y2 = cury;
       if (cury > cury2) // coordinate sum exceeds global range, issue warning
-        cout << "Warning: sum of specified heights on style file exceeds "
-            << "global range. \nPlot may look funny" << endl;
+        METLIBS_LOG_WARN("sum of specified heights on style file exceeds "
+                         << "global range. \nPlot may look funny");
     } else { // else block will be executed maximum one time
       // primitive[index] misses height specification.
       // Set all other heights first
@@ -736,48 +689,35 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
       (*outList[index])->prim.field.y2 = cury2;
       if (cury2 < cury)
         // specified coordinate-sum exceeds global range, issue warning
-        cout << "Warning: sum of specified heights on style file exceeds "
-            << "global range. \nPlot may look funny" << endl;
+        METLIBS_LOG_WARN("sum of specified heights on style file exceeds "
+                         << "global range. \nPlot may look funny");
       break; // break out of while loop
     }
   } // while
-#ifdef DEBUG
-  cout << "Finished loop for vertical positions " << endl;
-#endif
+  METLIBS_LOG_DEBUG("Finished loop for vertical positions");
 
   // set coordinates for the inside-axes-primitives
   index = motherCount[DIAGRAM];
-#ifdef DEBUG
-  cout << "MaxMother before inside-axes-primitives:" << maxMother << endl;
-#endif
+  METLIBS_LOG_DEBUG("MaxMother before inside-axes-primitives:" << maxMother);
   for (i = 0; i <= maxMother; index += motherCount[i++])
     for (j = 0; j < motherCount[i]; j++) {
-#ifdef DEBUG
-      cout << "Inside loop, set coordinates for axeprims " << i
-      << " " << j << endl;
-#endif
+      METLIBS_LOG_DEBUG("Inside loop, set coordinates for axeprims " << i << " " << j);
       (*outList[index + j])->prim.field.y1 = pAxes[i]->prim.field.y1
           + pAxes[i]->prim.layout.tickLen;
       (*outList[index + j])->prim.field.y2 = pAxes[i]->prim.field.y2;
     }
 
-#ifdef DEBUG
-  cout << "outList with specified vertical positions:\n";
-  for (i=0; i<nout;i++)
-  cout << "type: " << (*outList[i])->prim.type << " mother: "
-  << (*outList[i])->mother << " order: " << (*outList[i])->order
-  << " zorder: " << (*outList[i])->zorder
-  << " height: " << (*outList[i])->prim.layout.height
-  << " y1: " << (*outList[i])->prim.field.y1 << " y2: "
-  << (*outList[i])->prim.field.y2 << " text: "
-  << (*outList[i])->prim.layout.text << endl;
-#endif
+  if (METLIBS_LOG_DEBUG_ENABLED()) {
+    METLIBS_LOG_DEBUG("outList with specified vertical positions:");
+    for (i = 0; i < nout; i++)
+      METLIBS_LOG_DEBUG("type: " << (*outList[i])->prim.type << " mother: " << (*outList[i])->mother << " order: " << (*outList[i])->order << " zorder: "
+                                 << (*outList[i])->zorder << " height: " << (*outList[i])->prim.layout.height << " y1: " << (*outList[i])->prim.field.y1
+                                 << " y2: " << (*outList[i])->prim.field.y2 << " text: " << (*outList[i])->prim.layout.text);
+  }
 
   // set the elements of the return array
   for (i = 0; i < nout; i++) {
-#ifdef DEBUG
-    cout << "Inside loop, set output list " << i << endl;
-#endif
+    METLIBS_LOG_DEBUG("Inside loop, set output list " << i);
     orderList[i].layout = (*outList[i])->prim.layout;
     orderList[i].id = (*outList[i])->prim.id;
     orderList[i].type = (*outList[i])->prim.type;
@@ -797,18 +737,19 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
 
 bool ptStyle::readStyle(const std::string& filename, bool verbose)
 {
+  METLIBS_LOG_SCOPE();
   ParameterDefinition parDef;
   Primitive onep, curp;
   pets2::Layout onel, curl;
   map<std::string, std::string> userkeys;
 
   if (verbose)
-    cout << "ptStyle::readStyle. Reading stylefile: " << filename << endl;
-  ifstream sfile(filename.c_str());
-  //   sfile.open(filename.c_str());
-  //   if (sfile.bad()){
+    METLIBS_LOG_INFO("Reading stylefile '" << filename << "'");
+  else
+    METLIBS_LOG_DEBUG("Reading stylefile '" << filename << "'");
+  ifstream sfile(filename);
   if (!sfile) {
-    cerr << "ptStyle::readStyle. Can't open file: " << filename << endl;
+    METLIBS_LOG_ERROR("Cannot open file '" << filename << "'");
     return false;
   }
 
@@ -907,16 +848,11 @@ bool ptStyle::readStyle(const std::string& filename, bool verbose)
           pprim.push_back(curp);
           nprim++;
         }
-#ifdef DEBUG
-        cout << "ptStyle::readStyle -- adding primitive" << endl;
-        cout << "Type:" << curp.type << endl;
-        cout << "order:" << curp.order << endl;
-        cout << "enabled:" << curp.enabled << endl;
-        cout << "id:" << curp.id << endl;
-        cout << "Mother:" << curp.mother << endl;
-        cout << "Component:" << curp.component << endl;
-        //cout << "Layout:\n" << curp.layout << endl;
-#endif
+        METLIBS_LOG_DEBUG("adding primitive "
+                          << "Type:" << curp.type << "order:" << curp.order << "enabled:" << curp.enabled << "id:" << curp.id << "Mother:" << curp.mother
+                          << "Component:" << curp.component
+                          //<< "Layout:\n" << curp.layout
+        );
       } else if (miutil::contains(buf, "DEFAULT")) {
         // set new default
         onel = curl;
@@ -1186,7 +1122,7 @@ bool ptStyle::readStyle(const std::string& filename, bool verbose)
     else if (miutil::contains(keyw, "$"))
       userkeys[keyw] = argu;
     else
-      cerr << "ptStyle::readStyle. Unknown keyword: " << keyw << endl;
+      METLIBS_LOG_ERROR("Unknown keyword '" << keyw << "'");
   }
 
   sfile.close();

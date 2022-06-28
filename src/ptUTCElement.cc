@@ -37,10 +37,8 @@
 #include <iomanip>
 #include <sstream>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.UTCElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -53,9 +51,7 @@ UTCElement::UTCElement(const std::vector<miTime>& tline,
   , text(layout.text)
   , modhours(layout.modhours)
 {
-#ifdef DEBUG
-  cout << "Inside UTCElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=UTC;
   timeLine = tline;
   if (label && text.empty())

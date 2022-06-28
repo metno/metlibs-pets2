@@ -34,10 +34,8 @@
 
 #include "ptLogoElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.LogoElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -48,9 +46,7 @@ LogoElement::LogoElement(const ptVertFieldf& field,
 
   : PlotElement(layout, field, xtime)
 {
-#ifdef DEBUG
-  cout << "Inside LogoElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=LOGO;
 }
 

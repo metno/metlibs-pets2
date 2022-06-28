@@ -39,12 +39,8 @@
 #include <cmath>
 #include <cfloat>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-using std::cout;
-using std::endl;
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.LineElement"
+#include <miLogger/miLogging.h>
 
 namespace pets2 {
 
@@ -76,9 +72,7 @@ LineElement::LineElement(yAxisElement* ya,
   , isMultiLine(ismulti)
 
 {
-#ifdef DEBUG
-  cout << "Inside LineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=LINE;
 }
 
@@ -115,10 +109,8 @@ void LineElement::dataInfo(float &min, float &max)
 
 void LineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && Yaxis && visible) {
-#ifdef DEBUG
-    cout << "LineElement::plot(ptPainter& painter)" << endl;
-#endif
     // vertex points (legal datapoints)
     std::vector<float> vertexx, vertexy;
     // vertex point data index (legal datapoints)
@@ -606,9 +598,6 @@ void LineElement::plot(ptPainter& painter)
       painter.setColor(color);
       painter.drawText(qtext, labelx, labely);
     }
-#ifdef DEBUG
-    cout << "LineElement::plot(ptPainter& painter) finished" << endl;
-#endif
   }
 }
 

@@ -37,10 +37,8 @@
 
 #include <cmath>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.PlotElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -67,9 +65,7 @@ PlotElement::PlotElement(const Layout& layout, const ptVertFieldf& field,
   , colorlist(layout.colorlist)
   , next(pNext) // FIXME public
 {
-#ifdef DEBUG
-  cout << "Inside PlotElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
 }
 
 PlotElement::~PlotElement()

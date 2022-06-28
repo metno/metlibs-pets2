@@ -34,10 +34,8 @@
 
 #include "ptGridlineElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.GridlineElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -57,9 +55,7 @@ GridlineElement::GridlineElement(const std::vector<miTime>& tline,
   , daycolor(layout.color2)
   , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside GridlineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=GRIDLINE;
   deltaY = axeStopY - startY - labelSpace;
 
@@ -78,10 +74,8 @@ GridlineElement::GridlineElement(const std::vector<miTime>& tline,
 
 void GridlineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "GridlineElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setLine(color, lineWidth, style);
     painter.setFillStyle(pets2::SOLID);
 

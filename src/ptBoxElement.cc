@@ -35,6 +35,9 @@
 
 #include <QPolygonF>
 
+#define MILOGGER_CATEGORY "metlibs.pets2.Boxlement"
+#include <miLogger/miLogging.h>
+
 using namespace miutil;
 using namespace std;
 
@@ -51,9 +54,7 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
     , useTimes(layout.useTimes)
     , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside BoxElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = TIMEBOX;
 
   size_t nc = colorlist.size();
@@ -81,11 +82,8 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
 
 void BoxElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (enabled && visible) {
-#ifdef DEBUG
-    cout << "BoxElement::plot(ptPainter& painter)" <<endl;
-#endif
-
     painter.setFontSize(fontSize);
 
     painter.setLineWidth(linewidth);

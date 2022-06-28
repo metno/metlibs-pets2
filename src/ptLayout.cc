@@ -35,6 +35,8 @@
 
 #include <puTools/miStringFunctions.h>
 
+#include <iostream>
+
 static std::string trimmed_upper(const std::string& text)
 {
   return miutil::trimmed(miutil::to_upper(text));

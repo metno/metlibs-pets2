@@ -34,10 +34,8 @@
 
 #include "ptTimemarkerElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.TimemarkerElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -52,9 +50,7 @@ TimemarkerElement::TimemarkerElement(const std::vector<miTime>& tline,
   , style(layout.linePattern)
   , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside TimemarkerElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type= TIMEMARKER;
   deltaY= axeStopY - startY - labelSpace;
 }
@@ -62,10 +58,8 @@ TimemarkerElement::TimemarkerElement(const std::vector<miTime>& tline,
 
 void TimemarkerElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && markTimes.size() && visible) {
-#ifdef DEBUG
-    cout << "TimemarkerElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setLine(color, lineWidth, style);
 
     int i,j,n=markTimes.size();

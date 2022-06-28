@@ -60,13 +60,11 @@
 
 #include <puTools/miStringFunctions.h>
 
+#define MILOGGER_CATEGORY "metlibs.pets2.Diagram"
+#include <miLogger/miLogging.h>
+
 using namespace miutil;
 using namespace std;
-
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
 
 // should consider additional constructor for equally spaced time points????
 
@@ -116,6 +114,8 @@ void ptDiagram::toLocaltime(miTime& t)
 //---------------------------------------------------
 bool ptDiagram::attachData(ptDiagramData *dd)
 {
+  METLIBS_LOG_SCOPE();
+
   if (!Style)
     return false;
   if (!dd)
@@ -152,13 +152,14 @@ bool ptDiagram::attachData(ptDiagramData *dd)
 
   makeXtime();
 
-#ifdef DEBUG
-  int i;
-  cout << "ptDiagram timeLine: ";
-  for (i=0;i<nTimePoints;i++) cout << timeLine[i] << "\t"; cout << endl;
-  cout << "xtime->coord: ";
-  for (i=0; i<nTimePoints;i++) cout << xtime.xcoord[i] << "\t"; cout << endl;
-#endif
+  if (METLIBS_LOG_DEBUG_ENABLED()) {
+    METLIBS_LOG_DEBUG("timeLine:");
+    for (const auto& t : timeLine)
+      METLIBS_LOG_DEBUG(t);
+    METLIBS_LOG_DEBUG("xtime->coord:");
+    for (int i=0; i<nTimePoints;i++)
+      METLIBS_LOG_DEBUG(xtime.xcoord[i]);
+  }
 
   return 1;
 }
@@ -215,6 +216,7 @@ void ptDiagram::setViewport(ptCanvas* canvas)
 //---------------------------------------------------
 bool ptDiagram::makeDefaultPlotElements()
 {
+  METLIBS_LOG_SCOPE();
   if (!Style)
     return false;
 
@@ -234,9 +236,7 @@ bool ptDiagram::makeDefaultPlotElements()
     primList[j].dataIndex = i;
     primList[j].dataComp = 0;
     primList[j].type = (*DD)[i].Type();
-#ifdef DEBUG
-    cout << "Primitive:" << i << " type:" << primList[j].type << " Ndim:" << (*DD)[i].Ndim() << " ParId:" << primList[j].id << endl;
-#endif
+    METLIBS_LOG_DEBUG("Primitive:" << i << " type:" << primList[j].type << " Ndim:" << (*DD)[i].Ndim() << " ParId:" << primList[j].id);
   }
   // Dropper textlinjer foreloebig...
   //   for (i=0;i<count.nTextLines;j++,i++) {   // text lines from file
@@ -252,17 +252,13 @@ bool ptDiagram::makeDefaultPlotElements()
   //  nPlotPrim++;
   nPlotPrim = j;
 
-#ifdef DEBUG
-  cout << "Organizing the plot from the style" << endl;
-#endif
+  METLIBS_LOG_DEBUG("Organizing the plot from the style");
   if (!(Style->organize(primOrderList, &nPrimOut, primList, nPlotPrim))) {
-    cerr << "ERROR: Something catastrophic happened during style->organize\n"
-        << "Exiting" << endl;
+    METLIBS_LOG_ERROR("Something catastrophic happened during style->organize\n"
+                      << "Exiting");
     exit(0);
   }
-#ifdef DEBUG
-  cout << "About to create plotElements" << endl;
-#endif
+  METLIBS_LOG_DEBUG("About to create plotElements");
 
   // loop through the primOrderList and create PlotElements for each element
   ErrorFlag ef; // OBS OBS
@@ -598,6 +594,7 @@ PlotElement* ptDiagram::findElement(ptPrimitiveType type, ParId id,
 // remove one element
 void ptDiagram::removeElement(PlotElement *elm)
 {
+  METLIBS_LOG_SCOPE();
   PlotElement *cur = first;
 
   //special care if first element is to be removed
@@ -617,7 +614,7 @@ void ptDiagram::removeElement(PlotElement *elm)
     }
     cur = cur->next;
   }
-  cerr << "ptDiagram::RemoveElement : Element not found" << endl;
+  METLIBS_LOG_ERROR("Element not found");
 }
 
 // remove all elements of specified type
@@ -673,9 +670,7 @@ void ptDiagram::disableElement(PlotElement* elm)
 // add a new plotelement to the list
 void ptDiagram::addElement(PlotElement* elm)
 {
-#ifdef DEBUG
-  cout << "Inside ptDiagram::addElement" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   if (first == NULL)
     first = last = elm;
   else {
@@ -689,9 +684,7 @@ void ptDiagram::addElement(PlotElement* elm)
 // plot diagram
 void ptDiagram::plot(ptPainter& painter)
 {
-#ifdef DEBUG
-  cout << "--Starting Diagram.plot(ptPainter& painter)" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   if (!first)
     return;
 
@@ -699,9 +692,6 @@ void ptDiagram::plot(ptPainter& painter)
     painter.clear(Style->backgroundColor());
   for (PlotElement* elm = first; elm; elm = elm->next)
     elm->plot(painter);
-#ifdef DEBUG
-  cout << "--Ending Diagram.plot(ptPainter& painter)" << endl;
-#endif
 }
 
 void ptDiagram::tst_print()

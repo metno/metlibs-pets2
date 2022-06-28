@@ -36,10 +36,8 @@
 
 #include <cstdio>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.ProgElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -50,15 +48,14 @@ ProgElement::ProgElement(std::vector<int>& data,
   : PlotElement(layout, field, xtime),
     timeData(data), minSkipX(layout.minSkipX)
 {
-#ifdef DEBUG
-  cout << "Inside ProgElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=PROG;
 }
 
 
 void ProgElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   char text[6], tmp[4];
   painter.setFontSize(fontSize);
   const float tw = painter.getCharWidth('0');
@@ -73,9 +70,6 @@ void ProgElement::plot(ptPainter& painter)
   float deltaT=(xtime->xcoord.size() ? xtime->xcoord[1]-xtime->xcoord[0] : 1);
 
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "ProgElement::plot(ptPainter& painter)" <<endl;
-#endif
     if (timeData[0]>=0) {
       strcpy(text,"+");
       signw = signWidth;

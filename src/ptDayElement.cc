@@ -37,10 +37,8 @@
 
 #include <list>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.DayElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 using namespace std;
@@ -61,9 +59,7 @@ DayElement::DayElement(const vector<miTime>& tline,
     timeLine(tline),
     language(layout.language), asNumber(layout.asNumber)
 {
-#ifdef DEBUG
-  cout << "Inside DayElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=DAY;
   lang= (language=="NO" ? miDate::Norwegian :  miDate::English);
 }
@@ -80,13 +76,11 @@ std::string DayElement::dataAsString(const miDate& date)
 
 void DayElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   miDate curDate = timeLine[startT].date();
   std::string curDay;
   float offset;
   float prevf;       // end of previous text
-#ifdef DEBUG
-  cout << "DayElement::plot(ptPainter& painter)" << endl;
-#endif
   if (enabled && visible) {
     painter.setFontSize(fontSize);
     painter.setLine(color);

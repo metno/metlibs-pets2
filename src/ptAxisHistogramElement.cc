@@ -38,10 +38,8 @@
 #include <puTools/miTime.h>
 #include <cfloat>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.AxisHistogramElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -57,18 +55,14 @@ AxisHistogramElement::AxisHistogramElement(yAxisElement* ya,
     , hstop(layout.histStop)
     , drawlabel(layout.label)
 {
-#ifdef DEBUG
-  cout << "Inside AxisHistogramElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = AXISHIST;
 }
 
 void AxisHistogramElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (enabled && Yaxis && visible) {
-#ifdef DEBUG
-    cout << "AxisHistogramElement::plot(ptPainter& painter)" <<endl;
-#endif
     _prePlot();
     painter.setFontSize(fontSize);
     const float tw = painter.getCharWidth(QLatin1Char('0'));

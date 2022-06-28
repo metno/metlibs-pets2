@@ -36,10 +36,8 @@
 
 #include <puTools/miTime.h>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.HistogramElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -57,9 +55,7 @@ HistogramElement::HistogramElement(const DataSpec cds,
     , hstop(layout.histStop)
     , drawlabel(layout.label)
 {
-#ifdef DEBUG
-  cout << "Inside HistogramElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = HIST;
   deltaY -= YSPACE;
 
@@ -75,9 +71,7 @@ HistogramElement::HistogramElement(const DataSpec cds,
   for (int i = 1; i < nt; i++) {
     if (valid(i)) {
       deltaT[i] = miTime::hourDiff(timeLine[i], timeLine[j]);
-#ifdef DEBUG
-      cout << "Times: " << timeLine[i] << " - " << timeLine[j] << "  Histogram value:" << dval(j) << " deltaT:" << deltaT[i] << endl;
-#endif
+      METLIBS_LOG_DEBUG("Times: " << timeLine[i] << " - " << timeLine[j] << "  Histogram value:" << dval(j) << " deltaT:" << deltaT[i]);
       if (dval(j) > deltaT[i] * max / 3.0)
         max = dval(j) * 3.0 / (deltaT[i] * 1.0);
       j++;
@@ -88,12 +82,11 @@ HistogramElement::HistogramElement(const DataSpec cds,
     deltaT[0] = deltaT[1];
   else
     deltaT[0] = 1;
-#ifdef DEBUG
-  cout << "Histogram constructor: max:"<<max<<endl;
-  cout << "deltaT:"<<endl;
-  for (int i=0; i<nt;i++)
-    cout<<" DELTAT["<<i<<"] = " << deltaT[i]<<endl;
-#endif
+  if (METLIBS_LOG_DEBUG_ENABLED()) {
+    METLIBS_LOG_DEBUG(LOGVAL(max) << " deltaT:");
+    for (int i = 0; i < nt; i++)
+      METLIBS_LOG_DEBUG("DELTAT[" << i << "] = " << deltaT[i]);
+  }
 }
 
 HistogramElement::~HistogramElement()
@@ -105,10 +98,8 @@ HistogramElement::~HistogramElement()
 // plotting)
 void HistogramElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (enabled && visible) {
-#ifdef DEBUG
-    cout << "HistogramElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setFontSize(fontSize);
     const QSizeF bbx0 = painter.getTextSize("0");
     float deltay = deltaY - bbx0.height();
@@ -126,12 +117,8 @@ void HistogramElement::plot(ptPainter& painter)
         float newx = xtime->xcoord[i];
         if (dval(j) >= 0.05) { // don't draw if is ignorable
           float y = startY + deltay * dval(j) * 3 / (deltaT[i] * max);
-#ifdef DEBUG
-          cout << "histogram value:" << dval(j) << " startY:"<<startY
-               <<" deltaY:"<<deltay<<" deltaT["<<i<<"]:"
-               <<deltaT[i]<<" max:"<<max
-               <<" verdi:"<<y<<endl;
-#endif
+          METLIBS_LOG_DEBUG("histogram value:" << dval(j) << " startY:" << startY << " deltaY:" << deltay << " deltaT[" << i << "]:" << deltaT[i]
+                                               << " max:" << max << " verdi:" << y);
           float del = (newx - oldx) / 10.0;
           float x1 = oldx + hstart * del;
           float x2 = newx - (10 - hstop) * del;

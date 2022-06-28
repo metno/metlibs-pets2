@@ -36,10 +36,8 @@
 
 #include <puTools/miStringFunctions.h>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.IntervalElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -53,9 +51,7 @@ IntervalElement::IntervalElement(const std::vector<miTime>& tline,
   , lineWidth(layout.lineWidth)
   , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside IntervalElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=INTERVAL;
 
   if (!timetext.empty())
@@ -78,10 +74,8 @@ void IntervalElement::setTimes(const std::vector<tinterval>& t)
 
 void IntervalElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "IntervalElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setFontSize(fontSize);
     painter.setLine(color, lineWidth, style);
 

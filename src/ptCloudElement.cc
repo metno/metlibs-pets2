@@ -34,10 +34,8 @@
 
 #include "ptCloudElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.CloudElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -49,20 +47,15 @@ CloudElement::CloudElement(const DataSpec cds,
     style(layout.fillstyle), width(layout.lineWidth),
     text(layout.text)
 {
-#ifdef DEBUG
-  cout << "Inside CloudElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = CLOUDBOX;
 }
 
 // Plotting of cloud boxes could probably be made more effective
 void CloudElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "CloudElement::plot(ptPainter& painter)" <<endl;
-#endif
-
     painter.setLine(color, width);
 
     // find minimum delta T for calculation of cloud box width

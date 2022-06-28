@@ -39,6 +39,9 @@
 #include <cmath>
 #include <cfloat>
 
+#define MILOGGER_CATEGORY "metlibs.pets2.MultiLineElement"
+#include <miLogger/miLogging.h>
+
 namespace pets2 {
 
 MultiLineElement::MultiLineElement(yAxisElement* ya,
@@ -47,9 +50,7 @@ MultiLineElement::MultiLineElement(yAxisElement* ya,
     const Layout& layout, XAxisInfo* xtime)
   :AxisChildElement(ya,cds,field,layout,xtime)
 {
-#ifdef DEBUG
-  cout << "Inside MultiLineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=MULTI_LINE;
 }
 
@@ -70,10 +71,8 @@ void MultiLineElement::dataInfo(float &min, float &max)
 
 void MultiLineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && Yaxis && visible) {
-#ifdef DEBUG
-    cout << "MultiLineElement::plot(ptPainter& painter)" << endl;
-#endif
     _prePlot();
     painter.setLine(color, lineWidth, style);
 
@@ -99,9 +98,6 @@ void MultiLineElement::plot(ptPainter& painter)
     }
     painter.drawPolyline(line);
 
-#ifdef DEBUG
-    cout << "MultiLineElement::plot(ptPainter& painter) finished" << endl;
-#endif
   }
 }
 

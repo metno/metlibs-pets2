@@ -39,6 +39,9 @@
 #include <cmath>
 #include <cfloat>
 
+#define MILOGGER_CATEGORY "metlibs.pets2.QBoxElement"
+#include <miLogger/miLogging.h>
+
 namespace pets2 {
 
 QBoxElement::QBoxElement(yAxisElement* ya, const DataSpec cds,
@@ -52,9 +55,7 @@ QBoxElement::QBoxElement(yAxisElement* ya, const DataSpec cds,
   , boxcolor(layout.color2)
   , boxfill(layout.fillstyle)
 {
-#ifdef DEBUG
-  cout << "Inside QBOXElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=QBOX;
 }
 
@@ -75,11 +76,8 @@ void QBoxElement::dataInfo(float &min, float &max)
 
 void QBoxElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && Yaxis) {
-#ifdef DEBUG
-    cout << "QBoxElement::plot(ptPainter& painter)" << endl;
-#endif
-
     _prePlot();
 
     if (boxfill != pets2::NONE) {
@@ -144,10 +142,6 @@ void QBoxElement::plot(ptPainter& painter)
         j++;
       }
     }
-
-#ifdef DEBUG
-    cout << "QBoxElement::plot(ptPainter& painter) finished" << endl;
-#endif
   }
 }
 

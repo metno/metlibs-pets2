@@ -34,6 +34,9 @@
 #include <ptPlotElement.h>
 #include <ptSymbolElement.h>
 
+#define MILOGGER_CATEGORY "metlibs.pets2.SymbolElement"
+#include <miLogger/miLogging.h>
+
 using namespace miutil;
 
 namespace pets2 {
@@ -43,9 +46,7 @@ SymbolElement::SymbolElement(const DataSpec cds, const ptVertFieldf& field,
   dataPlotElement(cds, layout, field, xtime), minidx(0), maxidx(0),
       maxwidth(1), maxheight(1), scalewidth(layout.scalewidth)
 {
-#ifdef DEBUG
-  cout << "Inside SymbolElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = SYMBOL;
 }
 
@@ -65,11 +66,8 @@ void SymbolElement::setImages(const int min, const std::vector<std::string>& fil
 
 void SymbolElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (enabled && visible) {
-#ifdef DEBUG
-    cout << "SymbolElement::plot(ptPainter& painter)" <<endl;
-#endif
-
     // find minimum delta T for calculation of image width
     float minx = 10000;
     int k = startT;

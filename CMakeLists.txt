@@ -11,6 +11,7 @@ METNO_PVERSION_DEFINES(PETS2 "src/pets2Version.h")
 SET(PKGS
   metlibs-putools>=8.0.0
   metlibs-tsdata-core>=7.0.0
+  metlibs-milogger>=6.0.0
 )
 
 PKG_CHECK_MODULES(PC_METLIBS REQUIRED

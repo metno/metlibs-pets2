@@ -40,10 +40,8 @@
 #include <cmath>
 #include <cstdio>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.EditLineElement"
+#include <miLogger/miLogging.h>
 
 namespace pets2 {
 
@@ -68,9 +66,7 @@ EditLineElement::EditLineElement(yAxisElement* ya, const DataSpec cds,
     , pointAlign(layout.align)
     , pMarked(false) // FIXME public
 {
-#ifdef DEBUG
-  cout << "Inside EditLineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = EDITLINE;
 
   // Reset marked points array and
@@ -107,10 +103,8 @@ EditLineElement::~EditLineElement()
 
 void EditLineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (enabled && Yaxis && visible) {
-#ifdef DEBUG
-    cout << "EditLineElement::plot(ptPainter& painter)" << endl;
-#endif
 
     _prePlot();
     painter.setLine(color, lineWidth, style);

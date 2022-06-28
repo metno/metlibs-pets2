@@ -37,10 +37,8 @@
 #include <cmath>
 #include <cfloat>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.AxisChildElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -59,9 +57,7 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
   , labelside(layout.versides)
   , keepinaxis(layout.keepinaxis)
 {
-#ifdef DEBUG
-  cout << "Inside AxisChildElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
 
   //axisText = (layout.text.length()) ? layout.text : data->axisText;
   axisText  = layout.text;
