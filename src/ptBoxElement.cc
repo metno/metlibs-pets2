@@ -27,10 +27,6 @@
 
 // ptBoxElement.cc : Definitions for BoxElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptBoxElement.h"
 
 #include <QPolygonF>

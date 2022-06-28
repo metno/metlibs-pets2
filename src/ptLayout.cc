@@ -27,10 +27,6 @@
 
 // ptLayout.cc
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptLayout.h"
 
 #include <puTools/miStringFunctions.h>

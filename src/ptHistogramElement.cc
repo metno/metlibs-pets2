@@ -26,9 +26,6 @@
  */
 
 // ptHistogramElement.cc : Definitions for HistogramElement class
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptHistogramElement.h"
 

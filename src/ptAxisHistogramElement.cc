@@ -27,10 +27,6 @@
 
 // ptAxisHistogramElement.cc : Definitions for AxisHistogramElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptAxisHistogramElement.h"
 
 #include "ptPatterns.h"

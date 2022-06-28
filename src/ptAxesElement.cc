@@ -28,10 +28,6 @@
 
 // ptAxesElement.cc : Definitions for AxesElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptAxesElement.h"
 
 #define MILOGGER_CATEGORY "metlibs.pets2.AxesElement"

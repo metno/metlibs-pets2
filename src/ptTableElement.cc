@@ -28,10 +28,6 @@
 
 // ptTableElement.cc : Definitions for TableElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptTableElement.h"
 
 #define MILOGGER_CATEGORY "metlibs.pets2.TableElement"

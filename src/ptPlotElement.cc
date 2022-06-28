@@ -25,14 +25,10 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 // ptPlotElement.cc : Class definition for generic plotelement
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptPlotElement.h"
+
 #include <puTools/miStringFunctions.h>
 
 #include <cmath>

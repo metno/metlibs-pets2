@@ -28,10 +28,6 @@
 
 // ptYaxisElement.cc : Definitions for yAxisElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptYaxisElement.h"
 
 #define MILOGGER_CATEGORY "metlibs.pets2.yAxisElement"

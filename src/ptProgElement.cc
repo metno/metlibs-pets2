@@ -28,10 +28,6 @@
 
 // ptProgElement.cc : Definitions for ProgElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptProgElement.h"
 
 #define MILOGGER_CATEGORY "metlibs.pets2.ProgElement"

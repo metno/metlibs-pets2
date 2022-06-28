@@ -27,10 +27,6 @@
 
 // ptStyle.cc : Definitions for ptStyle class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptStyle.h"
 
 #include <puTools/miStringFunctions.h>

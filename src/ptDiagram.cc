@@ -27,10 +27,6 @@
 
 // ptDiagram.cc: Definitions for the ptDiagram class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptDiagram.h"
 
 #include "ptAxesElement.h"
