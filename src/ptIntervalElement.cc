@@ -58,7 +58,6 @@ IntervalElement::IntervalElement(const std::vector<miTime>& tline,
     vt= miutil::split(timetext, ";");
 }
 
-
 void IntervalElement::setTimes(const std::vector<tinterval>& t)
 {
   intervals= t;
@@ -70,7 +69,6 @@ void IntervalElement::setTimes(const std::vector<tinterval>& t)
     }
   }
 }
-
 
 void IntervalElement::plot(ptPainter& painter)
 {

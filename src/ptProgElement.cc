@@ -34,8 +34,6 @@
 
 #include "ptProgElement.h"
 
-#include <cstdio>
-
 #define MILOGGER_CATEGORY "metlibs.pets2.ProgElement"
 #include <miLogger/miLogging.h>
 
@@ -51,7 +49,6 @@ ProgElement::ProgElement(std::vector<int>& data,
   METLIBS_LOG_SCOPE();
   type=PROG;
 }
-
 
 void ProgElement::plot(ptPainter& painter)
 {
@@ -95,7 +92,7 @@ void ProgElement::plot(ptPainter& painter)
 
     text[1] = '\0';
 
-    for (int i=1; i<xtime->xcoord.size() && i<timeData.size(); i++) {
+    for (int i = 1; i < (int)xtime->xcoord.size() && i < (int)timeData.size(); i++) {
       // if step is too small, don't print value
       if (accum+deltaT < minSkipX * painter.pixWidth()) {
 	accum += deltaT;
@@ -123,8 +120,8 @@ void ProgElement::plot(ptPainter& painter)
       strcat(text,tmp);
       painter.drawText(text, xtime->xcoord[i]-offset, startY);
 
-      if (i == xtime->xcoord.size()-1)
-	break;
+      if (i == ((int)xtime->xcoord.size()) - 1)
+        break;
       deltaT = xtime->xcoord[i+1]-xtime->xcoord[i];
       accum = 0;
     }

@@ -34,8 +34,6 @@
 
 #include "ptYaxisElement.h"
 
-#include <cstdio>
-
 #define MILOGGER_CATEGORY "metlibs.pets2.yAxisElement"
 #include <miLogger/miLogging.h>
 
@@ -83,8 +81,8 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
   METLIBS_LOG_SCOPE();
   type = YAXIS;
 
-  for (int i=0; i<MAX_YAXIS_CHILDREN; i++)
-    child[i]=0;
+  for (int i = 0; i < MAX_YAXIS_CHILDREN; i++)
+    child[i] = 0;
 
   //axisText = (layout.text.length()) ? layout.text : data->axisText;
   Labels[0] = layout.text;
@@ -96,8 +94,9 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
 
 void yAxisElement::plotAxis(ptPainter& painter)
 {
-  if (!numChild || !visible ) return;
   METLIBS_LOG_SCOPE();
+  if (!numChild || !visible)
+    return;
   float txtX, tmpX, tmpY;
   const float SMALLSPACE = 5;
   char txt[20];
@@ -430,7 +429,7 @@ std::string yAxisElement::userValueLabel(const float value)
   int n = majorticks.size();
 
   for (int i=0; i<n; i++) {
-    if (value <= majorphys[i] && i < userValueLabels.size()) {
+    if (value <= majorphys[i] && i < (int)userValueLabels.size()) {
       return userValueLabels[i];
     }
   }

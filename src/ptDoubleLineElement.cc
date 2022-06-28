@@ -77,7 +77,7 @@ void DoubleLineElement::plot(ptPainter& painter)
     // plot curve
 
     // find x-startcoordinate for line-label
-    float labelx, labely1, labely2;
+    float labelx = 0, labely1 = 0, labely2 = 0;
     if (labelOnLine)
       labelx=lineLabelPos*float((stopT-startT)/100.0);
 

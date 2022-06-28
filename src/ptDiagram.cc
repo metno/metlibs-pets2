@@ -157,11 +157,11 @@ bool ptDiagram::attachData(ptDiagramData *dd)
     for (const auto& t : timeLine)
       METLIBS_LOG_DEBUG(t);
     METLIBS_LOG_DEBUG("xtime->coord:");
-    for (int i=0; i<nTimePoints;i++)
+    for (int i = 0; i < nTimePoints; i++)
       METLIBS_LOG_DEBUG(xtime.xcoord[i]);
   }
 
-  return 1;
+  return true;
 }
 
 //
@@ -205,8 +205,6 @@ void ptDiagram::setViewport(ptCanvas* canvas)
       elm->setViewport(canvas);
   }
 }
-
-
 
 //---------------------------------------------------
 // Name         : makeDefaultPlotElements
@@ -434,11 +432,11 @@ void ptDiagram::setAllTimesAxisScale(bool b)
 void ptDiagram::setTimeInterval(int start, int stop)
 {
   if (timeLine.size()) {
-    if (start >= 0 && start < timeLine.size()) {
+    if (start >= 0 && start < (int)timeLine.size()) {
       startidx = start;
       startT = timeLine[start];
     }
-    if (stop >= startidx && stop < timeLine.size()) {
+    if (stop >= startidx && stop < (int)timeLine.size()) {
       stopidx = stop;
       stopT = timeLine[stop];
     }
@@ -514,9 +512,9 @@ void ptDiagram::getTimeInterval(int &start, int &stop)
 
 void ptDiagram::getTimeInterval(miTime& start, miTime & stop)
 {
-  if (startidx >= 0 && startidx<timeLine.size())
+  if (startidx >= 0 && startidx < (int)timeLine.size())
     start = timeLine[startidx];
-  if (stopidx >= 0 && stopidx<timeLine.size())
+  if (stopidx >= 0 && stopidx < (int)timeLine.size())
     stop = timeLine[stopidx];
 }
 

@@ -80,9 +80,9 @@ void PlotElement::setViewport(ptCanvas* c)
 
 void PlotElement::setTimeInterval(const int start, const int stop)
 {
-  if (start >= 0 && start < xtime->xcoord.size())
+  if (start >= 0 && start < (int)xtime->xcoord.size())
     startT = start;
-  if (stop >= 0 && stop < xtime->xcoord.size())
+  if (stop >= 0 && stop < (int)xtime->xcoord.size())
     stopT = stop;
 }
 

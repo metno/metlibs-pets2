@@ -95,7 +95,7 @@ void GridlineElement::plot(ptPainter& painter)
       }
     }
 
-    int d,n= daychanges.size();
+    int d = 0, n = daychanges.size();
     int d1, d2;
     if (plotDayPattern)
       for (d=0; d<n && daychanges[d]<=startT; d++)

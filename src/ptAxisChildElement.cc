@@ -67,8 +67,6 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
   calcAllDataProperties();
 }
 
-
-
 // find intersection point (Px,Py) between line-segments AB and CD
 // returns true if such exists
 // Algorithm from comp.graphics.algorithms FAQ subject 1.03:
@@ -164,7 +162,7 @@ bool AxisChildElement::crossPoint(const float x1, const float y1,
 				  const float x2, const float y2,
 				  float& cx, float& cy)
 {
-  float Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,r,s,Px,Py;
+  float Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, r, s, Px = 0, Py = 0;
   bool res= false;
   Ax= x1; Ay= y1;
   Bx= x2; By= y2;
@@ -194,7 +192,7 @@ bool AxisChildElement::dataCrossPoint(const float x1, const float y1,
 				      const float d,
 				      float& cx, float& cy)
 {
-  float Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,r,s,Px,Py;
+  float Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, r, s, Px = 0, Py = 0;
   bool res= false;
   Ax= x1; Ay= y1;
   Bx= x2; By= y2;

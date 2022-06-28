@@ -553,8 +553,8 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
       } else
         break; // no free axis, break out of loop
       if (METLIBS_LOG_DEBUG_ENABLED()) {
-        for (int k=0;k<MAXAXES;k++) {
-          for (int l=0;l<MAXYAXIS;l++)
+        for (int k = 0; k < MAXAXES; k++) {
+          for (int l = 0; l < MAXYAXIS; l++)
             METLIBS_LOG_DEBUG("usedAxes[" << k << "][" << l << "] = " << usedAxes[k][l]);
         }
       }
@@ -635,7 +635,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
 
   if (METLIBS_LOG_DEBUG_ENABLED()) {
     METLIBS_LOG_DEBUG("pAxes:");
-    for (i=0;i<axesIndex;i++)
+    for (i = 0; i < axesIndex; i++)
       METLIBS_LOG_DEBUG("type: " << pAxes[i]->prim.type << " height: " << pAxes[i]->prim.layout.height);
   }
   if (axesIndex < maxMother + 1) {

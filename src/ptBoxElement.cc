@@ -99,7 +99,7 @@ void BoxElement::plot(ptPainter& painter)
         nidx = i;
         ndat = static_cast<int> (dval(j));
         if (ndat != ldat || i == stopT) {
-          if (ldat >= 0 && ldat < colorlist.size()) {
+          if (ldat >= 0 && ldat < (int)colorlist.size()) {
             painter.setFill(colorlist[ldat], patternlist[ldat]);
             painter.drawRect(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
           }
@@ -109,7 +109,7 @@ void BoxElement::plot(ptPainter& painter)
         j++;
       }
       if (i == stopT && lidx != nidx) {
-        if (ldat >= 0 && ldat < colorlist.size()) {
+        if (ldat >= 0 && ldat < (int)colorlist.size()) {
           painter.setFill(colorlist[ldat], patternlist[ldat]);
           painter.drawRect(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
         }

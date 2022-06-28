@@ -59,7 +59,6 @@ QBoxElement::QBoxElement(yAxisElement* ya, const DataSpec cds,
   type=QBOX;
 }
 
-
 void QBoxElement::dataInfo(float &min, float &max)
 {
   float mi= FLT_MAX, ma= -FLT_MAX;

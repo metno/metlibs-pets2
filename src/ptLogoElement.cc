@@ -50,7 +50,6 @@ LogoElement::LogoElement(const ptVertFieldf& field,
   type=LOGO;
 }
 
-
 void LogoElement::plot(ptPainter& /*painter*/)
 {
 }

@@ -37,9 +37,6 @@
 
 #include <QPolygonF>
 
-#include <cmath>
-#include <cstdio>
-
 #define MILOGGER_CATEGORY "metlibs.pets2.EditLineElement"
 #include <miLogger/miLogging.h>
 
@@ -122,8 +119,8 @@ void EditLineElement::plot(ptPainter& painter)
     int k = 0, i;
     j = datastart();
     int prepoints = j;
-    float oldx = -1000, oldy, x1, x2;
-    bool drawprevhisto = false, firstisstart;
+    float oldx = -1000, oldy = -1000, x1, x2;
+    bool drawprevhisto = false, firstisstart = false;
 
     QPolygonF esline;
     for (i = startT; i <= stopT; i++) {
@@ -236,7 +233,7 @@ void EditLineElement::plot(ptPainter& painter)
 
     if (activenodes) {
       int act = activePoint - prepoints;
-      if (act >= 0 && act < dataX.size()) {
+      if (act >= 0 && act < (int)dataX.size()) {
         actPx = dataX[act];
         actPy = dataY[act];
       }
@@ -247,7 +244,7 @@ void EditLineElement::plot(ptPainter& painter)
         painter.setFontSize(fontSize);
       }
       painter.setLineStyle(pets2::FULL);
-      for (i = 0; i < dataX.size(); i++) {
+      for (i = 0; i < (int)dataX.size(); i++) {
         ox = dataX[i];
         oy = dataY[i];
         // editpoint displaced
@@ -337,8 +334,8 @@ bool EditLineElement::grabPoint(float x, float y, bool mark, bool fillInterval)
                   break;
                 }
             }
-            if (l < xtime->xcoord.size() - 1) { // check points to the right
-              for (j = l + 1; j < xtime->xcoord.size(); j++)
+            if (l < (int)xtime->xcoord.size() - 1) { // check points to the right
+              for (j = l + 1; j < (int)xtime->xcoord.size(); j++)
                 if (markedPoints[j]) {
                   for (k = j; k > l; k--)
                     markedPoints[k] = true;
@@ -379,7 +376,7 @@ bool EditLineElement::grabPoint(int step, bool mark, bool fillInterval)
   int first_point = datastart();
   int last_point = dataend();
 
-  if (activePoint < 0 || activePoint >= markedPoints.size()) {
+  if (activePoint < 0 || activePoint >= (int)markedPoints.size()) {
     activePoint = first_point;
   }
 
@@ -412,8 +409,8 @@ bool EditLineElement::grabPoint(int step, bool mark, bool fillInterval)
                   break;
                 }
             }
-            if (l < xtime->xcoord.size() - 1) { // check points to the right
-              for (j = l + 1; j < xtime->xcoord.size(); j++)
+            if (l < (int)xtime->xcoord.size() - 1) { // check points to the right
+              for (j = l + 1; j < (int)xtime->xcoord.size(); j++)
                 if (markedPoints[j]) {
                   for (k = j; k > l; k--)
                     markedPoints[k] = true;
@@ -464,8 +461,8 @@ void EditLineElement::undo()
 {
   if (undobuffer->size()) {
     //cout << "Undobuffer.size:" << undobuffer->size() << endl;
-    std::vector<float> v = undobuffer->pop();
-    for (int i = 0; i < v.size(); i++)
+    const std::vector<float> v = undobuffer->pop();
+    for (int i = 0; i < (int)v.size(); i++)
       setdval(i, v[i]);
     calcDataProperties();
   }
@@ -474,7 +471,7 @@ void EditLineElement::undo()
 // replace data for marked points with data from source
 void EditLineElement::replaceDataValues(const WeatherParameter & source){
   std::vector<float> sd = source.copyDataVector();
-  if (sd.size() != datasize())
+  if ((int)sd.size() != datasize())
     return;
   //saveundo();
   for (int i = 0; i < datasize(); i++)
@@ -640,8 +637,7 @@ void EditLineElement::movePoints(float dy)
       }
     break;
   case LE_ROTATE:
-    if ((activePoint == xtime->xcoord.size() - 1 || !markedPoints[activePoint
-        + 1]) && activePoint > 0) {
+    if ((activePoint == ((int)xtime->xcoord.size()) - 1 || !markedPoints[activePoint + 1]) && activePoint > 0) {
       for (i = 0; i < activePoint && !markedPoints[i]; i++)
         ;
       if (markedPoints[i] && i != activePoint)
@@ -686,8 +682,7 @@ void EditLineElement::movePoints(float dy)
     }
     break;
   case LE_LINEAR:
-    if ((activePoint == xtime->xcoord.size() - 1 || !markedPoints[activePoint
-        + 1]) && activePoint > 0) {
+    if ((activePoint == ((int)xtime->xcoord.size()) - 1 || !markedPoints[activePoint + 1]) && activePoint > 0) {
       for (i = 0; i < activePoint && !markedPoints[i]; i++)
         ;
       if (markedPoints[i] && i != activePoint) {

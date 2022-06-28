@@ -64,7 +64,6 @@ DayElement::DayElement(const vector<miTime>& tline,
   lang= (language=="NO" ? miDate::Norwegian :  miDate::English);
 }
 
-
 std::string DayElement::dataAsString(const miDate& date)
 {
   if (asNumber)
@@ -72,7 +71,6 @@ std::string DayElement::dataAsString(const miDate& date)
   else
     return date.shortweekday(miDate::languagestring(lang), use_utf8);
 }
-
 
 void DayElement::plot(ptPainter& painter)
 {

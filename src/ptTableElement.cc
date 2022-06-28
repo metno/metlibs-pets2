@@ -34,8 +34,6 @@
 
 #include "ptTableElement.h"
 
-#include <cstdio>
-
 #define MILOGGER_CATEGORY "metlibs.pets2.TableElement"
 #include <miLogger/miLogging.h>
 
