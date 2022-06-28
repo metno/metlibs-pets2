@@ -444,8 +444,7 @@ bool ptStyle::organize(StyleOrder *orderList, int *pnout, StyleOrder *inList,
   pets2::Layout oneLayout;
   int unspecLines[MAXUNSPECIFIED_LINES]; // index to inList for unspecified lines
   int nunspecLines = 0;
-  int motherCount[6] =
-    { 0, 0, 0, 0, 0, 0 };
+  int motherCount[NO_MOTHER + 1] = {0, 0, 0, 0, 0, 0, 0};
   int i, j;
   Out **outList[MAXPRIMF + MAXPRIM];
   Out *pAxes[MAXAXES];
