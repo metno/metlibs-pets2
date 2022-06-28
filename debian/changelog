@@ -1,3 +1,9 @@
+metlibs-tseries-pets2 (8.0.2-1) unstable; urgency=low
+
+  * use milogger
+
+ -- Alexander Bürger <alexander.buerger@met.no>  Tue, 28 Jun 2022 08:00:08 +0200
+
 metlibs-tseries-pets2 (8.0.1-1) unstable; urgency=low
 
   * do not require Qt5 linguist tools
