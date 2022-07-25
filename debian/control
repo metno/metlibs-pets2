@@ -1,7 +1,7 @@
 Source: metlibs-tseries-pets2
 Priority: optional
 Maintainer: Alexander Bürger <alexander.buerger@met.no>
-Build-Depends:  debhelper (>= 9),
+Build-Depends:  debhelper (>= 11),
  cmake,
  metlibs-milogger-dev (>= 6.0.0),
  metlibs-putools-dev (>= 8.0.0),
