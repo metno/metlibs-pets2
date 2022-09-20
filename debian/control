@@ -15,9 +15,9 @@ Section: libs
 Package: metlibs-pets2-qt5-dev
 Section: libdevel
 Architecture: any
-Depends: libmetlibs-pets2-qt5-8 (= ${binary:Version}),
+Depends: libmetlibs-pets2-qt5-9 (= ${binary:Version}),
  metlibs-putools-dev (>= 8.0.0),
- metlibs-tsdata-core-dev (>= 7.0.0),
+ metlibs-tsdata-core-dev (>= 8.0.0),
  qtbase5-dev,
  ${misc:Depends}
 Breaks: metlibs-pets2-dev (<< 7.0.0)
@@ -28,7 +28,7 @@ Description: MET Norway time series plotting
  .
  This package provides the development files.
 
-Package: libmetlibs-pets2-qt5-8
+Package: libmetlibs-pets2-qt5-9
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends},
@@ -38,7 +38,7 @@ Description: MET Norway time series plotting
  .
  This package provides the shared library.
 
-Package: libmetlibs-pets2-qt5-8-dbg
+Package: libmetlibs-pets2-qt5-9-dbg
 Section: debug
 Priority: extra
 Architecture: any

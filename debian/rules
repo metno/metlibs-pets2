@@ -24,7 +24,7 @@ version-check:
 
 .PHONY: override_dh_strip
 override_dh_strip:
-	dh_strip --dbg-package=libmetlibs-pets2-qt5-8-dbg
+	dh_strip --dbg-package=libmetlibs-pets2-qt5-9-dbg
 
 .PHONY: override_dh_makeshlibs
 override_dh_makeshlibs:
