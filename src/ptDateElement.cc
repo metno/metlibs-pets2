@@ -25,12 +25,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptDateElement.cc : Definitions for DateElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptDateElement.h"
 
@@ -38,10 +33,8 @@
 
 #include <list>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.DateElement"
+#include <miLogger/miLogging.h>
 
 using namespace std;
 using namespace miutil;
@@ -67,9 +60,7 @@ DateElement::DateElement(const std::vector<miTime>& tline,
   , datestyle(layout.datestyle)
   , plotlabel(layout.label)
 {
-#ifdef DEBUG
-  cout << "Inside DateElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=DATE;
   lang= (language=="NO" ? miDate::Norwegian :  miDate::English);
 
@@ -112,15 +103,13 @@ std::string DateElement::dataAsString(const miDate& date)
 
 void DateElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   std::string txt;
   miDate curDate = timeLine[startT].date();
   float offset;
   float prevf; // end of previous text
 
   if (enabled && visible) {
-#ifdef DEBUG
-    cout << "DateElement::plot(ptPainter& painter)" << endl;
-#endif
     painter.setFontSize(fontSize);
     painter.setLine(color);
 

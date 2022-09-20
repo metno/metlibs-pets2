@@ -3,7 +3,7 @@
 
 #define METLIBS_PETS2_VERSION_MAJOR 8
 #define METLIBS_PETS2_VERSION_MINOR 0
-#define METLIBS_PETS2_VERSION_PATCH 1
+#define METLIBS_PETS2_VERSION_PATCH 2
 
 #define METLIBS_PETS2_VERSION_INT(major,minor,patch) \
     (1000000*major + 1000*minor + patch)

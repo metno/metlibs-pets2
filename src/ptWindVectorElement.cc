@@ -25,12 +25,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptWindVectorElement.cc : Definitions for WindVectorElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptWindVectorElement.h"
 
@@ -39,6 +34,9 @@
 #include <QPolygonF>
 
 #include <cmath>
+
+#define MILOGGER_CATEGORY "metlibs.pets2.WindVectorElement"
+#include <miLogger/miLogging.h>
 
 namespace pets2 {
 
@@ -53,9 +51,7 @@ WindVectorElement::WindVectorElement(const DataSpec cds,
   , useTimes(layout.useTimes)
   , datainknots(layout.datainknots)
 {
-#ifdef DEBUG
-  cout << "Inside WindVectorElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=WIND_VECTOR;
   FF_DD = datapolar();
   if (label) {
@@ -67,10 +63,8 @@ WindVectorElement::WindVectorElement(const DataSpec cds,
 
 void WindVectorElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "WindVectorElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setFontSize(fontSize);
 
     const float TICK05X=0.6, TICK05Y=0.6;

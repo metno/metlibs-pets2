@@ -28,19 +28,13 @@
 
 // ptAxisChildElement.cc : Definitions for AxisChildElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptYaxisElement.h"
 
 #include <cmath>
 #include <cfloat>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.AxisChildElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -59,9 +53,7 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
   , labelside(layout.versides)
   , keepinaxis(layout.keepinaxis)
 {
-#ifdef DEBUG
-  cout << "Inside AxisChildElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
 
   //axisText = (layout.text.length()) ? layout.text : data->axisText;
   axisText  = layout.text;
@@ -70,8 +62,6 @@ AxisChildElement::AxisChildElement(yAxisElement* ya,
   _informYaxis();
   calcAllDataProperties();
 }
-
-
 
 // find intersection point (Px,Py) between line-segments AB and CD
 // returns true if such exists
@@ -168,7 +158,7 @@ bool AxisChildElement::crossPoint(const float x1, const float y1,
 				  const float x2, const float y2,
 				  float& cx, float& cy)
 {
-  float Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,r,s,Px,Py;
+  float Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, r, s, Px = 0, Py = 0;
   bool res= false;
   Ax= x1; Ay= y1;
   Bx= x2; By= y2;
@@ -198,7 +188,7 @@ bool AxisChildElement::dataCrossPoint(const float x1, const float y1,
 				      const float d,
 				      float& cx, float& cy)
 {
-  float Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,r,s,Px,Py;
+  float Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, r, s, Px = 0, Py = 0;
   bool res= false;
   Ax= x1; Ay= y1;
   Bx= x2; By= y2;

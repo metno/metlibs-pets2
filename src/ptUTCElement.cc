@@ -25,22 +25,15 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptUTCElement.cc : Definitions for UTCElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptUTCElement.h"
 
 #include <iomanip>
 #include <sstream>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.UTCElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -53,9 +46,7 @@ UTCElement::UTCElement(const std::vector<miTime>& tline,
   , text(layout.text)
   , modhours(layout.modhours)
 {
-#ifdef DEBUG
-  cout << "Inside UTCElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=UTC;
   timeLine = tline;
   if (label && text.empty())

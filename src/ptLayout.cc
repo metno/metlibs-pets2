@@ -27,13 +27,11 @@
 
 // ptLayout.cc
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptLayout.h"
 
 #include <puTools/miStringFunctions.h>
+
+#include <iostream>
 
 static std::string trimmed_upper(const std::string& text)
 {
@@ -107,16 +105,16 @@ std::vector<std::string> Str2TextLabels(const std::string& buf)
 std::vector<float> Str2FloatList(const std::string& buf){
   const std::vector<std::string> vs = miutil::split(buf, ",", true);
   std::vector<float> vf;
-  for (int i=0; i<vs.size(); i++)
-    vf.push_back(miutil::to_double(vs[i], 0.0));
+  for (const auto& s : vs)
+    vf.push_back(miutil::to_double(s, 0.0));
   return vf;
 }
 
 std::vector<int> Str2IntList(const std::string& buf){
   const std::vector<std::string> vs = miutil::split(buf, ",", true);
   std::vector<int> vf;
-  for (int i=0; i<vs.size(); i++)
-    vf.push_back(miutil::to_int(vs[i], 0));
+  for (const auto& s : vs)
+    vf.push_back(miutil::to_int(s, 0));
   return vf;
 }
 
@@ -184,24 +182,24 @@ std::string EditStyle2Str(ptEditStyle style){
 std::string TextLabels2Str(const std::vector<std::string>& vs)
 {
   std::string s;
-  for (int i=0; i<vs.size(); i++)
-    s+= vs[i] + "|";
+  for (const auto& v : vs)
+    s += v + "|";
   return s;
 }
 
 std::string FloatList2Str(const std::vector<float>& vf)
 {
   std::string s;
-  for (int i=0; i<vf.size(); i++)
-    s+= miutil::from_number(vf[i]) + ",";
+  for (const auto& v : vf)
+    s += miutil::from_number(v) + ",";
   return s;
 }
 
 std::string IntList2Str(const std::vector<int>& vf)
 {
   std::string s;
-  for (int i=0; i<vf.size(); i++)
-    s+= miutil::from_number(vf[i]) + ",";
+  for (const auto& v : vf)
+    s += miutil::from_number(v) + ",";
   return s;
 }
 

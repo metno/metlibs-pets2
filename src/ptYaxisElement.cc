@@ -28,18 +28,10 @@
 
 // ptYaxisElement.cc : Definitions for yAxisElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptYaxisElement.h"
 
-#include <cstdio>
-
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.yAxisElement"
+#include <miLogger/miLogging.h>
 
 namespace pets2 {
 
@@ -82,12 +74,11 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
   , gridstyle(layout.gridstyle)
   , useMinMax(layout.useMinMax)
 {
-#ifdef DEBUG
-  cout << "Inside yAxisElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = YAXIS;
 
-  for (int i=0; i<MAX_YAXIS_CHILDREN; i++) child[i]=0;
+  for (int i = 0; i < MAX_YAXIS_CHILDREN; i++)
+    child[i] = 0;
 
   //axisText = (layout.text.length()) ? layout.text : data->axisText;
   Labels[0] = layout.text;
@@ -99,10 +90,9 @@ yAxisElement::yAxisElement(const ptVertFieldf& field,
 
 void yAxisElement::plotAxis(ptPainter& painter)
 {
-  if (!numChild || !visible ) return;
-#ifdef DEBUG
-    cout << "yAxisElement::plotAxis()" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
+  if (!numChild || !visible)
+    return;
   float txtX, tmpX, tmpY;
   const float SMALLSPACE = 5;
   char txt[20];
@@ -203,10 +193,8 @@ void yAxisElement::plotGrid(ptPainter& painter)
 
 void yAxisElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && numChild) {
-#ifdef DEBUG
-    cout << "yAxisElement::plot(ptPainter& painter)" << endl;
-#endif
     calcPlotVal();
     firstPlot = false;
     if (recalcDims) {
@@ -240,7 +228,7 @@ void yAxisElement::calcPlotVal()
   int i;
 
   if (canvas) {
-    std::cout << "++++++++++++++++++++> calcPlotVal with canvas" << std::endl;
+    METLIBS_LOG_DEBUG("++++++++++++++++++++> calcPlotVal with canvas");
     canvas->setFontSize(fontSize);
     const QSizeF bbx0 = canvas->getTextSize("M");
     charWidth = bbx0.width();
@@ -253,7 +241,7 @@ void yAxisElement::calcPlotVal()
         maxwid = labelW[i];
     }
   } else {
-    std::cout << "--------------------> calcPlotVal without canvas" << std::endl;
+    METLIBS_LOG_DEBUG("--------------------> calcPlotVal without canvas");
     charWidth = 10;
     charHeight = 10;
     for (i=0; i<numChild+1; i++)
@@ -437,7 +425,7 @@ std::string yAxisElement::userValueLabel(const float value)
   int n = majorticks.size();
 
   for (int i=0; i<n; i++) {
-    if (value <= majorphys[i] && i < userValueLabels.size()) {
+    if (value <= majorphys[i] && i < (int)userValueLabels.size()) {
       return userValueLabels[i];
     }
   }

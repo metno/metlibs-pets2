@@ -25,22 +25,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 // ptPlotElement.cc : Class definition for generic plotelement
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptPlotElement.h"
+
 #include <puTools/miStringFunctions.h>
 
 #include <cmath>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.PlotElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -67,9 +61,7 @@ PlotElement::PlotElement(const Layout& layout, const ptVertFieldf& field,
   , colorlist(layout.colorlist)
   , next(pNext) // FIXME public
 {
-#ifdef DEBUG
-  cout << "Inside PlotElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
 }
 
 PlotElement::~PlotElement()
@@ -84,9 +76,9 @@ void PlotElement::setViewport(ptCanvas* c)
 
 void PlotElement::setTimeInterval(const int start, const int stop)
 {
-  if (start >= 0 && start < xtime->xcoord.size())
+  if (start >= 0 && start < (int)xtime->xcoord.size())
     startT = start;
-  if (stop >= 0 && stop < xtime->xcoord.size())
+  if (stop >= 0 && stop < (int)xtime->xcoord.size())
     stopT = stop;
 }
 

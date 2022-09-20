@@ -1,5 +1,5 @@
 PROJECT(metlibs-pets2)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 INCLUDE(MetnoUtils)
@@ -11,6 +11,7 @@ METNO_PVERSION_DEFINES(PETS2 "src/pets2Version.h")
 SET(PKGS
   metlibs-putools>=8.0.0
   metlibs-tsdata-core>=7.0.0
+  metlibs-milogger>=6.0.0
 )
 
 PKG_CHECK_MODULES(PC_METLIBS REQUIRED

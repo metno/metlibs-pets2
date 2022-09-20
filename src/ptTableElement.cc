@@ -28,18 +28,10 @@
 
 // ptTableElement.cc : Definitions for TableElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptTableElement.h"
 
-#include <cstdio>
-
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.TableElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -54,18 +46,14 @@ TableElement::TableElement(const DataSpec cds,
   , vectorF(layout.vectorF)
   , cutoff(layout.cutoff)
 {
-#ifdef DEBUG
-  cout << "Inside TableElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=TABLE;
 }
 
 void TableElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "TableElement::plot(ptPainter& painter)" <<endl;
-#endif
     int i;
     int j=-1, skip=0;
     char text[6];

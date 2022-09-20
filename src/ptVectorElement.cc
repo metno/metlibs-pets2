@@ -25,12 +25,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptVectorElement.cc : Definitions for VectorElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptVectorElement.h"
 
@@ -40,10 +35,8 @@
 
 #include <cmath>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.VectorElement"
+#include <miLogger/miLogging.h>
 
 namespace pets2 {
 
@@ -58,9 +51,7 @@ VectorElement::VectorElement(const DataSpec cds,
   , arrow(layout.vectorArrow)
   , useTimes(layout.useTimes)
 {
-#ifdef DEBUG
-  cout << "Inside VectorElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=VECTOR;
   polar = datapolar();
   if (label){ // use layout.text if text is specified
@@ -72,10 +63,8 @@ VectorElement::VectorElement(const DataSpec cds,
 
 void VectorElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "VectorElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setFontSize(fontSize);
 
     const float YLEN=0.7*deltaY/2;

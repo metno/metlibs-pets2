@@ -27,13 +27,12 @@
 
 // ptBoxElement.cc : Definitions for BoxElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptBoxElement.h"
 
 #include <QPolygonF>
+
+#define MILOGGER_CATEGORY "metlibs.pets2.Boxlement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 using namespace std;
@@ -51,9 +50,7 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
     , useTimes(layout.useTimes)
     , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside BoxElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = TIMEBOX;
 
   size_t nc = colorlist.size();
@@ -81,11 +78,8 @@ BoxElement::BoxElement(const DataSpec cds, const vector<miTime> tline,
 
 void BoxElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (enabled && visible) {
-#ifdef DEBUG
-    cout << "BoxElement::plot(ptPainter& painter)" <<endl;
-#endif
-
     painter.setFontSize(fontSize);
 
     painter.setLineWidth(linewidth);
@@ -101,7 +95,7 @@ void BoxElement::plot(ptPainter& painter)
         nidx = i;
         ndat = static_cast<int> (dval(j));
         if (ndat != ldat || i == stopT) {
-          if (ldat >= 0 && ldat < colorlist.size()) {
+          if (ldat >= 0 && ldat < (int)colorlist.size()) {
             painter.setFill(colorlist[ldat], patternlist[ldat]);
             painter.drawRect(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
           }
@@ -111,7 +105,7 @@ void BoxElement::plot(ptPainter& painter)
         j++;
       }
       if (i == stopT && lidx != nidx) {
-        if (ldat >= 0 && ldat < colorlist.size()) {
+        if (ldat >= 0 && ldat < (int)colorlist.size()) {
           painter.setFill(colorlist[ldat], patternlist[ldat]);
           painter.drawRect(xtime->xcoord[lidx], startY, xtime->xcoord[nidx], stopY);
         }

@@ -28,16 +28,10 @@
 
 // ptAxesElement.cc : Definitions for AxesElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptAxesElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.AxesElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -52,21 +46,16 @@ AxesElement::AxesElement(const ptVertFieldf& field,
   , rectangle(layout.axisRectangle)
   , horizontal(hor)
 {
-#ifdef DEBUG
-  cout << "Inside AxesElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=XAXIS;
 }
 
-
 void AxesElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if (!enabled)
     return;
 
-#ifdef DEBUG
-  cout << "AxesElement::plot(ptPainter& painter)" <<endl;
-#endif
   if (horizontal) {
     x1 = xtime->x1;
     x2 = xtime->x2;

@@ -25,19 +25,12 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptLogoElement.cc : Definitions for LogoElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptLogoElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.LogoElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -48,12 +41,9 @@ LogoElement::LogoElement(const ptVertFieldf& field,
 
   : PlotElement(layout, field, xtime)
 {
-#ifdef DEBUG
-  cout << "Inside LogoElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=LOGO;
 }
-
 
 void LogoElement::plot(ptPainter& /*painter*/)
 {

@@ -28,18 +28,10 @@
 
 // ptProgElement.cc : Definitions for ProgElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptProgElement.h"
 
-#include <cstdio>
-
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.ProgElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -50,15 +42,13 @@ ProgElement::ProgElement(std::vector<int>& data,
   : PlotElement(layout, field, xtime),
     timeData(data), minSkipX(layout.minSkipX)
 {
-#ifdef DEBUG
-  cout << "Inside ProgElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=PROG;
 }
 
-
 void ProgElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   char text[6], tmp[4];
   painter.setFontSize(fontSize);
   const float tw = painter.getCharWidth('0');
@@ -73,9 +63,6 @@ void ProgElement::plot(ptPainter& painter)
   float deltaT=(xtime->xcoord.size() ? xtime->xcoord[1]-xtime->xcoord[0] : 1);
 
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "ProgElement::plot(ptPainter& painter)" <<endl;
-#endif
     if (timeData[0]>=0) {
       strcpy(text,"+");
       signw = signWidth;
@@ -101,7 +88,7 @@ void ProgElement::plot(ptPainter& painter)
 
     text[1] = '\0';
 
-    for (int i=1; i<xtime->xcoord.size() && i<timeData.size(); i++) {
+    for (int i = 1; i < (int)xtime->xcoord.size() && i < (int)timeData.size(); i++) {
       // if step is too small, don't print value
       if (accum+deltaT < minSkipX * painter.pixWidth()) {
 	accum += deltaT;
@@ -129,8 +116,8 @@ void ProgElement::plot(ptPainter& painter)
       strcat(text,tmp);
       painter.drawText(text, xtime->xcoord[i]-offset, startY);
 
-      if (i == xtime->xcoord.size()-1)
-	break;
+      if (i == ((int)xtime->xcoord.size()) - 1)
+        break;
       deltaT = xtime->xcoord[i+1]-xtime->xcoord[i];
       accum = 0;
     }

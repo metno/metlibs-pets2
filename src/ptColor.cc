@@ -25,19 +25,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptColor.h"
+
 #include <puTools/miStringFunctions.h>
+
 #include <map>
+
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
-
 using namespace std;
-
 
 namespace petsColorTools
 {

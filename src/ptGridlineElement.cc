@@ -25,19 +25,12 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptGridlineElement.cc : Definitions for GridlineElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptGridlineElement.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.GridlineElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -57,9 +50,7 @@ GridlineElement::GridlineElement(const std::vector<miTime>& tline,
   , daycolor(layout.color2)
   , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside GridlineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=GRIDLINE;
   deltaY = axeStopY - startY - labelSpace;
 
@@ -78,10 +69,8 @@ GridlineElement::GridlineElement(const std::vector<miTime>& tline,
 
 void GridlineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "GridlineElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setLine(color, lineWidth, style);
     painter.setFillStyle(pets2::SOLID);
 
@@ -101,7 +90,7 @@ void GridlineElement::plot(ptPainter& painter)
       }
     }
 
-    int d,n= daychanges.size();
+    int d = 0, n = daychanges.size();
     int d1, d2;
     if (plotDayPattern)
       for (d=0; d<n && daychanges[d]<=startT; d++)

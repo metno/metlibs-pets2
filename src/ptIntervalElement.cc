@@ -25,21 +25,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptIntervalElement.cc : Definitions for IntervalElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptIntervalElement.h"
 
 #include <puTools/miStringFunctions.h>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.IntervalElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -53,15 +46,12 @@ IntervalElement::IntervalElement(const std::vector<miTime>& tline,
   , lineWidth(layout.lineWidth)
   , timeLine(tline)
 {
-#ifdef DEBUG
-  cout << "Inside IntervalElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=INTERVAL;
 
   if (!timetext.empty())
     vt= miutil::split(timetext, ";");
 }
-
 
 void IntervalElement::setTimes(const std::vector<tinterval>& t)
 {
@@ -75,13 +65,10 @@ void IntervalElement::setTimes(const std::vector<tinterval>& t)
   }
 }
 
-
 void IntervalElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && visible) {
-#ifdef DEBUG
-    cout << "IntervalElement::plot(ptPainter& painter)" <<endl;
-#endif
     painter.setFontSize(fontSize);
     painter.setLine(color, lineWidth, style);
 

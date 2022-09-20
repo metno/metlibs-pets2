@@ -25,12 +25,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 // ptLineElement.cc : Definitions for LineElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptLineElement.h"
 
@@ -39,12 +34,8 @@
 #include <cmath>
 #include <cfloat>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-using std::cout;
-using std::endl;
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.LineElement"
+#include <miLogger/miLogging.h>
 
 namespace pets2 {
 
@@ -76,12 +67,9 @@ LineElement::LineElement(yAxisElement* ya,
   , isMultiLine(ismulti)
 
 {
-#ifdef DEBUG
-  cout << "Inside LineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=LINE;
 }
-
 
 void LineElement::dataInfo(float &min, float &max)
 {
@@ -115,10 +103,8 @@ void LineElement::dataInfo(float &min, float &max)
 
 void LineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && Yaxis && visible) {
-#ifdef DEBUG
-    cout << "LineElement::plot(ptPainter& painter)" << endl;
-#endif
     // vertex points (legal datapoints)
     std::vector<float> vertexx, vertexy;
     // vertex point data index (legal datapoints)
@@ -137,7 +123,7 @@ void LineElement::plot(ptPainter& painter)
     int previ1=-2000;
 
     // find x-startcoordinate for line-label
-    float labelx, labely;
+    float labelx = 0, labely = 0;
     if (labelOnLine)
       labelx = lineLabelPos*1.0*(stopT-startT)/100.0;
 
@@ -246,7 +232,6 @@ void LineElement::plot(ptPainter& painter)
                     float cx,cy;
                     int neg = ( previ1 > i1 ? -1 : 1);
                     int ncr = abs(previ1-i1);
-                    float xc1=d2, xc2=d2;
                     float yc1=prevy, yc2=newy;
                     for ( int k = 1; k<=ncr; k++ ){
                       int ind1= previ1+neg*(k-1);
@@ -264,7 +249,6 @@ void LineElement::plot(ptPainter& painter)
                         ploty.push_back(cy);
                         ploti.push_back(ind2);
 
-                        xc1= d2; xc2= d2;
                         yc1= cy; yc2= newy;
                       }
                     }
@@ -606,9 +590,6 @@ void LineElement::plot(ptPainter& painter)
       painter.setColor(color);
       painter.drawText(qtext, labelx, labely);
     }
-#ifdef DEBUG
-    cout << "LineElement::plot(ptPainter& painter) finished" << endl;
-#endif
   }
 }
 

@@ -25,12 +25,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptLineElement.cc : Definitions for LineElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptDoubleLineElement.h"
 
@@ -38,6 +33,9 @@
 
 #include <cmath>
 #include <cfloat>
+
+#define MILOGGER_CATEGORY "metlibs.pets2.DoubleLineElement"
+#include <miLogger/miLogging.h>
 
 using namespace std;
 
@@ -48,9 +46,7 @@ DoubleLineElement::DoubleLineElement(yAxisElement* ya, const DataSpec cds,
   : AxisChildElement(ya,cds,field,layout,xtime)
   , fillColor(layout.color2)
 {
-#ifdef DEBUG
-  cout << "Inside DoubleLineElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=DOUBLE_LINE;
 }
 
@@ -68,17 +64,15 @@ void DoubleLineElement::dataInfo(float &min, float &max)
 
 void DoubleLineElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && Yaxis && visible) {
-#ifdef DEBUG
-    cout << "DoubleLineElement::plot(ptPainter& painter)" << endl;
-#endif
     _prePlot();
     painter.setLine(color, lineWidth, style);
 
     // plot curve
 
     // find x-startcoordinate for line-label
-    float labelx, labely1, labely2;
+    float labelx = 0, labely1 = 0, labely2 = 0;
     if (labelOnLine)
       labelx=lineLabelPos*float((stopT-startT)/100.0);
 
@@ -137,9 +131,6 @@ void DoubleLineElement::plot(ptPainter& painter)
       painter.setLine(color, 1);
       painter.drawText(QPointF(labelx,labely), qtext);
     }
-#ifdef DEBUG
-    cout << "DoubleLineElement::plot(ptPainter& painter) finished" << endl;
-#endif
   }
 }
 

@@ -27,20 +27,14 @@
 
 // ptTextElement.cc : Definitions for TextElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptTextElement.h"
 
 #include "ptPatterns.h"
 
 #include <puTools/miStringFunctions.h>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.TextElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -54,11 +48,7 @@ TextElement::TextElement(const std::string& pText,
   , fillstyle(layout.fillstyle)
   , drawbackground(layout.drawbackground)
 {
-#ifdef DEBUG
-  cout << "Inside TextElement's constructor" << endl;
-  cout << "font: " << fontSize << " align: " << align <<
-    " startY: " << startY << endl;
-#endif
+  METLIBS_LOG_SCOPE("font: " << fontSize << " align: " << align << " startY: " << startY);
   type=TEXT;
 
   size_t n= xtime->xcoord.size();
@@ -81,10 +71,8 @@ TextElement::TextElement(const std::string& pText,
 
 void TextElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   if(enabled && text.length() && visible) {
-#ifdef DEBUG
-    cout << "TextElement::plot(ptPainter& painter): " << text << endl;
-#endif
     std::vector<float> vth, vtw;
     float allth=0;
     painter.setFontSize(fontSize);

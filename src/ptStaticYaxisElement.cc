@@ -27,19 +27,13 @@
 
 // ptStaticYaxisElement.cc : Definitions for staticYaxisElement class
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ptYaxisElement.h"
 
 #include <cmath>
 #include <cfloat>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.staticYaxisElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 
@@ -52,9 +46,7 @@ staticYaxisElement::staticYaxisElement(const ptVertFieldf& field,
   , numTickMinor(layout.numTickMinor)
   , labelSpace(layout.labelSpace)
 {
-#ifdef DEBUG
-  cout << "Inside staticYaxisElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type = YAXIS_STATIC;
 }
 

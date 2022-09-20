@@ -25,22 +25,15 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 // ptDayElement.cc : Definitions for DayElement class
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "ptDayElement.h"
 #include <puTools/miStringFunctions.h>
 
 #include <list>
 
-// #define DEBUG
-#ifdef DEBUG
-#include <iostream>
-#endif // DEBUG
+#define MILOGGER_CATEGORY "metlibs.pets2.DayElement"
+#include <miLogger/miLogging.h>
 
 using namespace miutil;
 using namespace std;
@@ -61,13 +54,10 @@ DayElement::DayElement(const vector<miTime>& tline,
     timeLine(tline),
     language(layout.language), asNumber(layout.asNumber)
 {
-#ifdef DEBUG
-  cout << "Inside DayElement's constructor" << endl;
-#endif
+  METLIBS_LOG_SCOPE();
   type=DAY;
   lang= (language=="NO" ? miDate::Norwegian :  miDate::English);
 }
-
 
 std::string DayElement::dataAsString(const miDate& date)
 {
@@ -77,16 +67,13 @@ std::string DayElement::dataAsString(const miDate& date)
     return date.shortweekday(miDate::languagestring(lang), use_utf8);
 }
 
-
 void DayElement::plot(ptPainter& painter)
 {
+  METLIBS_LOG_SCOPE();
   miDate curDate = timeLine[startT].date();
   std::string curDay;
   float offset;
   float prevf;       // end of previous text
-#ifdef DEBUG
-  cout << "DayElement::plot(ptPainter& painter)" << endl;
-#endif
   if (enabled && visible) {
     painter.setFontSize(fontSize);
     painter.setLine(color);
